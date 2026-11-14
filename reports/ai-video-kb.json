@@ -1,0 +1,198 @@
+{
+  "name": "ai-video-kb",
+  "root": "/Users/zhumingchen/ai-video-kb",
+  "project_type": "document",
+  "file_counts": {
+    "document": 24,
+    "data": 1
+  },
+  "languages": {},
+  "total_indexable_files": 25,
+  "spec_candidates": [],
+  "manifests": [],
+  "lock_files": [],
+  "excluded_dirs": {
+    ".synapse-fix-backup": 1
+  },
+  "excluded_files": {},
+  "unreadable": [],
+  "oversize": [],
+  "errors": [],
+  "files": [
+    {
+      "path": "README.md",
+      "category": "document",
+      "language": "",
+      "size": 15531,
+      "is_spec_candidate": false
+    },
+    {
+      "path": ".synapse-layout.json",
+      "category": "data",
+      "language": "",
+      "size": 237,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "02-技术详解/03-Flux.md",
+      "category": "document",
+      "language": "",
+      "size": 7611,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "02-技术详解/04-ControlNet.md",
+      "category": "document",
+      "language": "",
+      "size": 7966,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "02-技术详解/02-SDXL.md",
+      "category": "document",
+      "language": "",
+      "size": 5499,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "02-技术详解/07-人脸一致性方案-FaceID-InstantID-PuLID.md",
+      "category": "document",
+      "language": "",
+      "size": 10234,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "02-技术详解/06-IP-Adapter.md",
+      "category": "document",
+      "language": "",
+      "size": 7300,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "02-技术详解/05-LoRA.md",
+      "category": "document",
+      "language": "",
+      "size": 10024,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "02-技术详解/01-ComfyUI.md",
+      "category": "document",
+      "language": "",
+      "size": 6688,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "99-索引与排序/01-重要程度排序.md",
+      "category": "document",
+      "language": "",
+      "size": 9395,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "99-索引与排序/02-学习路径与决策树.md",
+      "category": "document",
+      "language": "",
+      "size": 11262,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "06-后期与质控/02-AI内容审核与质量控制.md",
+      "category": "document",
+      "language": "",
+      "size": 19758,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "06-后期与质控/01-后期处理-超分插帧修复调色.md",
+      "category": "document",
+      "language": "",
+      "size": 11280,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "07-商业平台/01-商业视频平台实战指南.md",
+      "category": "document",
+      "language": "",
+      "size": 13717,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "09-部署与生态/01-ComfyUI生态与硬件部署.md",
+      "category": "document",
+      "language": "",
+      "size": 16819,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "03-工作流/04-自动化生产与脚本.md",
+      "category": "document",
+      "language": "",
+      "size": 22451,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "03-工作流/03-最小可行生产栈.md",
+      "category": "document",
+      "language": "",
+      "size": 9132,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "03-工作流/02-角色一致性三阶段方案.md",
+      "category": "document",
+      "language": "",
+      "size": 11278,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "03-工作流/01-漫剧关键帧生成工作流.md",
+      "category": "document",
+      "language": "",
+      "size": 9530,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "08-合规与运营/01-AI漫剧版权合规与平台规则.md",
+      "category": "document",
+      "language": "",
+      "size": 13403,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "04-视频模型/01-视频生成模型全家桶.md",
+      "category": "document",
+      "language": "",
+      "size": 11864,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "05-音频与动效/01-TTS与对口型工具链.md",
+      "category": "document",
+      "language": "",
+      "size": 10797,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "05-音频与动效/02-数字人与Live2D动效.md",
+      "category": "document",
+      "language": "",
+      "size": 10959,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "01-业务概览/01-行业现状与产业链.md",
+      "category": "document",
+      "language": "",
+      "size": 8964,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "01-业务概览/02-制作流程与工具链.md",
+      "category": "document",
+      "language": "",
+      "size": 12453,
+      "is_spec_candidate": false
+    }
+  ]
+}

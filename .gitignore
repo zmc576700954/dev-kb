@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# 虚拟环境
+.venv/
+venv/
+
+# 本地索引数据（可由 sync_cli 重新生成）
+data/meta.db
+data/meta.db-*
+data/qdrant/
+data/*.db
+
+# 运行时缓存
+data/query_expansion_cache.json
+.pytest_cache/
+
+# Claude Code 本地配置
+.claude/settings.local.json
+
+# 编辑器与系统文件
+.DS_Store
+.idea/
+.vscode/
+*.swp

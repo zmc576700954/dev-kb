@@ -1,0 +1,812 @@
+{
+  "run": "semantic-failures-v6",
+  "created_at": "2026-11-13T05:00:48.842263+00:00",
+  "cases_file": "evals/cases_semantic_failures.jsonl",
+  "cases": {
+    "path": "evals/cases_semantic_failures.jsonl",
+    "sha256": "bf3e5293ae8bb2f5f4acc12a03c643a0698b04e225e67ad2b9f4dc2653bf9427",
+    "count": 5,
+    "ids_sha256": "520dbc9d0f98975140269aab8a5166b41ffc3ca3fac5a250bb3d53cf4b1d71db"
+  },
+  "config": {
+    "rerank": true,
+    "blend": 0.3,
+    "expand": true,
+    "code_boost": 1.5,
+    "doc_damp": 0.7,
+    "rrf_k": 60,
+    "result_limit": 5,
+    "query_expansion_cache_sha256": "a530d356d661726298a504ba1b2f60841048e6b1b2960871ce44f1407b0b3cdf"
+  },
+  "models": {
+    "embedding": "BAAI/bge-m3",
+    "reranker": "BAAI/bge-reranker-v2-m3",
+    "query_expansion": "mlx:Qwen3-4B-Instruct-2507-mlx-4bit"
+  },
+  "implementation": {
+    "algorithm": "sha256",
+    "sources_sha256": "f1e03c1bd7f170b56935bc9c6f523f32cbceca8311f1fe68610d47589bc48f9d"
+  },
+  "index": {
+    "algorithm": "files-content-sha256-v1",
+    "sha256": "9d3a3202ddda52345d7fcbb68b1832ff2b5447c5dd7d4edd667737ab83802035",
+    "files": 4210,
+    "chunks": 44438,
+    "pending_embedding": 0
+  },
+  "rerank": true,
+  "blend": 0.3,
+  "expand": true,
+  "code_boost": 1.5,
+  "doc_damp": 0.7,
+  "elapsed_s": 11.1,
+  "metrics": {
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "mrr@5": 0.0,
+    "n": 5
+  },
+  "by_difficulty": {
+    "semantic": {
+      "recall@1": 0.0,
+      "recall@3": 0.0,
+      "recall@5": 0.0,
+      "n": 5
+    }
+  },
+  "rows": [
+    {
+      "id": "q044",
+      "project": "kaiwu",
+      "difficulty": "semantic",
+      "question": "知识库语料文件是怎么校验的",
+      "rank": null,
+      "hit5": false,
+      "failure_reason": "filtered_before_rerank",
+      "gold_candidates": [
+        {
+          "chunk_id": 1060,
+          "project": "kaiwu",
+          "path": "app/import_real_corpus.py",
+          "symbol": "validate_file",
+          "start_line": 77,
+          "end_line": 145,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand-sub"
+            ],
+            "channel_ranks": {
+              "expand-sub": 2
+            },
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1061,
+          "project": "kaiwu",
+          "path": "app/import_real_corpus.py",
+          "symbol": "build_index",
+          "start_line": 148,
+          "end_line": 182,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": true,
+        "expanded_terms": [
+          "validate_kb_corpus",
+          "check_corpus_integrity",
+          "verify_knowledge_base"
+        ],
+        "candidate_count": 19
+      },
+      "top_results": [
+        {
+          "chunk_id": 1531,
+          "path": "docs/kb-architecture.md",
+          "symbol": "",
+          "matched_by": [
+            "fts-weak",
+            "vector"
+          ],
+          "score": 0.0149,
+          "rerank_score": 0.8058,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 1067,
+          "path": "app/retrieval.py",
+          "symbol": "load_corpus",
+          "matched_by": [
+            "expand-sub"
+          ],
+          "score": 0.0148,
+          "rerank_score": 0.0922,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 1093,
+          "path": "kb/kaiwu/README.md",
+          "symbol": "",
+          "matched_by": [
+            "fts-weak",
+            "vector"
+          ],
+          "score": 0.0144,
+          "rerank_score": 0.0275,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 1585,
+          "path": "docs/handover-2026-11-05.md",
+          "symbol": "",
+          "matched_by": [
+            "fts-weak",
+            "vector"
+          ],
+          "score": 0.014,
+          "rerank_score": 0.1097,
+          "fusion_rank": 4
+        },
+        {
+          "chunk_id": 1494,
+          "path": "kb/kaiwu/10-知识库治理/01-分类与优先级映射.md",
+          "symbol": "",
+          "matched_by": [
+            "fts-weak",
+            "path"
+          ],
+          "score": 0.0122,
+          "rerank_score": 0.0053,
+          "fusion_rank": 5
+        }
+      ]
+    },
+    {
+      "id": "q057",
+      "project": "tiangong",
+      "difficulty": "semantic",
+      "question": "运行记录是怎么持久化到数据库的",
+      "rank": null,
+      "hit5": false,
+      "failure_reason": "not_retrieved",
+      "gold_candidates": [
+        {
+          "chunk_id": 9139,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository#part1",
+          "start_line": 55,
+          "end_line": 134,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9143,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.constructor",
+          "start_line": 56,
+          "end_line": 56,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9144,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.createRun",
+          "start_line": 58,
+          "end_line": 94,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9145,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.getRun",
+          "start_line": 96,
+          "end_line": 98,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9146,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.getRunByIdempotencyKey",
+          "start_line": 100,
+          "end_line": 104,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9147,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.updateRunStatus",
+          "start_line": 106,
+          "end_line": 110,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9148,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.listRunsByStatuses",
+          "start_line": 112,
+          "end_line": 117,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9149,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.createStep",
+          "start_line": 119,
+          "end_line": 152,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9140,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository#part1",
+          "start_line": 125,
+          "end_line": 204,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9150,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.updateStepStatus",
+          "start_line": 154,
+          "end_line": 156,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9151,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.listSteps",
+          "start_line": 158,
+          "end_line": 162,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9152,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.listEvents",
+          "start_line": 164,
+          "end_line": 192,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9153,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.appendEvent",
+          "start_line": 194,
+          "end_line": 197,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9141,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository#part2",
+          "start_line": 195,
+          "end_line": 274,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9154,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.nextSeq",
+          "start_line": 199,
+          "end_line": 201,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9155,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.insertApproval",
+          "start_line": 205,
+          "end_line": 227,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9156,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.getApproval",
+          "start_line": 229,
+          "end_line": 263,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9142,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository#part3",
+          "start_line": 265,
+          "end_line": 279,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9157,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.listPendingApprovals",
+          "start_line": 265,
+          "end_line": 278,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": true,
+        "expanded_terms": [
+          "run_log",
+          "operation_record",
+          "audit_log"
+        ],
+        "candidate_count": 30
+      },
+      "top_results": [
+        {
+          "chunk_id": 13126,
+          "path": "src/main/a2a/task-store.ts",
+          "symbol": "A2ATaskStore",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0194,
+          "rerank_score": 0.1282,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 13129,
+          "path": "src/main/a2a/task-store.ts",
+          "symbol": "A2ATaskStore.get",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.019,
+          "rerank_score": 0.3229,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 20926,
+          "path": "src/main/recipes/recipe-runner.ts",
+          "symbol": "RecipeRunner#part6",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0171,
+          "rerank_score": 0.7405,
+          "fusion_rank": 5
+        },
+        {
+          "chunk_id": 13117,
+          "path": "src/main/a2a/task-store.ts",
+          "symbol": "logger",
+          "matched_by": [
+            "path-hint"
+          ],
+          "score": 0.0172,
+          "rerank_score": 0.1089,
+          "fusion_rank": 4
+        },
+        {
+          "chunk_id": 9136,
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRow",
+          "matched_by": [
+            "path-hint"
+          ],
+          "score": 0.0172,
+          "rerank_score": 0.001,
+          "fusion_rank": 3
+        }
+      ]
+    },
+    {
+      "id": "q076",
+      "project": "repository-manage",
+      "difficulty": "semantic",
+      "question": "知识库列表是怎么获取的",
+      "rank": null,
+      "hit5": false,
+      "failure_reason": "filtered_before_rerank",
+      "gold_candidates": [
+        {
+          "chunk_id": 3322,
+          "project": "repository-manage",
+          "path": "src-tauri/src/commands.rs",
+          "symbol": "list_kbs",
+          "start_line": 96,
+          "end_line": 99,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand-sub"
+            ],
+            "channel_ranks": {
+              "expand-sub": 2
+            },
+            "fusion_rank": null
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": true,
+        "expanded_terms": [
+          "knowledge_base_list",
+          "get_knowledge_bases",
+          "kb_directory"
+        ],
+        "candidate_count": 20
+      },
+      "top_results": [
+        {
+          "chunk_id": 3530,
+          "path": "src-tauri/src/kb_registry.rs",
+          "symbol": "list",
+          "matched_by": [
+            "expand-sub",
+            "vector"
+          ],
+          "score": 0.0245,
+          "rerank_score": 0.0374,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 4200,
+          "path": "src/views/MapView.zh.json",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0131,
+          "rerank_score": 0.1031,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 4203,
+          "path": "src/views/Settings.zh.json",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0129,
+          "rerank_score": 0.1543,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 3959,
+          "path": "src/search/SearchBox.zh.json",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0127,
+          "rerank_score": 0.1456,
+          "fusion_rank": 4
+        },
+        {
+          "chunk_id": 4017,
+          "path": "src/components/Sidebar.zh.json",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0125,
+          "rerank_score": 0.009,
+          "fusion_rank": 5
+        }
+      ]
+    },
+    {
+      "id": "q078",
+      "project": "repository-manage",
+      "difficulty": "semantic",
+      "question": "条目文件名是怎么校验的",
+      "rank": null,
+      "hit5": false,
+      "failure_reason": "filtered_before_rerank",
+      "gold_candidates": [
+        {
+          "chunk_id": 3319,
+          "project": "repository-manage",
+          "path": "src-tauri/src/commands.rs",
+          "symbol": "validate_filename",
+          "start_line": 15,
+          "end_line": 38,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand-sub"
+            ],
+            "channel_ranks": {
+              "expand-sub": 1
+            },
+            "fusion_rank": null
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": true,
+        "expanded_terms": [
+          "validate_entry_filename",
+          "check_entry_file",
+          "entry_file_validation"
+        ],
+        "candidate_count": 27
+      },
+      "top_results": [
+        {
+          "chunk_id": 1883,
+          "path": "shared/types.ts",
+          "symbol": "Entry",
+          "matched_by": [
+            "expand-sub"
+          ],
+          "score": 0.0221,
+          "rerank_score": 0.0551,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 3119,
+          "path": "src-tauri/src/lib.rs",
+          "symbol": "entry",
+          "matched_by": [
+            "expand-sub"
+          ],
+          "score": 0.0218,
+          "rerank_score": 0.0001,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 3414,
+          "path": "src-tauri/src/commands.rs",
+          "symbol": "tests.filename_accepts_normal_names",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0185,
+          "rerank_score": 0.8208,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 3766,
+          "path": "src-tauri/src/bin/synapse.rs",
+          "symbol": "Commands",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0176,
+          "rerank_score": 0.0227,
+          "fusion_rank": 4
+        },
+        {
+          "chunk_id": 3713,
+          "path": "src-tauri/src/validator/fix_impls/e6_remove_root_md.rs",
+          "symbol": "tests",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0174,
+          "rerank_score": 0.0111,
+          "fusion_rank": 5
+        }
+      ]
+    },
+    {
+      "id": "q080",
+      "project": "repository-manage",
+      "difficulty": "semantic",
+      "question": "巡检报告支持哪些输出格式",
+      "rank": null,
+      "hit5": false,
+      "failure_reason": "not_retrieved",
+      "gold_candidates": [
+        {
+          "chunk_id": 3771,
+          "project": "repository-manage",
+          "path": "src-tauri/src/bin/synapse.rs",
+          "symbol": "print_report_human",
+          "start_line": 153,
+          "end_line": 172,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 3772,
+          "project": "repository-manage",
+          "path": "src-tauri/src/bin/synapse.rs",
+          "symbol": "print_report_json",
+          "start_line": 174,
+          "end_line": 199,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": true,
+        "expanded_terms": [
+          "report_pdf",
+          "report_xml",
+          "report_json"
+        ],
+        "candidate_count": 19
+      },
+      "top_results": [
+        {
+          "chunk_id": 3768,
+          "path": "src-tauri/src/bin/synapse.rs",
+          "symbol": "ReportDto",
+          "matched_by": [
+            "expand-sub"
+          ],
+          "score": 0.0221,
+          "rerank_score": 0.0129,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 3658,
+          "path": "src-tauri/src/validator/mod.rs",
+          "symbol": "ValidationReport",
+          "matched_by": [
+            "expand-sub"
+          ],
+          "score": 0.0218,
+          "rerank_score": 0.0138,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 3770,
+          "path": "src-tauri/src/bin/synapse.rs",
+          "symbol": "main",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0179,
+          "rerank_score": 0.0851,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 2112,
+          "path": "docs/superpowers/plans/2026-10-12-kb-standards-v2.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0092,
+          "rerank_score": 0.0598,
+          "fusion_rank": 4
+        },
+        {
+          "chunk_id": 2116,
+          "path": "docs/superpowers/plans/2026-10-12-kb-standards-v2.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.009,
+          "rerank_score": 0.0598,
+          "fusion_rank": 5
+        }
+      ]
+    }
+  ]
+}

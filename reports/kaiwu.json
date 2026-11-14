@@ -1,0 +1,601 @@
+{
+  "name": "kaiwu",
+  "root": "/Users/zhumingchen/kaiwu",
+  "project_type": "mixed",
+  "file_counts": {
+    "document": 44,
+    "other": 1,
+    "code": 32,
+    "data": 3
+  },
+  "languages": {
+    "python": 30,
+    "html": 1,
+    "shell": 1
+  },
+  "total_indexable_files": 80,
+  "spec_candidates": [],
+  "manifests": [],
+  "lock_files": [],
+  "excluded_dirs": {
+    "__pycache__": 2,
+    "evals": 1,
+    ".screenshots": 1,
+    "models": 1,
+    ".venv": 1,
+    ".git": 1,
+    "data": 1,
+    "notebooks": 1,
+    "kb_corpus_real": 1,
+    "kb_corpus_draft": 1,
+    "kb_corpus": 1
+  },
+  "excluded_files": {
+    ".DS_Store": 1
+  },
+  "unreadable": [],
+  "oversize": [],
+  "errors": [],
+  "files": [
+    {
+      "path": "README.md",
+      "category": "document",
+      "language": "",
+      "size": 15843,
+      "is_spec_candidate": false
+    },
+    {
+      "path": ".gitignore",
+      "category": "other",
+      "language": "",
+      "size": 414,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "ai-dev-research.md",
+      "category": "document",
+      "language": "",
+      "size": 52229,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "env-audit.md",
+      "category": "document",
+      "language": "",
+      "size": 15904,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "app/build_kb_corpus.py",
+      "category": "code",
+      "language": "python",
+      "size": 15072,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "app/evaluate_rag.py",
+      "category": "code",
+      "language": "python",
+      "size": 9575,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "app/kb_gold_dev120.json",
+      "category": "data",
+      "language": "",
+      "size": 6845,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "app/answers.py",
+      "category": "code",
+      "language": "python",
+      "size": 5824,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "app/import_real_corpus.py",
+      "category": "code",
+      "language": "python",
+      "size": 8435,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "app/retrieval.py",
+      "category": "code",
+      "language": "python",
+      "size": 8582,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "app/kb_gold_dev40.json",
+      "category": "data",
+      "language": "",
+      "size": 1588,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "app/ask_ticket.py",
+      "category": "code",
+      "language": "python",
+      "size": 3881,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "app/web/index.html",
+      "category": "code",
+      "language": "html",
+      "size": 64153,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/README.md",
+      "category": "document",
+      "language": "",
+      "size": 8131,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/03-评测体系/02-测试集与划分.md",
+      "category": "document",
+      "language": "",
+      "size": 6513,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/03-评测体系/01-评测指标口径.md",
+      "category": "document",
+      "language": "",
+      "size": 5789,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/03-评测体系/03-评测稳定性与统计检验.md",
+      "category": "document",
+      "language": "",
+      "size": 13155,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/01-项目概览/01-项目目标与路线.md",
+      "category": "document",
+      "language": "",
+      "size": 12936,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/02-环境与硬件/01-环境与依赖实测.md",
+      "category": "document",
+      "language": "",
+      "size": 3109,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/08-应用层/03-回归门禁与阈值.md",
+      "category": "document",
+      "language": "",
+      "size": 8913,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/08-应用层/02-真实语料接入与标注一致性.md",
+      "category": "document",
+      "language": "",
+      "size": 10719,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/08-应用层/01-检索增强与引用.md",
+      "category": "document",
+      "language": "",
+      "size": 11729,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/08-应用层/05-量化与推理优化.md",
+      "category": "document",
+      "language": "",
+      "size": 11821,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/08-应用层/04-混合召回RRF.md",
+      "category": "document",
+      "language": "",
+      "size": 6799,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/06-微调与训练/06-训练侧算法优化对照.md",
+      "category": "document",
+      "language": "",
+      "size": 2379,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/06-微调与训练/09-4B-LoRA.md",
+      "category": "document",
+      "language": "",
+      "size": 13812,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/06-微调与训练/07-test2验收结论.md",
+      "category": "document",
+      "language": "",
+      "size": 2719,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/06-微调与训练/05-超参小网格与筛选.md",
+      "category": "document",
+      "language": "",
+      "size": 3250,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/06-微调与训练/08-模型选型.md",
+      "category": "document",
+      "language": "",
+      "size": 4872,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/06-微调与训练/02-LoRA首轮评测结果.md",
+      "category": "document",
+      "language": "",
+      "size": 6082,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/06-微调与训练/04-训练数据v5与工程化配置.md",
+      "category": "document",
+      "language": "",
+      "size": 4705,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/06-微调与训练/01-微调配置与冒烟结果.md",
+      "category": "document",
+      "language": "",
+      "size": 4560,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/99-归档/02-多seed重验结论.md",
+      "category": "document",
+      "language": "",
+      "size": 4883,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/99-归档/03-扩样本后的对比结论.md",
+      "category": "document",
+      "language": "",
+      "size": 4983,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/99-归档/01-LoRA多seed重验.md",
+      "category": "document",
+      "language": "",
+      "size": 7683,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/09-新任务-政策判定/02-检索优化与瓶颈诊断.md",
+      "category": "document",
+      "language": "",
+      "size": 5007,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/09-新任务-政策判定/01-任务定义与难度基线.md",
+      "category": "document",
+      "language": "",
+      "size": 6623,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/07-决策日志/09-test2验收与dev120乐观偏差.md",
+      "category": "document",
+      "language": "",
+      "size": 2328,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/07-决策日志/08-文档一致性修订.md",
+      "category": "document",
+      "language": "",
+      "size": 16285,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/07-决策日志/05-评测波动诊断与统计口径.md",
+      "category": "document",
+      "language": "",
+      "size": 3615,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/07-决策日志/04-LoRA首轮结果与取舍.md",
+      "category": "document",
+      "language": "",
+      "size": 3937,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/07-决策日志/02-约束解码选型决策.md",
+      "category": "document",
+      "language": "",
+      "size": 3228,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/07-决策日志/03-序列长度与最大长度决策.md",
+      "category": "document",
+      "language": "",
+      "size": 1989,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/07-决策日志/01-测试集降级决策.md",
+      "category": "document",
+      "language": "",
+      "size": 2322,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/05-数据与标注/01-标注口径指南.md",
+      "category": "document",
+      "language": "",
+      "size": 3534,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/05-数据与标注/02-数据构造与泄漏检查.md",
+      "category": "document",
+      "language": "",
+      "size": 7571,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/04-提示词与约束解码/01-提示词迭代与实测结论.md",
+      "category": "document",
+      "language": "",
+      "size": 3935,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/04-提示词与约束解码/02-约束解码取舍.md",
+      "category": "document",
+      "language": "",
+      "size": 4706,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "kb/kaiwu/10-知识库治理/01-分类与优先级映射.md",
+      "category": "document",
+      "language": "",
+      "size": 8888,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "config/models.json",
+      "category": "data",
+      "language": "",
+      "size": 1095,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "docs/real-corpus-onboarding.md",
+      "category": "document",
+      "language": "",
+      "size": 13209,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "docs/kb-architecture.md",
+      "category": "document",
+      "language": "",
+      "size": 13143,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "docs/env.md",
+      "category": "document",
+      "language": "",
+      "size": 11128,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "docs/labeling-guide.md",
+      "category": "document",
+      "language": "",
+      "size": 15444,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "docs/handover-2026-11-05.md",
+      "category": "document",
+      "language": "",
+      "size": 21223,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/train_lora_epoch.py",
+      "category": "code",
+      "language": "python",
+      "size": 21272,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/expand_dataset_c.py",
+      "category": "code",
+      "language": "python",
+      "size": 20323,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/smoke_test.py",
+      "category": "code",
+      "language": "python",
+      "size": 8068,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/check_summary_targets.py",
+      "category": "code",
+      "language": "python",
+      "size": 3268,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/guided_outlines.py",
+      "category": "code",
+      "language": "python",
+      "size": 1957,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/train_lora_smoke.py",
+      "category": "code",
+      "language": "python",
+      "size": 5933,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/build_cases_v5.py",
+      "category": "code",
+      "language": "python",
+      "size": 40061,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/guided.py",
+      "category": "code",
+      "language": "python",
+      "size": 13760,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/check_kb.py",
+      "category": "code",
+      "language": "python",
+      "size": 39372,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/prompts.py",
+      "category": "code",
+      "language": "python",
+      "size": 8368,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/build_cases_v6.py",
+      "category": "code",
+      "language": "python",
+      "size": 17521,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/policy_task_lib.py",
+      "category": "code",
+      "language": "python",
+      "size": 8223,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/download_model.py",
+      "category": "code",
+      "language": "python",
+      "size": 2055,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/summarize_lora.py",
+      "category": "code",
+      "language": "python",
+      "size": 8092,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/train_lora_mlx.py",
+      "category": "code",
+      "language": "python",
+      "size": 15485,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/build_dataset_b.py",
+      "category": "code",
+      "language": "python",
+      "size": 53937,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/policy_retrieval.py",
+      "category": "code",
+      "language": "python",
+      "size": 15550,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/compare_regression.py",
+      "category": "code",
+      "language": "python",
+      "size": 11821,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/check_policy_leakage.py",
+      "category": "code",
+      "language": "python",
+      "size": 5299,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/build_policy_cases.py",
+      "category": "code",
+      "language": "python",
+      "size": 49943,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/model_registry.py",
+      "category": "code",
+      "language": "python",
+      "size": 2595,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/run_regression.sh",
+      "category": "code",
+      "language": "shell",
+      "size": 5477,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/extract.py",
+      "category": "code",
+      "language": "python",
+      "size": 12623,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/check_leakage.py",
+      "category": "code",
+      "language": "python",
+      "size": 8422,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/lora_case_diff.py",
+      "category": "code",
+      "language": "python",
+      "size": 4914,
+      "is_spec_candidate": false
+    }
+  ]
+}

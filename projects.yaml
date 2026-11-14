@@ -1,0 +1,31 @@
+# 知识源登记：五个本地项目目录
+projects:
+  - name: ai-video-kb
+    path: /Users/zhumingchen/ai-video-kb
+    type: auto
+
+  - name: kaiwu
+    path: /Users/zhumingchen/kaiwu
+    type: auto
+    # 评测集与语料数据量大，默认不入索引，需要时可移除
+    extra_exclude_dirs: [evals, data]
+
+  - name: new-bargain-laravel
+    path: /Users/zhumingchen/new-bargain-laravel
+    type: auto
+
+  - name: tiangong
+    path: /Users/zhumingchen/tiangong
+    type: auto
+
+  - name: repository-manage
+    path: /Users/zhumingchen/repository-manage
+    type: auto
+
+  - name: dev-kb
+    path: /Users/zhumingchen/dev-kb
+    type: auto
+    # 自举：排除索引数据、评测结果与冻结基线，避免问题/答案自我引用污染检索。
+    # 路径形式（带 /）按相对路径匹配整棵子树——baselines/results 实际在 evals/ 下，
+    # 只写目录名匹配不到（见 scanner 的 ignore_paths）。
+    extra_exclude_dirs: [data, evals/baselines, evals/results]

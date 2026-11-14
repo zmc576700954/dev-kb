@@ -1,0 +1,5 @@
+{"id": "q024", "project": null, "difficulty": "cross", "question": "知识库文档的标准和规范", "gold": {"any_of": ["standards", "kb-standards", "标准"]}}
+{"id": "q029", "project": "tiangong", "difficulty": "semantic", "question": "Agent 会话管理是怎么实现的", "gold": {"any_of": ["agent-manager", "session", "Session"]}}
+{"id": "q061", "project": "tiangong", "difficulty": "semantic", "question": "中断的审批请求如何恢复", "gold": {"any_of": ["replayPending", "PendingResolver", "Approval"]}}
+{"id": "q080", "project": "repository-manage", "difficulty": "semantic", "question": "巡检报告支持哪些输出格式", "gold": {"any_of": ["print_report"]}}
+{"id": "q100", "project": null, "difficulty": "cross", "question": "数据库迁移文件在哪个目录", "gold": {"any_of": ["migrations", "迁移"]}}

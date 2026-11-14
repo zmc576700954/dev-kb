@@ -1,0 +1,5 @@
+{"id": "q044", "project": "kaiwu", "difficulty": "semantic", "question": "知识库语料文件是怎么校验的", "gold": {"any_of": ["validate_file", "build_index"]}}
+{"id": "q057", "project": "tiangong", "difficulty": "semantic", "question": "运行记录是怎么持久化到数据库的", "gold": {"any_of": ["RunRepository"]}}
+{"id": "q076", "project": "repository-manage", "difficulty": "semantic", "question": "知识库列表是怎么获取的", "gold": {"any_of": ["list_kbs"]}}
+{"id": "q078", "project": "repository-manage", "difficulty": "semantic", "question": "条目文件名是怎么校验的", "gold": {"any_of": ["validate_filename"]}}
+{"id": "q080", "project": "repository-manage", "difficulty": "semantic", "question": "巡检报告支持哪些输出格式", "gold": {"any_of": ["print_report"]}}

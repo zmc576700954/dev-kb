@@ -1,0 +1,12 @@
+{"id":"r001","question":"tiangong 的 canTransition 在哪定义","expected_project":"tiangong"}
+{"id":"r002","question":"dev-kb 的 HybridSearch 在哪个文件","expected_project":"dev-kb"}
+{"id":"r003","question":"repository-manage 的 list_kbs 怎么实现","expected_project":"repository-manage"}
+{"id":"r004","question":"比较 tiangong 和 dev-kb 的检索实现","expected_project":null,"expected_candidates":["tiangong","dev-kb"]}
+{"id":"r005","question":"canTransition 在哪定义","expected_project":"tiangong"}
+{"id":"r006","question":"list_kbs 是怎么获取知识库的","expected_project":"repository-manage"}
+{"id":"r007","question":"validate_file 怎么校验语料","expected_project":"kaiwu"}
+{"id":"r008","question":"AutoCommentPrizeCommand 的作用是什么","expected_project":"new-bargain-laravel"}
+{"id":"r009","question":"ComfyUI 部署需要什么硬件","expected_project":"ai-video-kb"}
+{"id":"r010","question":"HybridSearch 的融合逻辑在哪","expected_project":null}
+{"id":"r011","question":"日志是在哪记录的","expected_project":null}
+{"id":"r012","question":"数据库迁移文件在哪个目录","expected_project":null,"all_projects":true}

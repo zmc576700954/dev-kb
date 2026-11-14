@@ -1,0 +1,12 @@
+{"id": "h001", "project": "tiangong", "difficulty": "literal", "question": "runExclusive 的运行锁逻辑在哪实现", "gold": {"any_of": ["run-lock.ts", "runExclusive"]}}
+{"id": "h002", "project": "tiangong", "difficulty": "semantic", "question": "运行步骤记录是怎么写入数据库的", "gold": {"any_of": ["repository.ts", "createStep"]}}
+{"id": "h003", "project": "repository-manage", "difficulty": "literal", "question": "print_report_human 函数在哪里", "gold": {"any_of": ["print_report_human"]}}
+{"id": "h004", "project": "repository-manage", "difficulty": "semantic", "question": "巡检结果在什么情况下应该返回错误退出码", "gold": {"any_of": ["should_exit_error"]}}
+{"id": "h005", "project": "kaiwu", "difficulty": "literal", "question": "parse_frontmatter 是在哪个文件定义的", "gold": {"any_of": ["import_real_corpus.py", "parse_frontmatter"]}}
+{"id": "h006", "project": "kaiwu", "difficulty": "semantic", "question": "不使用模型时的模板答案在哪里生成", "gold": {"any_of": ["template_answer"]}}
+{"id": "h007", "project": "new-bargain-laravel", "difficulty": "literal", "question": "CleanExpiredLuckData 命令定义在哪", "gold": {"any_of": ["CleanExpiredLuckData"]}}
+{"id": "h008", "project": "new-bargain-laravel", "difficulty": "semantic", "question": "抽奖轮次是怎么结束的", "gold": {"any_of": ["FinishRounds"]}}
+{"id": "h009", "project": "dev-kb", "difficulty": "literal", "question": "HybridSearch 类在哪个文件", "gold": {"any_of": ["tools/retrieval.py", "HybridSearch"]}}
+{"id": "h010", "project": "dev-kb", "difficulty": "semantic", "question": "证据回读时如何识别索引后的文件变化", "gold": {"any_of": ["tools/source.py", "read_source"]}}
+{"id": "h011", "project": null, "difficulty": "cross", "question": "AppConfig 配置结构体在哪定义", "gold": {"any_of": ["shared/types.ts", "AppConfig"]}}
+{"id": "h012", "project": "dev-kb", "difficulty": "doc", "question": "检索基线对比使用什么统计检验", "gold": {"any_of": ["evals/README.md"]}}

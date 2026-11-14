@@ -1,0 +1,1241 @@
+{
+  "name": "repository-manage",
+  "root": "/Users/zhumingchen/repository-manage",
+  "project_type": "mixed",
+  "file_counts": {
+    "data": 47,
+    "code": 93,
+    "config": 6,
+    "document": 21,
+    "other": 1
+  },
+  "languages": {
+    "typescript": 49,
+    "rust": 39,
+    "javascript": 3,
+    "html": 1,
+    "css": 1
+  },
+  "total_indexable_files": 168,
+  "spec_candidates": [
+    "docs/superpowers/plans/2026-10-09-synapse-kb.md",
+    "docs/superpowers/plans/2026-10-11-i18n.md",
+    "docs/superpowers/plans/2026-10-12-inline-edit-rename-plan.md",
+    "docs/superpowers/plans/2026-10-12-kb-standards-v2.md",
+    "docs/superpowers/plans/2026-10-12-notification-system.md",
+    "docs/superpowers/plans/2026-10-12-search-and-markdown-plan.md",
+    "docs/superpowers/plans/2026-10-12-ui-layout-redesign.md",
+    "docs/superpowers/specs/2026-10-09-synapse-kb-design.md",
+    "docs/superpowers/specs/2026-10-11-i18n-design.md",
+    "docs/superpowers/specs/2026-10-12-inline-edit-rename-design.md",
+    "docs/superpowers/specs/2026-10-12-kb-standards-v2-design.md",
+    "docs/superpowers/specs/2026-10-12-notification-system-design.md",
+    "docs/superpowers/specs/2026-10-12-search-and-markdown-design.md",
+    "docs/superpowers/specs/2026-10-12-ui-layout-redesign-design.md"
+  ],
+  "manifests": [
+    "package.json",
+    "postcss.config.js",
+    "src-tauri/Cargo.toml",
+    "tailwind.config.js",
+    "tsconfig.json",
+    "vite.config.ts"
+  ],
+  "lock_files": [
+    "package-lock.json",
+    "src-tauri/Cargo.lock"
+  ],
+  "excluded_dirs": {
+    ".screenshots": 1,
+    "dist": 1,
+    "node_modules": 1,
+    ".claude": 1,
+    ".git": 1,
+    "target": 1,
+    ".superpowers/brainstorm": 1
+  },
+  "excluded_files": {
+    ".DS_Store": 1
+  },
+  "unreadable": [],
+  "oversize": [],
+  "errors": [],
+  "files": [
+    {
+      "path": "tsconfig.node.json",
+      "category": "data",
+      "language": "",
+      "size": 233,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "index.html",
+      "category": "code",
+      "language": "html",
+      "size": 297,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "tailwind.config.js",
+      "category": "config",
+      "language": "",
+      "size": 602,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "README.md",
+      "category": "document",
+      "language": "",
+      "size": 1118,
+      "is_spec_candidate": false
+    },
+    {
+      "path": ".gitignore",
+      "category": "other",
+      "language": "",
+      "size": 307,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "package.json",
+      "category": "config",
+      "language": "",
+      "size": 1045,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "tsconfig.json",
+      "category": "config",
+      "language": "",
+      "size": 816,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "vite.config.ts",
+      "category": "config",
+      "language": "",
+      "size": 543,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "postcss.config.js",
+      "category": "config",
+      "language": "",
+      "size": 81,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "CLAUDE.md",
+      "category": "document",
+      "language": "",
+      "size": 6802,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "shared/types.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 4163,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "docs/architecture.md",
+      "category": "document",
+      "language": "",
+      "size": 45519,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "docs/standards.md",
+      "category": "document",
+      "language": "",
+      "size": 1458,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "docs/github-gitee-mirror.md",
+      "category": "document",
+      "language": "",
+      "size": 3664,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "docs/verification/2026-10-12-kb-standards-v2.md",
+      "category": "document",
+      "language": "",
+      "size": 4187,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-12-kb-standards-v2.md",
+      "category": "document",
+      "language": "",
+      "size": 87997,
+      "is_spec_candidate": true
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-12-notification-system.md",
+      "category": "document",
+      "language": "",
+      "size": 63061,
+      "is_spec_candidate": true
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-12-inline-edit-rename-plan.md",
+      "category": "document",
+      "language": "",
+      "size": 87537,
+      "is_spec_candidate": true
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-12-ui-layout-redesign.md",
+      "category": "document",
+      "language": "",
+      "size": 23860,
+      "is_spec_candidate": true
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-12-search-and-markdown-plan.md",
+      "category": "document",
+      "language": "",
+      "size": 45728,
+      "is_spec_candidate": true
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-09-synapse-kb.md",
+      "category": "document",
+      "language": "",
+      "size": 94022,
+      "is_spec_candidate": true
+    },
+    {
+      "path": "docs/superpowers/plans/2026-10-11-i18n.md",
+      "category": "document",
+      "language": "",
+      "size": 56330,
+      "is_spec_candidate": true
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-12-search-and-markdown-design.md",
+      "category": "document",
+      "language": "",
+      "size": 13285,
+      "is_spec_candidate": true
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-12-inline-edit-rename-design.md",
+      "category": "document",
+      "language": "",
+      "size": 17354,
+      "is_spec_candidate": true
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-09-synapse-kb-design.md",
+      "category": "document",
+      "language": "",
+      "size": 9077,
+      "is_spec_candidate": true
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-12-ui-layout-redesign-design.md",
+      "category": "document",
+      "language": "",
+      "size": 15357,
+      "is_spec_candidate": true
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-12-notification-system-design.md",
+      "category": "document",
+      "language": "",
+      "size": 22150,
+      "is_spec_candidate": true
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-11-i18n-design.md",
+      "category": "document",
+      "language": "",
+      "size": 8899,
+      "is_spec_candidate": true
+    },
+    {
+      "path": "docs/superpowers/specs/2026-10-12-kb-standards-v2-design.md",
+      "category": "document",
+      "language": "",
+      "size": 47377,
+      "is_spec_candidate": true
+    },
+    {
+      "path": "docs/superpowers/verification/2026-10-12-notification-verify.md",
+      "category": "document",
+      "language": "",
+      "size": 2866,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/cleanup-temp.mjs",
+      "category": "code",
+      "language": "javascript",
+      "size": 1826,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/cleanup-temp.test.mjs",
+      "category": "code",
+      "language": "javascript",
+      "size": 1947,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "scripts/run-unit-tests.mjs",
+      "category": "code",
+      "language": "javascript",
+      "size": 1903,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/Cargo.toml",
+      "category": "config",
+      "language": "",
+      "size": 1044,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/tauri.conf.json",
+      "category": "data",
+      "language": "",
+      "size": 629,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/build.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 110,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/capabilities/default.json",
+      "category": "data",
+      "language": "",
+      "size": 236,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/gen/schemas/capabilities.json",
+      "category": "data",
+      "language": "",
+      "size": 190,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/gen/schemas/acl-manifests.json",
+      "category": "data",
+      "language": "",
+      "size": 73958,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/gen/schemas/macOS-schema.json",
+      "category": "data",
+      "language": "",
+      "size": 129929,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/gen/schemas/desktop-schema.json",
+      "category": "data",
+      "language": "",
+      "size": 129929,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/fingerprint.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 13685,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/error.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 8357,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/lib.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 48120,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/paths.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 4701,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/index.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 82539,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/formatter.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 13953,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/scanner.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 8865,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/commands.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 127233,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/content_io.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 3734,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/history.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 25527,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/state.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 11270,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/kb_registry.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 20322,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/main.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 136,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/entry.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 22757,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/layout_store.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 9733,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/validator/rules.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 21073,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/validator/mod.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 2559,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/validator/migrator.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 12049,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/validator/fix.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 2472,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/validator/system_labels.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 6353,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/validator/fix_impls/e4_default_type.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 4748,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/validator/fix_impls/e6_remove_root_md.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 7226,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/validator/fix_impls/e7_rename_reserved.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 1128,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/validator/fix_impls/e3_add_title.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 4367,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/validator/fix_impls/e1_add_id.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 3857,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/validator/fix_impls/mod.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 1301,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/validator/fix_impls/e2_sync_id.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 3190,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/validator/fix_impls/e5_move_deep.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 1106,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/validator/fix_impls/e9_strip_system.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 6750,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/bin/synapse.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 6348,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/parser/links.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 8934,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/parser/yaml_field.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 4774,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/parser/mod.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 203,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/parser/comments.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 6999,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/parser/metadata_updater.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 9824,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/parser/attachments.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 4435,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/fs/backup.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 5817,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src-tauri/src/fs/mod.rs",
+      "category": "code",
+      "language": "rust",
+      "size": 15,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/App.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 3954,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/main.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 602,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/styles.css",
+      "category": "code",
+      "language": "css",
+      "size": 3293,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/App.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 122,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/App.en.json",
+      "category": "data",
+      "language": "",
+      "size": 116,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/markdown/MarkdownView.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 4458,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/markdown/MarkdownView.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 240,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/markdown/MarkdownView.en.json",
+      "category": "data",
+      "language": "",
+      "size": 241,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/markdown/remarkWikilink.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 2218,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/utils/lineDiff.test.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 857,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/utils/tRule.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 638,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/utils/templateHeader.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 4559,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/utils/editorDraft.test.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 2179,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/utils/lineDiff.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 756,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/utils/templateHeader.test.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 2967,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/utils/editorDraft.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 2516,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/search/highlight.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 2320,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/search/SearchBox.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 6083,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/search/useSearch.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 2738,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/search/SearchBox.en.json",
+      "category": "data",
+      "language": "",
+      "size": 335,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/search/index.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 5162,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/search/SearchBox.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 348,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/EntryDialog.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 14142,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/ContextMenu.en.json",
+      "category": "data",
+      "language": "",
+      "size": 530,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/Sidebar.en.json",
+      "category": "data",
+      "language": "",
+      "size": 591,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/RightPanel.en.json",
+      "category": "data",
+      "language": "",
+      "size": 123,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/Error.en.json",
+      "category": "data",
+      "language": "",
+      "size": 257,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/FixWizard.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 2032,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/FixDrawer.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 4521,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/RightPanelStack.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 1177,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/ErrorBar.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 1008,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/NodeCard.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 2590,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/Error.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 271,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/FilterPanel.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 1098,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/RenameEntryDialog.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 7158,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/ContextMenu.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 550,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/EntryMetadataEditor.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 9355,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/RightPanel.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 117,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/Sidebar.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 565,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/ValidationPanel.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 332,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/RightPanel.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 1119,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/RelationDialog.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 7485,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/ContextMenu.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 3018,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/NodeCard.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 237,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/Fix.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 352,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/FilterPanel.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 103,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/RelationDialog.en.json",
+      "category": "data",
+      "language": "",
+      "size": 894,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/EntryDialog.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 1614,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/Sidebar.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 14060,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/VersionHistorySection.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 16780,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/RelationDialog.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 855,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/EntryDialog.en.json",
+      "category": "data",
+      "language": "",
+      "size": 1619,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/ValidationPanel.en.json",
+      "category": "data",
+      "language": "",
+      "size": 318,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/Fix.en.json",
+      "category": "data",
+      "language": "",
+      "size": 344,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/FilterPanel.en.json",
+      "category": "data",
+      "language": "",
+      "size": 102,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/ErrorBoundary.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 1686,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/ValidationPanel.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 6491,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/NodeCard.en.json",
+      "category": "data",
+      "language": "",
+      "size": 228,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/i18n/EntryMetadataEditor.en.json",
+      "category": "data",
+      "language": "",
+      "size": 590,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/i18n/EntryMetadataEditor.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 605,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/i18n/RenameEntryDialog.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 679,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/components/i18n/RenameEntryDialog.en.json",
+      "category": "data",
+      "language": "",
+      "size": 699,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/events/kbRefresh.test.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 6973,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/events/kbRefresh.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 6125,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/i18n/Validation.en.json",
+      "category": "data",
+      "language": "",
+      "size": 2671,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/i18n/languages.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 408,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/i18n/resources.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 3787,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/i18n/Validation.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 2601,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/i18n/translateError.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 2137,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/i18n/Errors.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 1717,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/i18n/index.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 1356,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/i18n/Errors.en.json",
+      "category": "data",
+      "language": "",
+      "size": 1789,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/views/Settings.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 17468,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/views/layoutSync.test.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 1220,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/views/layoutSync.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 861,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/views/DetailPanel.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 57343,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/views/MapView.tsx",
+      "category": "code",
+      "language": "typescript",
+      "size": 18204,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/views/Settings.en.json",
+      "category": "data",
+      "language": "",
+      "size": 2026,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/views/DetailPanel.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 8451,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/views/MapView.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 147,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/views/DetailPanel.en.json",
+      "category": "data",
+      "language": "",
+      "size": 8618,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/views/MapView.en.json",
+      "category": "data",
+      "language": "",
+      "size": 129,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/views/Settings.zh.json",
+      "category": "data",
+      "language": "",
+      "size": 1957,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/store/panelStore.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 1362,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/store/fixStore.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 876,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/store/langStore.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 722,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/store/readingPrefs.test.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 1228,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/store/useAppStore.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 19665,
+      "is_spec_candidate": false
+    },
+    {
+      "path": "src/store/readingPrefsStore.ts",
+      "category": "code",
+      "language": "typescript",
+      "size": 2805,
+      "is_spec_candidate": false
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+{
+  "run": "routing-v1",
+  "created_at": "2026-11-13T05:10:58.790002+00:00",
+  "cases_file": "evals/routing_cases_v1.jsonl",
+  "metrics": {
+    "n": 12,
+    "targeted_n": 8,
+    "targeted_accuracy": 0.375,
+    "targeted_coverage": 0.375,
+    "abstained": 5,
+    "wrong_route": 0,
+    "ambiguous_preserved": 1.0
+  },
+  "rows": [
+    {
+      "id": "r001",
+      "question": "tiangong 的 canTransition 在哪定义",
+      "expected_project": "tiangong",
+      "predicted_project": "tiangong",
+      "status": "ok",
+      "candidates": [],
+      "correct": true,
+      "wrong_route": false,
+      "abstained": false
+    },
+    {
+      "id": "r002",
+      "question": "dev-kb 的 HybridSearch 在哪个文件",
+      "expected_project": "dev-kb",
+      "predicted_project": "dev-kb",
+      "status": "ok",
+      "candidates": [],
+      "correct": true,
+      "wrong_route": false,
+      "abstained": false
+    },
+    {
+      "id": "r003",
+      "question": "repository-manage 的 list_kbs 怎么实现",
+      "expected_project": "repository-manage",
+      "predicted_project": "repository-manage",
+      "status": "ok",
+      "candidates": [],
+      "correct": true,
+      "wrong_route": false,
+      "abstained": false
+    },
+    {
+      "id": "r004",
+      "question": "比较 tiangong 和 dev-kb 的检索实现",
+      "expected_project": null,
+      "predicted_project": null,
+      "status": "project_required",
+      "candidates": [
+        "tiangong",
+        "dev-kb"
+      ],
+      "correct": true,
+      "wrong_route": false,
+      "abstained": false
+    },
+    {
+      "id": "r005",
+      "question": "canTransition 在哪定义",
+      "expected_project": "tiangong",
+      "predicted_project": null,
+      "status": "project_required",
+      "candidates": [
+        "ai-video-kb",
+        "dev-kb",
+        "kaiwu",
+        "new-bargain-laravel",
+        "repository-manage",
+        "tiangong"
+      ],
+      "correct": false,
+      "wrong_route": false,
+      "abstained": true
+    },
+    {
+      "id": "r006",
+      "question": "list_kbs 是怎么获取知识库的",
+      "expected_project": "repository-manage",
+      "predicted_project": null,
+      "status": "project_required",
+      "candidates": [
+        "ai-video-kb",
+        "dev-kb",
+        "kaiwu",
+        "new-bargain-laravel",
+        "repository-manage",
+        "tiangong"
+      ],
+      "correct": false,
+      "wrong_route": false,
+      "abstained": true
+    },
+    {
+      "id": "r007",
+      "question": "validate_file 怎么校验语料",
+      "expected_project": "kaiwu",
+      "predicted_project": null,
+      "status": "project_required",
+      "candidates": [
+        "ai-video-kb",
+        "dev-kb",
+        "kaiwu",
+        "new-bargain-laravel",
+        "repository-manage",
+        "tiangong"
+      ],
+      "correct": false,
+      "wrong_route": false,
+      "abstained": true
+    },
+    {
+      "id": "r008",
+      "question": "AutoCommentPrizeCommand 的作用是什么",
+      "expected_project": "new-bargain-laravel",
+      "predicted_project": null,
+      "status": "project_required",
+      "candidates": [
+        "ai-video-kb",
+        "dev-kb",
+        "kaiwu",
+        "new-bargain-laravel",
+        "repository-manage",
+        "tiangong"
+      ],
+      "correct": false,
+      "wrong_route": false,
+      "abstained": true
+    },
+    {
+      "id": "r009",
+      "question": "ComfyUI 部署需要什么硬件",
+      "expected_project": "ai-video-kb",
+      "predicted_project": null,
+      "status": "project_required",
+      "candidates": [
+        "ai-video-kb",
+        "dev-kb",
+        "kaiwu",
+        "new-bargain-laravel",
+        "repository-manage",
+        "tiangong"
+      ],
+      "correct": false,
+      "wrong_route": false,
+      "abstained": true
+    },
+    {
+      "id": "r010",
+      "question": "HybridSearch 的融合逻辑在哪",
+      "expected_project": null,
+      "predicted_project": null,
+      "status": "project_required",
+      "candidates": [
+        "ai-video-kb",
+        "dev-kb",
+        "kaiwu",
+        "new-bargain-laravel",
+        "repository-manage",
+        "tiangong"
+      ],
+      "correct": true,
+      "wrong_route": false,
+      "abstained": false
+    },
+    {
+      "id": "r011",
+      "question": "日志是在哪记录的",
+      "expected_project": null,
+      "predicted_project": null,
+      "status": "project_required",
+      "candidates": [
+        "ai-video-kb",
+        "dev-kb",
+        "kaiwu",
+        "new-bargain-laravel",
+        "repository-manage",
+        "tiangong"
+      ],
+      "correct": true,
+      "wrong_route": false,
+      "abstained": false
+    },
+    {
+      "id": "r012",
+      "question": "数据库迁移文件在哪个目录",
+      "expected_project": null,
+      "predicted_project": null,
+      "status": "ok",
+      "candidates": [],
+      "correct": true,
+      "wrong_route": false,
+      "abstained": false
+    }
+  ]
+}

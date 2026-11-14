@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "kb-spec": {
+      "type": "stdio",
+      "command": ".venv/bin/python",
+      "args": [
+        "-m",
+        "agent_app.kb_spec.mcp_server"
+      ],
+      "env": {
+        "PYTHONPATH": "src"
+      }
+    }
+  }
+}

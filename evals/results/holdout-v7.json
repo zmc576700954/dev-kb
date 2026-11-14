@@ -1,0 +1,3050 @@
+{
+  "run": "holdout-v7",
+  "created_at": "2026-11-13T05:26:36.368813+00:00",
+  "cases_file": "evals/cases_holdout.jsonl",
+  "cases": {
+    "path": "evals/cases_holdout.jsonl",
+    "sha256": "12d43003f46c31ef1c4766fecd68a946608ecba78e0853e35b2667e03828e749",
+    "count": 12,
+    "ids_sha256": "77615857ff512f627007f27a13dad48fb3410a1c44015aaf5ed79eaa10872149"
+  },
+  "config": {
+    "rerank": true,
+    "blend": 0.3,
+    "expand": true,
+    "expand_use_llm": true,
+    "code_boost": 1.5,
+    "doc_damp": 0.7,
+    "rrf_k": 60,
+    "result_limit": 5,
+    "query_expansion_cache_sha256": "f979494289c2a793e2c83c2bbff6f2a5fd81a213aee20a6fc8fb93ccef69e370"
+  },
+  "models": {
+    "embedding": "BAAI/bge-m3",
+    "reranker": "BAAI/bge-reranker-v2-m3",
+    "query_expansion": "mlx:Qwen3-4B-Instruct-2507-mlx-4bit"
+  },
+  "implementation": {
+    "algorithm": "sha256",
+    "sources_sha256": "02b62e90e678026e5e56fcc495babd4977fabe4ca4bdf2246c269c5bf8330328"
+  },
+  "index": {
+    "algorithm": "files-content-sha256-v1",
+    "sha256": "93ff7ed7cba83f5f4eeabbdc0363a0aa0354c11683ea47ce52ed538dcd1acb5d",
+    "files": 4206,
+    "chunks": 44480,
+    "pending_embedding": 0
+  },
+  "rerank": true,
+  "blend": 0.3,
+  "expand": true,
+  "code_boost": 1.5,
+  "doc_damp": 0.7,
+  "elapsed_s": 20.6,
+  "metrics": {
+    "recall@1": 0.6667,
+    "recall@3": 0.75,
+    "recall@5": 0.75,
+    "mrr@5": 0.7083,
+    "n": 12
+  },
+  "by_difficulty": {
+    "cross": {
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "n": 1
+    },
+    "doc": {
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "n": 1
+    },
+    "literal": {
+      "recall@1": 1.0,
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "n": 5
+    },
+    "semantic": {
+      "recall@1": 0.2,
+      "recall@3": 0.4,
+      "recall@5": 0.4,
+      "n": 5
+    }
+  },
+  "rows": [
+    {
+      "id": "h001",
+      "project": "tiangong",
+      "difficulty": "literal",
+      "question": "runExclusive 的运行锁逻辑在哪实现",
+      "rank": 1,
+      "hit5": true,
+      "failure_reason": null,
+      "gold_candidates": [
+        {
+          "chunk_id": 9130,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/concurrency/run-lock.ts",
+          "symbol": "LockContext",
+          "start_line": 5,
+          "end_line": 8,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9131,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/concurrency/run-lock.ts",
+          "symbol": "sleep",
+          "start_line": 10,
+          "end_line": 10,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9132,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/concurrency/run-lock.ts",
+          "symbol": "RunLockRegistry",
+          "start_line": 18,
+          "end_line": 75,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "vector"
+            ],
+            "channel_ranks": {
+              "vector": 3
+            },
+            "fusion_rank": 3
+          }
+        },
+        {
+          "chunk_id": 9133,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/concurrency/run-lock.ts",
+          "symbol": "RunLockRegistry.tryAcquire",
+          "start_line": 22,
+          "end_line": 46,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9134,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/concurrency/run-lock.ts",
+          "symbol": "RunLockRegistry.runExclusive",
+          "start_line": 48,
+          "end_line": 70,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand-sub",
+              "vector"
+            ],
+            "channel_ranks": {
+              "expand-sub": 1,
+              "vector": 2
+            },
+            "fusion_rank": 1
+          }
+        },
+        {
+          "chunk_id": 9135,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/concurrency/run-lock.ts",
+          "symbol": "RunLockRegistry.isHeld",
+          "start_line": 72,
+          "end_line": 74,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": true,
+        "expanded_terms": [
+          "runExclusive.lock",
+          "exclusiveLockManager",
+          "lockUtils"
+        ],
+        "candidate_count": 21
+      },
+      "top_results": [
+        {
+          "chunk_id": 9134,
+          "path": "spikes/agent-core/src/concurrency/run-lock.ts",
+          "symbol": "RunLockRegistry.runExclusive",
+          "matched_by": [
+            "expand-sub",
+            "vector"
+          ],
+          "score": 0.0341,
+          "rerank_score": 0.3763,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 9128,
+          "path": "spikes/agent-core/src/concurrency/session-executor.ts",
+          "symbol": "SessionExecutor",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0197,
+          "rerank_score": 0.8427,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 9132,
+          "path": "spikes/agent-core/src/concurrency/run-lock.ts",
+          "symbol": "RunLockRegistry",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.019,
+          "rerank_score": 0.5877,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 9129,
+          "path": "spikes/agent-core/src/concurrency/session-executor.ts",
+          "symbol": "SessionExecutor.submit",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0188,
+          "rerank_score": 0.6477,
+          "fusion_rank": 4
+        },
+        {
+          "chunk_id": 9104,
+          "path": "spikes/agent-core/src/types.ts",
+          "symbol": "SessionLockHandle",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0185,
+          "rerank_score": 0.0044,
+          "fusion_rank": 5
+        }
+      ]
+    },
+    {
+      "id": "h002",
+      "project": "tiangong",
+      "difficulty": "semantic",
+      "question": "运行步骤记录是怎么写入数据库的",
+      "rank": null,
+      "hit5": false,
+      "failure_reason": "not_retrieved",
+      "gold_candidates": [
+        {
+          "chunk_id": 9136,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRow",
+          "start_line": 12,
+          "end_line": 25,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9137,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "StepRow",
+          "start_line": 27,
+          "end_line": 40,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9138,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "CreateRunInput",
+          "start_line": 42,
+          "end_line": 53,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9139,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository#part1",
+          "start_line": 55,
+          "end_line": 134,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9143,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.constructor",
+          "start_line": 56,
+          "end_line": 56,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9144,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.createRun",
+          "start_line": 58,
+          "end_line": 94,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9145,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.getRun",
+          "start_line": 96,
+          "end_line": 98,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9146,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.getRunByIdempotencyKey",
+          "start_line": 100,
+          "end_line": 104,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9147,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.updateRunStatus",
+          "start_line": 106,
+          "end_line": 110,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9148,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.listRunsByStatuses",
+          "start_line": 112,
+          "end_line": 117,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9149,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.createStep",
+          "start_line": 119,
+          "end_line": 152,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9140,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository#part1",
+          "start_line": 125,
+          "end_line": 204,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9150,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.updateStepStatus",
+          "start_line": 154,
+          "end_line": 156,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9151,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.listSteps",
+          "start_line": 158,
+          "end_line": 162,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9152,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.listEvents",
+          "start_line": 164,
+          "end_line": 192,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9153,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.appendEvent",
+          "start_line": 194,
+          "end_line": 197,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9141,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository#part2",
+          "start_line": 195,
+          "end_line": 274,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9154,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.nextSeq",
+          "start_line": 199,
+          "end_line": 201,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9155,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.insertApproval",
+          "start_line": 205,
+          "end_line": 227,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9156,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.getApproval",
+          "start_line": 229,
+          "end_line": 263,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9142,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository#part3",
+          "start_line": 265,
+          "end_line": 279,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9157,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "RunRepository.listPendingApprovals",
+          "start_line": 265,
+          "end_line": 278,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9158,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "nextSeq",
+          "start_line": 281,
+          "end_line": 286,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 9159,
+          "project": "tiangong",
+          "path": "spikes/agent-core/src/db/repository.ts",
+          "symbol": "appendEventRaw",
+          "start_line": 289,
+          "end_line": 312,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15459,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "AgentUsageRow",
+          "start_line": 28,
+          "end_line": 28,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15460,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "AgentRunRow",
+          "start_line": 54,
+          "end_line": 63,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15461,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "AgentSessionRow",
+          "start_line": 65,
+          "end_line": 88,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15462,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "AgentTurnRow",
+          "start_line": 90,
+          "end_line": 113,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15463,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "AgentStepRow",
+          "start_line": 115,
+          "end_line": 130,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15464,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "AgentApprovalRow",
+          "start_line": 132,
+          "end_line": 160,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15465,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "InsertTurnInput",
+          "start_line": 162,
+          "end_line": 177,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15466,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "InsertApprovalInput",
+          "start_line": 179,
+          "end_line": 203,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15467,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "EventRetentionPolicy",
+          "start_line": 209,
+          "end_line": 214,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15468,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "DEFAULT_EVENT_RETENTION",
+          "start_line": 216,
+          "end_line": 216,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15469,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "RetentionSkipReason",
+          "start_line": 226,
+          "end_line": 229,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15470,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "EventRetentionSkip",
+          "start_line": 231,
+          "end_line": 236,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15471,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "EventRetentionResult",
+          "start_line": 238,
+          "end_line": 249,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15472,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "EventStorageStats",
+          "start_line": 251,
+          "end_line": 259,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15473,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "ACTIVE_TURN_STATUSES",
+          "start_line": 263,
+          "end_line": 263,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15474,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "OPEN_STEP_STATUSES",
+          "start_line": 264,
+          "end_line": 264,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15475,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "TERMINAL_TURN_STATUSES",
+          "start_line": 265,
+          "end_line": 265,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15476,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "parseJson",
+          "start_line": 267,
+          "end_line": 274,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15477,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "isReportedToken",
+          "start_line": 277,
+          "end_line": 279,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15478,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "AgentRepository#part1",
+          "start_line": 281,
+          "end_line": 360,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15497,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "AgentRepository.constructor",
+          "start_line": 282,
+          "end_line": 282,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15498,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "AgentRepository.insertRun",
+          "start_line": 287,
+          "end_line": 305,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15499,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "AgentRepository.getRun",
+          "start_line": 307,
+          "end_line": 309,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15500,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "AgentRepository.updateRunStatus",
+          "start_line": 311,
+          "end_line": 313,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15501,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "AgentRepository.projectRunStatus",
+          "start_line": 316,
+          "end_line": 340,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 15502,
+          "project": "tiangong",
+          "path": "src/main/agent/runtime/db/repository.ts",
+          "symbol": "AgentRepository.insertSession",
+          "start_line": 345,
+          "end_line": 379,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": false,
+        "expanded_terms": [],
+        "candidate_count": 15
+      },
+      "top_results": [
+        {
+          "chunk_id": 20926,
+          "path": "src/main/recipes/recipe-runner.ts",
+          "symbol": "RecipeRunner#part6",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0131,
+          "rerank_score": 0.5957,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 49129,
+          "path": "docs/architecture/session-map-blueprint.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0127,
+          "rerank_score": 0.19,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 49414,
+          "path": "docs/architecture/session-map-blueprint.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0125,
+          "rerank_score": 0.19,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 15411,
+          "path": "src/main/agent/runtime/executors/acp-executor.ts",
+          "symbol": "AcpBackendDriver#part4",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0123,
+          "rerank_score": 0.1902,
+          "fusion_rank": 4
+        },
+        {
+          "chunk_id": 5059,
+          "path": "docs/tasks/2026-07-23-wiki-link-ingest.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0121,
+          "rerank_score": 0.0053,
+          "fusion_rank": 5
+        }
+      ]
+    },
+    {
+      "id": "h003",
+      "project": "repository-manage",
+      "difficulty": "literal",
+      "question": "print_report_human 函数在哪里",
+      "rank": 1,
+      "hit5": true,
+      "failure_reason": null,
+      "gold_candidates": [
+        {
+          "chunk_id": 3771,
+          "project": "repository-manage",
+          "path": "src-tauri/src/bin/synapse.rs",
+          "symbol": "print_report_human",
+          "start_line": 153,
+          "end_line": 172,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand-sub",
+              "fts-weak",
+              "symbol",
+              "vector"
+            ],
+            "channel_ranks": {
+              "symbol": 1,
+              "expand-sub": 1,
+              "fts-weak": 1,
+              "vector": 1
+            },
+            "fusion_rank": 1
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": true,
+        "expanded_terms": [
+          "print_report_human.py",
+          "report_utils.py",
+          "human_reporter.py"
+        ],
+        "candidate_count": 14
+      },
+      "top_results": [
+        {
+          "chunk_id": 3771,
+          "path": "src-tauri/src/bin/synapse.rs",
+          "symbol": "print_report_human",
+          "matched_by": [
+            "expand-sub",
+            "fts-weak",
+            "symbol",
+            "vector"
+          ],
+          "score": 0.0959,
+          "rerank_score": 0.9579,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 3770,
+          "path": "src-tauri/src/bin/synapse.rs",
+          "symbol": "main",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0185,
+          "rerank_score": 0.7768,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 3772,
+          "path": "src-tauri/src/bin/synapse.rs",
+          "symbol": "print_report_json",
+          "matched_by": [
+            "expand-sub",
+            "vector"
+          ],
+          "score": 0.0246,
+          "rerank_score": 0.0726,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 2112,
+          "path": "docs/superpowers/plans/2026-10-12-kb-standards-v2.md",
+          "symbol": "",
+          "matched_by": [
+            "fts-weak",
+            "vector"
+          ],
+          "score": 0.014,
+          "rerank_score": 0.7454,
+          "fusion_rank": 6
+        },
+        {
+          "chunk_id": 2030,
+          "path": "docs/superpowers/plans/2026-10-12-kb-standards-v2.md",
+          "symbol": "",
+          "matched_by": [
+            "fts-weak",
+            "vector"
+          ],
+          "score": 0.0139,
+          "rerank_score": 0.7454,
+          "fusion_rank": 7
+        }
+      ]
+    },
+    {
+      "id": "h004",
+      "project": "repository-manage",
+      "difficulty": "semantic",
+      "question": "巡检结果在什么情况下应该返回错误退出码",
+      "rank": null,
+      "hit5": false,
+      "failure_reason": "reranked_out",
+      "gold_candidates": [
+        {
+          "chunk_id": 3773,
+          "project": "repository-manage",
+          "path": "src-tauri/src/bin/synapse.rs",
+          "symbol": "should_exit_error",
+          "start_line": 201,
+          "end_line": 209,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "vector"
+            ],
+            "channel_ranks": {
+              "vector": 7
+            },
+            "fusion_rank": 7
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": false,
+        "expanded_terms": [],
+        "candidate_count": 15
+      },
+      "top_results": [
+        {
+          "chunk_id": 3770,
+          "path": "src-tauri/src/bin/synapse.rs",
+          "symbol": "main",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0131,
+          "rerank_score": 0.2053,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 2894,
+          "path": "docs/superpowers/specs/2026-10-12-notification-system-design.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0129,
+          "rerank_score": 0.002,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 3040,
+          "path": "docs/superpowers/specs/2026-10-12-kb-standards-v2-design.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0127,
+          "rerank_score": 0.001,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 1898,
+          "path": "docs/architecture.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0125,
+          "rerank_score": 0.0037,
+          "fusion_rank": 4
+        },
+        {
+          "chunk_id": 2953,
+          "path": "docs/superpowers/specs/2026-10-12-kb-standards-v2-design.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0123,
+          "rerank_score": 0.0046,
+          "fusion_rank": 5
+        }
+      ]
+    },
+    {
+      "id": "h005",
+      "project": "kaiwu",
+      "difficulty": "literal",
+      "question": "parse_frontmatter 是在哪个文件定义的",
+      "rank": 1,
+      "hit5": true,
+      "failure_reason": null,
+      "gold_candidates": [
+        {
+          "chunk_id": 1058,
+          "project": "kaiwu",
+          "path": "app/import_real_corpus.py",
+          "symbol": "parse_frontmatter",
+          "start_line": 50,
+          "end_line": 70,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand-sub",
+              "symbol",
+              "vector"
+            ],
+            "channel_ranks": {
+              "symbol": 1,
+              "expand-sub": 1,
+              "vector": 2
+            },
+            "fusion_rank": 1
+          }
+        },
+        {
+          "chunk_id": 1059,
+          "project": "kaiwu",
+          "path": "app/import_real_corpus.py",
+          "symbol": "split_tags",
+          "start_line": 73,
+          "end_line": 74,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1060,
+          "project": "kaiwu",
+          "path": "app/import_real_corpus.py",
+          "symbol": "validate_file",
+          "start_line": 77,
+          "end_line": 145,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1061,
+          "project": "kaiwu",
+          "path": "app/import_real_corpus.py",
+          "symbol": "build_index",
+          "start_line": 148,
+          "end_line": 182,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1062,
+          "project": "kaiwu",
+          "path": "app/import_real_corpus.py",
+          "symbol": "main",
+          "start_line": 185,
+          "end_line": 223,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1682,
+          "project": "kaiwu",
+          "path": "scripts/check_kb.py",
+          "symbol": "parse_frontmatter",
+          "start_line": 146,
+          "end_line": 168,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand-sub",
+              "symbol",
+              "vector"
+            ],
+            "channel_ranks": {
+              "symbol": 2,
+              "expand-sub": 2,
+              "vector": 1
+            },
+            "fusion_rank": 2
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": true,
+        "expanded_terms": [
+          "parse_frontmatter.js",
+          "frontmatter-parser.js",
+          "_frontmatter.ts"
+        ],
+        "candidate_count": 17
+      },
+      "top_results": [
+        {
+          "chunk_id": 1058,
+          "path": "app/import_real_corpus.py",
+          "symbol": "parse_frontmatter",
+          "matched_by": [
+            "expand-sub",
+            "symbol",
+            "vector"
+          ],
+          "score": 0.0907,
+          "rerank_score": 0.2452,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 1682,
+          "path": "scripts/check_kb.py",
+          "symbol": "parse_frontmatter",
+          "matched_by": [
+            "expand-sub",
+            "symbol",
+            "vector"
+          ],
+          "score": 0.0898,
+          "rerank_score": 0.3306,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 1702,
+          "path": "scripts/check_kb.py",
+          "symbol": "check_m1",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.019,
+          "rerank_score": 0.3938,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 1703,
+          "path": "scripts/check_kb.py",
+          "symbol": "check_m2",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0176,
+          "rerank_score": 0.1651,
+          "fusion_rank": 6
+        },
+        {
+          "chunk_id": 1681,
+          "path": "scripts/check_kb.py",
+          "symbol": "_frontmatter_bounds",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0188,
+          "rerank_score": 0.0275,
+          "fusion_rank": 4
+        }
+      ]
+    },
+    {
+      "id": "h006",
+      "project": "kaiwu",
+      "difficulty": "semantic",
+      "question": "不使用模型时的模板答案在哪里生成",
+      "rank": 1,
+      "hit5": true,
+      "failure_reason": null,
+      "gold_candidates": [
+        {
+          "chunk_id": 1053,
+          "project": "kaiwu",
+          "path": "app/answers.py",
+          "symbol": "template_answer",
+          "start_line": 48,
+          "end_line": 71,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand-sub",
+              "vector"
+            ],
+            "channel_ranks": {
+              "expand-sub": 1,
+              "vector": 4
+            },
+            "fusion_rank": 1
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": true,
+        "expanded_terms": [
+          "template_answer_generator.py",
+          "default_template.html",
+          "no_model_response.json"
+        ],
+        "candidate_count": 22
+      },
+      "top_results": [
+        {
+          "chunk_id": 1053,
+          "path": "app/answers.py",
+          "symbol": "template_answer",
+          "matched_by": [
+            "expand-sub",
+            "vector"
+          ],
+          "score": 0.0335,
+          "rerank_score": 0.2445,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 1083,
+          "path": "app/ask_ticket.py",
+          "symbol": "main",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0197,
+          "rerank_score": 0.0528,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 1087,
+          "path": "app/web/index.html",
+          "symbol": "__fallback__",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0194,
+          "rerank_score": 0.0498,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 1633,
+          "path": "scripts/smoke_test.py",
+          "symbol": "main",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0182,
+          "rerank_score": 0.0114,
+          "fusion_rank": 4
+        },
+        {
+          "chunk_id": 1046,
+          "path": "app/evaluate_rag.py",
+          "symbol": "main",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0176,
+          "rerank_score": 0.006,
+          "fusion_rank": 5
+        }
+      ]
+    },
+    {
+      "id": "h007",
+      "project": "new-bargain-laravel",
+      "difficulty": "literal",
+      "question": "CleanExpiredLuckData 命令定义在哪",
+      "rank": 1,
+      "hit5": true,
+      "failure_reason": null,
+      "gold_candidates": [
+        {
+          "chunk_id": 34250,
+          "project": "new-bargain-laravel",
+          "path": "app/Console/Commands/CleanExpiredLuckData.php",
+          "symbol": "CleanExpiredLuckData",
+          "start_line": 8,
+          "end_line": 49,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand",
+              "expand-full-sub",
+              "expand-sub",
+              "fts-weak",
+              "symbol",
+              "vector"
+            ],
+            "channel_ranks": {
+              "symbol": 1,
+              "expand": 1,
+              "expand-full-sub": 1,
+              "expand-sub": 2,
+              "fts-weak": 1,
+              "vector": 1
+            },
+            "fusion_rank": 1
+          }
+        },
+        {
+          "chunk_id": 34251,
+          "project": "new-bargain-laravel",
+          "path": "app/Console/Commands/CleanExpiredLuckData.php",
+          "symbol": "CleanExpiredLuckData@handle",
+          "start_line": 29,
+          "end_line": 48,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand-full-sub",
+              "vector"
+            ],
+            "channel_ranks": {
+              "expand-full-sub": 3,
+              "vector": 8
+            },
+            "fusion_rank": 7
+          }
+        },
+        {
+          "chunk_id": 28019,
+          "project": "new-bargain-laravel",
+          "path": "app/Jobs/CleanExpiredLuckDataJob.php",
+          "symbol": "CleanExpiredLuckDataJob",
+          "start_line": 23,
+          "end_line": 227,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand",
+              "expand-full-sub",
+              "path",
+              "vector"
+            ],
+            "channel_ranks": {
+              "path": 1,
+              "expand": 1,
+              "expand-full-sub": 2,
+              "vector": 2
+            },
+            "fusion_rank": 2
+          }
+        },
+        {
+          "chunk_id": 28020,
+          "project": "new-bargain-laravel",
+          "path": "app/Jobs/CleanExpiredLuckDataJob.php",
+          "symbol": "CleanExpiredLuckDataJob@__construct",
+          "start_line": 35,
+          "end_line": 40,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand",
+              "path"
+            ],
+            "channel_ranks": {
+              "path": 2,
+              "expand": 2
+            },
+            "fusion_rank": 5
+          }
+        },
+        {
+          "chunk_id": 28021,
+          "project": "new-bargain-laravel",
+          "path": "app/Jobs/CleanExpiredLuckDataJob.php",
+          "symbol": "CleanExpiredLuckDataJob@handle",
+          "start_line": 42,
+          "end_line": 93,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand",
+              "path"
+            ],
+            "channel_ranks": {
+              "path": 3,
+              "expand": 3
+            },
+            "fusion_rank": 6
+          }
+        },
+        {
+          "chunk_id": 28022,
+          "project": "new-bargain-laravel",
+          "path": "app/Jobs/CleanExpiredLuckDataJob.php",
+          "symbol": "CleanExpiredLuckDataJob@cleanSoftDeletedLucks",
+          "start_line": 95,
+          "end_line": 119,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand",
+              "path",
+              "vector"
+            ],
+            "channel_ranks": {
+              "path": 4,
+              "expand": 4,
+              "vector": 5
+            },
+            "fusion_rank": 3
+          }
+        },
+        {
+          "chunk_id": 28023,
+          "project": "new-bargain-laravel",
+          "path": "app/Jobs/CleanExpiredLuckDataJob.php",
+          "symbol": "CleanExpiredLuckDataJob@cleanExpiredLucks",
+          "start_line": 121,
+          "end_line": 144,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand",
+              "path",
+              "vector"
+            ],
+            "channel_ranks": {
+              "path": 5,
+              "expand": 5,
+              "vector": 6
+            },
+            "fusion_rank": 4
+          }
+        },
+        {
+          "chunk_id": 28024,
+          "project": "new-bargain-laravel",
+          "path": "app/Jobs/CleanExpiredLuckDataJob.php",
+          "symbol": "CleanExpiredLuckDataJob@cleanOrphanedParticipates",
+          "start_line": 146,
+          "end_line": 172,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 28025,
+          "project": "new-bargain-laravel",
+          "path": "app/Jobs/CleanExpiredLuckDataJob.php",
+          "symbol": "CleanExpiredLuckDataJob@cleanUsedLuckCodes",
+          "start_line": 174,
+          "end_line": 202,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "vector"
+            ],
+            "channel_ranks": {
+              "vector": 9
+            },
+            "fusion_rank": 12
+          }
+        },
+        {
+          "chunk_id": 28026,
+          "project": "new-bargain-laravel",
+          "path": "app/Jobs/CleanExpiredLuckDataJob.php",
+          "symbol": "CleanExpiredLuckDataJob@cleanCompletedPrizes",
+          "start_line": 204,
+          "end_line": 226,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 38901,
+          "project": "new-bargain-laravel",
+          "path": "tests/Feature/CleanExpiredLuckDataJobTest.php",
+          "symbol": "CleanExpiredLuckDataJobTest",
+          "start_line": 13,
+          "end_line": 80,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "vector"
+            ],
+            "channel_ranks": {
+              "vector": 3
+            },
+            "fusion_rank": 13
+          }
+        },
+        {
+          "chunk_id": 38902,
+          "project": "new-bargain-laravel",
+          "path": "tests/Feature/CleanExpiredLuckDataJobTest.php",
+          "symbol": "CleanExpiredLuckDataJobTest@test_periodic_activity_and_used_code_are_retained_after_retention_window",
+          "start_line": 17,
+          "end_line": 26,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 38903,
+          "project": "new-bargain-laravel",
+          "path": "tests/Feature/CleanExpiredLuckDataJobTest.php",
+          "symbol": "CleanExpiredLuckDataJobTest@test_one_off_and_legacy_activities_and_used_codes_are_still_cleaned",
+          "start_line": 28,
+          "end_line": 45,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "vector"
+            ],
+            "channel_ranks": {
+              "vector": 4
+            },
+            "fusion_rank": 14
+          }
+        },
+        {
+          "chunk_id": 38904,
+          "project": "new-bargain-laravel",
+          "path": "tests/Feature/CleanExpiredLuckDataJobTest.php",
+          "symbol": "CleanExpiredLuckDataJobTest@test_soft_deleted_periodic_activity_is_not_force_deleted",
+          "start_line": 47,
+          "end_line": 61,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "vector"
+            ],
+            "channel_ranks": {
+              "vector": 7
+            },
+            "fusion_rank": 15
+          }
+        },
+        {
+          "chunk_id": 38905,
+          "project": "new-bargain-laravel",
+          "path": "tests/Feature/CleanExpiredLuckDataJobTest.php",
+          "symbol": "CleanExpiredLuckDataJobTest@makeExpiredLuck",
+          "start_line": 63,
+          "end_line": 70,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 38906,
+          "project": "new-bargain-laravel",
+          "path": "tests/Feature/CleanExpiredLuckDataJobTest.php",
+          "symbol": "CleanExpiredLuckDataJobTest@makeUsedCode",
+          "start_line": 72,
+          "end_line": 79,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": true,
+        "expanded_terms": [
+          "CleanExpiredLuckData",
+          "clean_expired_luck_data",
+          "clean_expired_luck.yaml"
+        ],
+        "candidate_count": 28
+      },
+      "top_results": [
+        {
+          "chunk_id": 34250,
+          "path": "app/Console/Commands/CleanExpiredLuckData.php",
+          "symbol": "CleanExpiredLuckData",
+          "matched_by": [
+            "expand",
+            "expand-full-sub",
+            "expand-sub",
+            "fts-weak",
+            "symbol",
+            "vector"
+          ],
+          "score": 0.169,
+          "rerank_score": 0.896,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 28019,
+          "path": "app/Jobs/CleanExpiredLuckDataJob.php",
+          "symbol": "CleanExpiredLuckDataJob",
+          "matched_by": [
+            "expand",
+            "expand-full-sub",
+            "path",
+            "vector"
+          ],
+          "score": 0.0781,
+          "rerank_score": 0.4159,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 28023,
+          "path": "app/Jobs/CleanExpiredLuckDataJob.php",
+          "symbol": "CleanExpiredLuckDataJob@cleanExpiredLucks",
+          "matched_by": [
+            "expand",
+            "path",
+            "vector"
+          ],
+          "score": 0.0597,
+          "rerank_score": 0.2506,
+          "fusion_rank": 4
+        },
+        {
+          "chunk_id": 28022,
+          "path": "app/Jobs/CleanExpiredLuckDataJob.php",
+          "symbol": "CleanExpiredLuckDataJob@cleanSoftDeletedLucks",
+          "matched_by": [
+            "expand",
+            "path",
+            "vector"
+          ],
+          "score": 0.0606,
+          "rerank_score": 0.1144,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 28021,
+          "path": "app/Jobs/CleanExpiredLuckDataJob.php",
+          "symbol": "CleanExpiredLuckDataJob@handle",
+          "matched_by": [
+            "expand",
+            "path"
+          ],
+          "score": 0.0429,
+          "rerank_score": 0.4901,
+          "fusion_rank": 6
+        }
+      ]
+    },
+    {
+      "id": "h008",
+      "project": "new-bargain-laravel",
+      "difficulty": "semantic",
+      "question": "抽奖轮次是怎么结束的",
+      "rank": 2,
+      "hit5": true,
+      "failure_reason": null,
+      "gold_candidates": [
+        {
+          "chunk_id": 34282,
+          "project": "new-bargain-laravel",
+          "path": "app/Console/Commands/Lottery/FinishRounds.php",
+          "symbol": "FinishRounds",
+          "start_line": 16,
+          "end_line": 47,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "vector"
+            ],
+            "channel_ranks": {
+              "vector": 2
+            },
+            "fusion_rank": 2
+          }
+        },
+        {
+          "chunk_id": 34283,
+          "project": "new-bargain-laravel",
+          "path": "app/Console/Commands/Lottery/FinishRounds.php",
+          "symbol": "FinishRounds@handle",
+          "start_line": 35,
+          "end_line": 46,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 25524,
+          "project": "new-bargain-laravel",
+          "path": "app/Shared/Services/WeeklyDrawService.php",
+          "symbol": "WeeklyDrawService@finishRounds",
+          "start_line": 452,
+          "end_line": 486,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": false,
+        "expanded_terms": [],
+        "candidate_count": 15
+      },
+      "top_results": [
+        {
+          "chunk_id": 27385,
+          "path": "app/Exceptions/Api/LuckParticipationException.php",
+          "symbol": "LuckParticipationException@luckEnded",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0131,
+          "rerank_score": 0.7565,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 34282,
+          "path": "app/Console/Commands/Lottery/FinishRounds.php",
+          "symbol": "FinishRounds",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0129,
+          "rerank_score": 0.7859,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 25753,
+          "path": "app/Shared/Services/LotteryExecutionService.php",
+          "symbol": "LotteryExecutionService@performNormalLottery",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0121,
+          "rerank_score": 0.0118,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 43086,
+          "path": "docs/接口参考/C端.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0119,
+          "rerank_score": 0.0347,
+          "fusion_rank": 4
+        },
+        {
+          "chunk_id": 27049,
+          "path": "app/Models/Luck.php",
+          "symbol": "Luck#part2",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0114,
+          "rerank_score": 0.0096,
+          "fusion_rank": 5
+        }
+      ]
+    },
+    {
+      "id": "h009",
+      "project": "dev-kb",
+      "difficulty": "literal",
+      "question": "HybridSearch 类在哪个文件",
+      "rank": 1,
+      "hit5": true,
+      "failure_reason": null,
+      "gold_candidates": [
+        {
+          "chunk_id": 50683,
+          "project": "dev-kb",
+          "path": "src/agent_app/tools/retrieval.py",
+          "symbol": "_extract_symbols",
+          "start_line": 44,
+          "end_line": 49,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 50684,
+          "project": "dev-kb",
+          "path": "src/agent_app/tools/retrieval.py",
+          "symbol": "_subtokens",
+          "start_line": 55,
+          "end_line": 66,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 50685,
+          "project": "dev-kb",
+          "path": "src/agent_app/tools/retrieval.py",
+          "symbol": "_extract_cjk_terms",
+          "start_line": 69,
+          "end_line": 88,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 50686,
+          "project": "dev-kb",
+          "path": "src/agent_app/tools/retrieval.py",
+          "symbol": "HybridSearch",
+          "start_line": 91,
+          "end_line": 210,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand-sub",
+              "symbol",
+              "vector"
+            ],
+            "channel_ranks": {
+              "symbol": 1,
+              "expand-sub": 1,
+              "vector": 1
+            },
+            "fusion_rank": 1
+          }
+        },
+        {
+          "chunk_id": 50687,
+          "project": "dev-kb",
+          "path": "src/agent_app/tools/retrieval.py",
+          "symbol": "HybridSearch.__init__",
+          "start_line": 92,
+          "end_line": 102,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 50688,
+          "project": "dev-kb",
+          "path": "src/agent_app/tools/retrieval.py",
+          "symbol": "HybridSearch.search",
+          "start_line": 104,
+          "end_line": 210,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "expand-sub"
+            ],
+            "channel_ranks": {
+              "expand-sub": 2
+            },
+            "fusion_rank": 2
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": true,
+        "expanded_terms": [
+          "hybrid_search.py",
+          "hybrid_search.class",
+          "search_hybrid.py"
+        ],
+        "candidate_count": 19
+      },
+      "top_results": [
+        {
+          "chunk_id": 50686,
+          "path": "src/agent_app/tools/retrieval.py",
+          "symbol": "HybridSearch",
+          "matched_by": [
+            "expand-sub",
+            "symbol",
+            "vector"
+          ],
+          "score": 0.1131,
+          "rerank_score": 0.5416,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 50674,
+          "path": "src/agent_app/mcp_server.py",
+          "symbol": "KnowledgeBaseService._search_engine",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.019,
+          "rerank_score": 0.6847,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 48056,
+          "path": "src/agent_app/llm/answer.py",
+          "symbol": "compose_answer",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0179,
+          "rerank_score": 0.7399,
+          "fusion_rank": 5
+        },
+        {
+          "chunk_id": 50688,
+          "path": "src/agent_app/tools/retrieval.py",
+          "symbol": "HybridSearch.search",
+          "matched_by": [
+            "expand-sub"
+          ],
+          "score": 0.0218,
+          "rerank_score": 0.0031,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 50645,
+          "path": "docs/architecture.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.009,
+          "rerank_score": 0.9084,
+          "fusion_rank": 6
+        }
+      ]
+    },
+    {
+      "id": "h010",
+      "project": "dev-kb",
+      "difficulty": "semantic",
+      "question": "证据回读时如何识别索引后的文件变化",
+      "rank": null,
+      "hit5": false,
+      "failure_reason": "not_retrieved",
+      "gold_candidates": [
+        {
+          "chunk_id": 50677,
+          "project": "dev-kb",
+          "path": "src/agent_app/mcp_server.py",
+          "symbol": "KnowledgeBaseService.read_source",
+          "start_line": 124,
+          "end_line": 128,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 50527,
+          "project": "dev-kb",
+          "path": "src/agent_app/tools/source.py",
+          "symbol": "read_source",
+          "start_line": 16,
+          "end_line": 54,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 50608,
+          "project": "dev-kb",
+          "path": "tests/test_mcp_server.py",
+          "symbol": "test_mcp_read_source_checks_boundaries_and_freshness",
+          "start_line": 72,
+          "end_line": 78,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": false,
+        "expanded_terms": [],
+        "candidate_count": 13
+      },
+      "top_results": [
+        {
+          "chunk_id": 50671,
+          "path": "src/agent_app/ask_cli.py",
+          "symbol": "main",
+          "matched_by": [
+            "fts-weak",
+            "vector"
+          ],
+          "score": 0.0201,
+          "rerank_score": 0.1447,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 50643,
+          "path": "docs/architecture.md",
+          "symbol": "",
+          "matched_by": [
+            "fts-weak",
+            "vector"
+          ],
+          "score": 0.0193,
+          "rerank_score": 0.0052,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 50662,
+          "path": "docs/decisions.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0131,
+          "rerank_score": 0.8982,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 48131,
+          "path": "src/agent_app/proposals/llm_draft.py",
+          "symbol": "llm_draft",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0129,
+          "rerank_score": 0.6913,
+          "fusion_rank": 4
+        },
+        {
+          "chunk_id": 50638,
+          "path": "docs/architecture.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0127,
+          "rerank_score": 0.07,
+          "fusion_rank": 5
+        }
+      ]
+    },
+    {
+      "id": "h011",
+      "project": null,
+      "difficulty": "cross",
+      "question": "AppConfig 配置结构体在哪定义",
+      "rank": 1,
+      "hit5": true,
+      "failure_reason": null,
+      "gold_candidates": [
+        {
+          "chunk_id": 32873,
+          "project": "new-bargain-laravel",
+          "path": "app/Modules/Common/Http/Controllers/Api/ConfigController.php",
+          "symbol": "ConfigController@appConfig",
+          "start_line": 111,
+          "end_line": 114,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "symbol"
+            ],
+            "channel_ranks": {
+              "symbol": 2
+            },
+            "fusion_rank": 2
+          }
+        },
+        {
+          "chunk_id": 32645,
+          "project": "new-bargain-laravel",
+          "path": "app/Modules/Common/Http/Requests/AppConfigRequest.php",
+          "symbol": "AppConfigRequest",
+          "start_line": 9,
+          "end_line": 25,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 32646,
+          "project": "new-bargain-laravel",
+          "path": "app/Modules/Common/Http/Requests/AppConfigRequest.php",
+          "symbol": "AppConfigRequest@rules",
+          "start_line": 14,
+          "end_line": 19,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 32647,
+          "project": "new-bargain-laravel",
+          "path": "app/Modules/Common/Http/Requests/AppConfigRequest.php",
+          "symbol": "AppConfigRequest@getPlatform",
+          "start_line": 21,
+          "end_line": 24,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 25743,
+          "project": "new-bargain-laravel",
+          "path": "app/Shared/Services/ConfigService.php",
+          "symbol": "ConfigService@getAppConfig",
+          "start_line": 242,
+          "end_line": 283,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 41736,
+          "project": "new-bargain-laravel",
+          "path": "tests/Feature/Api/AppConfigApiTest.php",
+          "symbol": "AppConfigApiTest",
+          "start_line": 12,
+          "end_line": 132,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "path"
+            ],
+            "channel_ranks": {
+              "path": 1
+            },
+            "fusion_rank": 7
+          }
+        },
+        {
+          "chunk_id": 41737,
+          "project": "new-bargain-laravel",
+          "path": "tests/Feature/Api/AppConfigApiTest.php",
+          "symbol": "AppConfigApiTest@test_returns_latest_version_with_platform_default_credentials",
+          "start_line": 16,
+          "end_line": 57,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "path"
+            ],
+            "channel_ranks": {
+              "path": 2
+            },
+            "fusion_rank": 8
+          }
+        },
+        {
+          "chunk_id": 41738,
+          "project": "new-bargain-laravel",
+          "path": "tests/Feature/Api/AppConfigApiTest.php",
+          "symbol": "AppConfigApiTest@test_version_credentials_override_platform_defaults",
+          "start_line": 59,
+          "end_line": 78,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "path"
+            ],
+            "channel_ranks": {
+              "path": 3
+            },
+            "fusion_rank": 10
+          }
+        },
+        {
+          "chunk_id": 41739,
+          "project": "new-bargain-laravel",
+          "path": "tests/Feature/Api/AppConfigApiTest.php",
+          "symbol": "AppConfigApiTest@test_rollback_outputs_historical_version_selected_as_latest",
+          "start_line": 80,
+          "end_line": 105,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "path"
+            ],
+            "channel_ranks": {
+              "path": 4
+            },
+            "fusion_rank": 11
+          }
+        },
+        {
+          "chunk_id": 41740,
+          "project": "new-bargain-laravel",
+          "path": "tests/Feature/Api/AppConfigApiTest.php",
+          "symbol": "AppConfigApiTest@test_rejects_unsupported_platform",
+          "start_line": 107,
+          "end_line": 111,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "path"
+            ],
+            "channel_ranks": {
+              "path": 5
+            },
+            "fusion_rank": 12
+          }
+        },
+        {
+          "chunk_id": 41741,
+          "project": "new-bargain-laravel",
+          "path": "tests/Feature/Api/AppConfigApiTest.php",
+          "symbol": "AppConfigApiTest@test_returns_empty_structure_when_platform_has_no_latest_version",
+          "start_line": 113,
+          "end_line": 131,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1871,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "RelationType",
+          "start_line": 1,
+          "end_line": 7,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1872,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "KBInfo",
+          "start_line": 9,
+          "end_line": 13,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1873,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "Relation",
+          "start_line": 15,
+          "end_line": 21,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1874,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "Attachment",
+          "start_line": 23,
+          "end_line": 27,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1875,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "SaveEntryResult",
+          "start_line": 29,
+          "end_line": 34,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1876,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "FormatPreview",
+          "start_line": 36,
+          "end_line": 41,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1877,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "VersionOrigin",
+          "start_line": 43,
+          "end_line": 43,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1878,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "VersionSummary",
+          "start_line": 45,
+          "end_line": 48,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1879,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "VersionMeta",
+          "start_line": 50,
+          "end_line": 62,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1880,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "HistoryWarnings",
+          "start_line": 64,
+          "end_line": 71,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1881,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "TrimPreview",
+          "start_line": 73,
+          "end_line": 78,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1882,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "TrimOutcome",
+          "start_line": 80,
+          "end_line": 83,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1883,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "Entry",
+          "start_line": 85,
+          "end_line": 103,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1884,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "StoredEntry",
+          "start_line": 110,
+          "end_line": 130,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1885,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "Layout",
+          "start_line": 132,
+          "end_line": 136,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1886,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "AppConfig",
+          "start_line": 138,
+          "end_line": 142,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "symbol"
+            ],
+            "channel_ranks": {
+              "symbol": 1
+            },
+            "fusion_rank": 1
+          }
+        },
+        {
+          "chunk_id": 1887,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "MetadataChanges",
+          "start_line": 149,
+          "end_line": 154,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1888,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "PrecheckRenameResult",
+          "start_line": 160,
+          "end_line": 166,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 1889,
+          "project": "repository-manage",
+          "path": "shared/types.ts",
+          "symbol": "RenameResult",
+          "start_line": 171,
+          "end_line": 174,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 11664,
+          "project": "tiangong",
+          "path": "src/shared/types.ts",
+          "symbol": "__fallback__",
+          "start_line": 1,
+          "end_line": 80,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": true,
+        "expanded_terms": [
+          "AppConfig.cpp",
+          "AppConfig.h",
+          "config/app_config.h"
+        ],
+        "candidate_count": 29
+      },
+      "top_results": [
+        {
+          "chunk_id": 1886,
+          "path": "shared/types.ts",
+          "symbol": "AppConfig",
+          "matched_by": [
+            "symbol"
+          ],
+          "score": 0.0492,
+          "rerank_score": 0.0338,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 32873,
+          "path": "app/Modules/Common/Http/Controllers/Api/ConfigController.php",
+          "symbol": "ConfigController@appConfig",
+          "matched_by": [
+            "symbol"
+          ],
+          "score": 0.0484,
+          "rerank_score": 0.041,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 3877,
+          "path": "src/App.tsx",
+          "symbol": "App",
+          "matched_by": [
+            "expand-sub"
+          ],
+          "score": 0.0221,
+          "rerank_score": 0.004,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 11606,
+          "path": "src/renderer/store/__tests__/sessionStore.test.ts",
+          "symbol": "config",
+          "matched_by": [
+            "expand-sub"
+          ],
+          "score": 0.0118,
+          "rerank_score": 0.0006,
+          "fusion_rank": 4
+        },
+        {
+          "chunk_id": 11608,
+          "path": "src/renderer/store/__tests__/sessionStore.test.ts",
+          "symbol": "config",
+          "matched_by": [
+            "expand-sub"
+          ],
+          "score": 0.0116,
+          "rerank_score": 0.0006,
+          "fusion_rank": 5
+        }
+      ]
+    },
+    {
+      "id": "h012",
+      "project": "dev-kb",
+      "difficulty": "doc",
+      "question": "检索基线对比使用什么统计检验",
+      "rank": 1,
+      "hit5": true,
+      "failure_reason": null,
+      "gold_candidates": [
+        {
+          "chunk_id": 50576,
+          "project": "dev-kb",
+          "path": "evals/README.md",
+          "symbol": "",
+          "start_line": 1,
+          "end_line": 55,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "fts-weak",
+              "vector"
+            ],
+            "channel_ranks": {
+              "fts-weak": 5,
+              "vector": 2
+            },
+            "fusion_rank": 1
+          }
+        },
+        {
+          "chunk_id": 50578,
+          "project": "dev-kb",
+          "path": "evals/README.md",
+          "symbol": "",
+          "start_line": 5,
+          "end_line": 14,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 50579,
+          "project": "dev-kb",
+          "path": "evals/README.md",
+          "symbol": "",
+          "start_line": 15,
+          "end_line": 33,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [
+              "vector"
+            ],
+            "channel_ranks": {
+              "vector": 5
+            },
+            "fusion_rank": 5
+          }
+        },
+        {
+          "chunk_id": 50580,
+          "project": "dev-kb",
+          "path": "evals/README.md",
+          "symbol": "",
+          "start_line": 34,
+          "end_line": 53,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 50581,
+          "project": "dev-kb",
+          "path": "evals/README.md",
+          "symbol": "",
+          "start_line": 45,
+          "end_line": 53,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 50582,
+          "project": "dev-kb",
+          "path": "evals/README.md",
+          "symbol": "",
+          "start_line": 54,
+          "end_line": 79,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 50577,
+          "project": "dev-kb",
+          "path": "evals/README.md",
+          "symbol": "",
+          "start_line": 56,
+          "end_line": 90,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 50583,
+          "project": "dev-kb",
+          "path": "evals/README.md",
+          "symbol": "",
+          "start_line": 80,
+          "end_line": 83,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        },
+        {
+          "chunk_id": 50584,
+          "project": "dev-kb",
+          "path": "evals/README.md",
+          "symbol": "",
+          "start_line": 84,
+          "end_line": 90,
+          "embedded": true,
+          "retrieval": {
+            "matched_by": [],
+            "channel_ranks": {},
+            "fusion_rank": null
+          }
+        }
+      ],
+      "diagnostics": {
+        "code_seeking": false,
+        "expanded_terms": [],
+        "candidate_count": 13
+      },
+      "top_results": [
+        {
+          "chunk_id": 50576,
+          "path": "evals/README.md",
+          "symbol": "",
+          "matched_by": [
+            "fts-weak",
+            "vector"
+          ],
+          "score": 0.0206,
+          "rerank_score": 0.7726,
+          "fusion_rank": 1
+        },
+        {
+          "chunk_id": 50565,
+          "path": "CHANGELOG.md",
+          "symbol": "",
+          "matched_by": [
+            "fts-weak",
+            "vector"
+          ],
+          "score": 0.0206,
+          "rerank_score": 0.2073,
+          "fusion_rank": 2
+        },
+        {
+          "chunk_id": 48171,
+          "path": "docs/knowledge-map.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0127,
+          "rerank_score": 0.8317,
+          "fusion_rank": 4
+        },
+        {
+          "chunk_id": 50569,
+          "path": "CHANGELOG.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0131,
+          "rerank_score": 0.3377,
+          "fusion_rank": 3
+        },
+        {
+          "chunk_id": 50579,
+          "path": "evals/README.md",
+          "symbol": "",
+          "matched_by": [
+            "vector"
+          ],
+          "score": 0.0123,
+          "rerank_score": 0.5382,
+          "fusion_rank": 5
+        }
+      ]
+    }
+  ]
+}

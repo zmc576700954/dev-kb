@@ -1,0 +1,21 @@
+# 知识源登记：本地项目目录（模板副本）
+#
+# 本文件是模板，不含真实环境信息。真实配置 projects.yaml 不入库——
+# 从本文件复制一份并填入本机实际路径：
+#
+#     cp projects.example.yaml projects.yaml
+#
+# path 支持 `~` 与环境变量（如 $HOME/xxx），由注册表统一展开。
+projects:
+  - name: my-project
+    path: ~/my-project
+    type: auto
+    # extra_exclude_dirs：可选，额外排除的目录。
+    # 目录名匹配 basename；带 / 的按相对路径匹配整棵子树。
+    # extra_exclude_dirs: [evals, data]
+
+  # dev-kb 自身（自举索引）：
+  #   - name: dev-kb
+  #     path: ~/dev-kb
+  #     type: auto
+  #     extra_exclude_dirs: [data, evals/baselines, evals/results]

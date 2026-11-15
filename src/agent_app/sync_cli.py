@@ -14,8 +14,7 @@ import argparse
 import time
 from pathlib import Path
 
-import yaml
-
+from agent_app.config import PROJECTS_EXAMPLE, default_projects_config, load_config
 from agent_app.indexing.metadata_store import MetadataStore
 from agent_app.ingestion.sync import SyncEngine
 
@@ -24,7 +23,7 @@ DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="M2 索引同步")
-    parser.add_argument("--config", default="projects.yaml")
+    parser.add_argument("--config", default=str(default_projects_config()))
     parser.add_argument("--project", help="只同步指定项目")
     parser.add_argument("--no-embed", action="store_true", help="跳过向量生成")
     parser.add_argument("--embed-pending", action="store_true", help="只补挂未完成向量")
@@ -55,7 +54,7 @@ def main() -> int:
                 break
         return 0
 
-    projects = yaml.safe_load(open(args.config, encoding="utf-8"))["projects"]
+    projects = load_config(args.config, PROJECTS_EXAMPLE, "项目注册表")["projects"]
     for p in projects:
         if args.project and p["name"] != args.project:
             continue

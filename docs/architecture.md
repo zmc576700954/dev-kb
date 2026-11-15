@@ -39,6 +39,10 @@ tools/              确定性工具层（只输出事实）
   source.py         read_source：按行号读原文件，检测索引后变更
   projects.py       projects.yaml 注册表
 
+config.py           配置定位：显式路径 > 环境变量 > 仓库根默认；缺失时给出「复制模板副本」提示
+                   （真实配置 projects.yaml / kb_projects.yaml 属本地状态，不入库，
+                     仓库只分发 *.example.yaml 模板副本）
+
 specs/              M4 Spec 结构化
   parser.py         解析 design/plan/task 三类文档：状态行、复选框、前置依赖、代码引用
   task_graph.py     任务依赖图：进度、阻塞、并行组（纯确定性图算法）

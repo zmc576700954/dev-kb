@@ -18,7 +18,7 @@ from pathlib import Path
 from agent_app.indexing.metadata_store import MetadataStore
 from agent_app.proposals.apply_update import apply_proposal
 from agent_app.proposals.impact_analysis import analyze_impact, draft_proposal
-from agent_app.tools.projects import project_root
+from agent_app.tools.projects import load_registry, project_root
 
 DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 
@@ -146,11 +146,9 @@ def main() -> int:
             return 1
         print(f"✅ 已写入 {r['applied']}（diff {r['diff_lines']} 行）")
         # 应用后自动增量索引
-        import yaml
         from agent_app.indexing.vector_store import VectorStore
         from agent_app.ingestion.sync import SyncEngine
-        cfg = yaml.safe_load(open("projects.yaml", encoding="utf-8"))
-        proj = next(x for x in cfg["projects"] if x["name"] == p["project"])
+        proj = load_registry()[p["project"]]
         engine = SyncEngine(store, VectorStore(DATA_DIR / "qdrant"))
         sr = engine.sync_project(p["project"], proj["path"], proj.get("extra_exclude_dirs"))
         print(f"增量索引完成：变更={sr['changed']} 块数={sr['chunks']}")

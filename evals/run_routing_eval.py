@@ -17,7 +17,7 @@ from agent_app.tools.routing import route_project  # noqa: E402
 def main() -> int:
     cases_path = ROOT / "evals/routing_cases_v1.jsonl"
     cases = [json.loads(line) for line in cases_path.read_text(encoding="utf-8").splitlines() if line.strip()]
-    registry = load_registry(ROOT / "projects.yaml")
+    registry = load_registry()
     rows = []
     for case in cases:
         route = route_project(

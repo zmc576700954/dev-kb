@@ -15,13 +15,13 @@ cd "$(dirname "$0")/.."
 STRICT=0
 [ "$1" = "--strict" ] && STRICT=1
 
-PROJECTS=$(PYTHONPATH=src .venv/bin/python - <<'PYEOF'
-import yaml
-data = yaml.safe_load(open("kb_projects.yaml", encoding="utf-8")) or {}
+PROJECTS=$(PYTHONPATH=src .venv/bin/python - <<'PYEOF' 2>&1
+from agent_app.config import KB_PROJECTS_EXAMPLE, default_kb_projects_config, load_config
+data = load_config(default_kb_projects_config(), KB_PROJECTS_EXAMPLE, "知识库项目注册表")
 for p in data.get("projects", []):
     print(p["name"])
 PYEOF
-)
+) || { echo "$PROJECTS"; exit 1; }
 
 FAILED=0
 for project in $PROJECTS; do
@@ -45,18 +45,18 @@ if [ "$STRICT" = "1" ]; then
     PYTHONPATH=src .venv/bin/python scripts/todo_report.py "$project" \
       --output "reports/kb-todo-$project.md" || exit 1
   done
-  COUNT=$(PYTHONPATH=src .venv/bin/python - <<'PYEOF'
-import yaml
+  COUNT=$(PYTHONPATH=src .venv/bin/python - <<'PYEOF' 2>&1
+from agent_app.config import KB_PROJECTS_EXAMPLE, default_kb_projects_config, load_config
 from agent_app.kb_spec.service import KBSpecService
+data = load_config(default_kb_projects_config(), KB_PROJECTS_EXAMPLE, "知识库项目注册表")
 svc = KBSpecService()
 total = 0
-data = yaml.safe_load(open("kb_projects.yaml", encoding="utf-8")) or {}
 for p in data.get("projects", []):
     r = svc.kb_validate_project(p["name"])
     total += r["summary"]["warnings"] + r["summary"]["reviews"]
 print(total)
 PYEOF
-)
+) || { echo "$COUNT"; exit 1; }
   if [ "$COUNT" != "0" ]; then
     echo "✗ 严格模式：仍有 $COUNT 处建议/待判断项（见 reports/kb-todo-*.md）"
     exit 1

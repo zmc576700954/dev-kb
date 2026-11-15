@@ -1,7 +1,9 @@
-"""M1 扫描命令：读取 projects.yaml，扫描全部知识源，输出 JSON + Markdown 报告。
+"""M1 扫描命令：读取项目注册表，扫描全部知识源，输出 JSON + Markdown 报告。
 
 用法：
     python -m agent_app.scan_cli --config projects.yaml --out reports/
+
+默认配置路径见 agent_app.config；真实配置不入库，先从 projects.example.yaml 复制。
 """
 
 from __future__ import annotations
@@ -11,14 +13,12 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-import yaml
-
+from agent_app.config import PROJECTS_EXAMPLE, default_projects_config, load_config
 from agent_app.ingestion.scanner import scan_project, summarize, report_to_json
 
 
 def load_projects(config_path: str) -> list[dict]:
-    with open(config_path, encoding="utf-8") as f:
-        data = yaml.safe_load(f)
+    data = load_config(config_path, PROJECTS_EXAMPLE, "项目注册表")
     return data.get("projects", [])
 
 
@@ -78,7 +78,7 @@ def render_markdown(summaries: list[dict]) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="M1 只读知识源扫描")
-    parser.add_argument("--config", default="projects.yaml")
+    parser.add_argument("--config", default=str(default_projects_config()))
     parser.add_argument("--out", default="reports")
     args = parser.parse_args()
 

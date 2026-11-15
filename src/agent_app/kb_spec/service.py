@@ -19,6 +19,7 @@ from .operations import (ProjectSnapshot, plan_archive, plan_create, plan_delete
                          plan_deprecate, plan_move, plan_update, _summary_of)
 from .proposals import KBProposalStore
 from .registry import kb_project_root, load_kb_registry
+from ..config import default_kb_projects_config
 from .vocab import Finding, SEVERITY_ERROR, SEVERITY_REVIEW, findings_to_dicts, summarize
 from .docmodel import count_words
 from .prompts import PROMPTS
@@ -42,7 +43,7 @@ class KBSpecService:
 
     def __init__(self, projects_config: str | Path | None = None,
                  db_path: str | Path | None = None, store=None):
-        self.registry_path = projects_config or ROOT / "kb_projects.yaml"
+        self.registry_path = projects_config or default_kb_projects_config()
         if store is not None:
             self.store = store
         else:

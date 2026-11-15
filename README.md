@@ -20,6 +20,20 @@
 
 ## 快速开始
 
+配置含本机项目路径，属本地状态，不随仓库分发。仓库只提供模板副本，先复制一份并填入实际路径：
+
+```bash
+cp projects.example.yaml projects.yaml
+cp kb_projects.example.yaml kb_projects.yaml
+```
+
+`path` 支持 `~` 与环境变量（如 `$HOME/xxx`）。配置也可放在仓库外，用环境变量指定：
+
+```bash
+export DEV_KB_PROJECTS=~/my-configs/projects.yaml
+export DEV_KB_KB_PROJECTS=~/my-configs/kb_projects.yaml
+```
+
 ```bash
 # 索引与问答
 PYTHONPATH=src .venv/bin/python -m agent_app.sync_cli --stats

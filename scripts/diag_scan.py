@@ -6,13 +6,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-import yaml
-
 from agent_app.ingestion.scanner import scan_project
+from agent_app.tools.projects import load_registry
 
 ROOT = Path(__file__).resolve().parent.parent
-projects = yaml.safe_load(open(ROOT / "projects.yaml", encoding="utf-8"))["projects"]
-dev = next(p for p in projects if p["name"] == "dev-kb")
+dev = load_registry()["dev-kb"]
 extra = dev.get("extra_exclude_dirs")
 print("projects.yaml 的 extra_exclude_dirs:", extra)
 

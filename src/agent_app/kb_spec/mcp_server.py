@@ -13,6 +13,7 @@ from pathlib import Path
 
 from .service import KBSpecError, KBSpecService
 from .prompts import PROMPTS, kb_write_guide, kb_review_guide, kb_fix_guide, kb_migrate_guide, kb_style_guide, kb_onboard_guide
+from ..config import default_kb_projects_config
 
 ROOT = Path(__file__).resolve().parents[3]
 PROTOCOL_VERSIONS = {"2024-11-05", "2025-03-26", "2025-06-18"}
@@ -250,7 +251,7 @@ class McpServer:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="知识库规范 MCP stdio 服务")
-    parser.add_argument("--config", default=str(ROOT / "kb_projects.yaml"))
+    parser.add_argument("--config", default=str(default_kb_projects_config()))
     parser.add_argument("--db", default=str(ROOT / "data/meta.db"))
     args = parser.parse_args()
     server = McpServer(KBSpecService(args.config, args.db))

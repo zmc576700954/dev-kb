@@ -12,6 +12,7 @@ import sys
 from pathlib import Path
 
 from agent_app.indexing.metadata_store import MetadataStore
+from agent_app.config import default_projects_config
 from agent_app.tools.projects import load_registry
 from agent_app.tools.routing import route_project
 from agent_app.tools.source import read_source as read_project_source
@@ -62,7 +63,7 @@ TOOL_DEFINITIONS = [
 class KnowledgeBaseService:
     def __init__(self, config: str | Path | None = None, db_path: str | Path | None = None,
                  engine=None):
-        self.config = str(config or ROOT / "projects.yaml")
+        self.config = str(config or default_projects_config())
         self.store = MetadataStore(db_path or ROOT / "data/meta.db")
         self._engine = engine
 
@@ -194,7 +195,7 @@ class McpServer:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="dev-kb 只读 MCP stdio 服务")
-    parser.add_argument("--config", default=str(ROOT / "projects.yaml"))
+    parser.add_argument("--config", default=str(default_projects_config()))
     parser.add_argument("--db", default=str(ROOT / "data/meta.db"))
     args = parser.parse_args()
     server = McpServer(KnowledgeBaseService(args.config, args.db))

@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 
 from .mcp_client import MCPServer, MCPError
+from ..config import default_kb_projects_config
 
 ROOT = Path(__file__).resolve().parents[3]
 
@@ -18,7 +19,7 @@ class KbSpecClient:
 
     def __init__(self, config: str | Path | None = None,
                  db: str | Path | None = None, python: str | None = None):
-        self.config = str(config or ROOT / "kb_projects.yaml")
+        self.config = str(config or default_kb_projects_config())
         self.db = str(db or ROOT / "data/meta.db")
         self.python = python or sys.executable
         self._server: MCPServer | None = None

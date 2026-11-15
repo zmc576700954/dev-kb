@@ -9,6 +9,7 @@
 
 from __future__ import annotations
 
+import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -108,7 +109,7 @@ def check_r04(decl: SourceDeclaration, store=None) -> list[Finding]:
     # 用入口文档去覆盖它们没有意义，会变成噪声。
     if not decl.provides_field("heading_path"):
         return findings
-    categories = _document_categories_of(root, decl)
+    categories = _document_categories_of(root, decl, store)
     if not categories:
         return findings
     linked = _entry_link_targets(root, decl)
@@ -227,12 +228,35 @@ def _target_exists(root: Path, pattern: str) -> bool:
         return False
 
 
-def _document_categories_of(root: Path, decl: SourceDeclaration) -> set[str]:
+#: 文件系统回退扫描的最大深度（避免在大目录上无界遍历）。
+_SCAN_DEPTH = 3
+
+
+def _document_categories_of(root: Path, decl: SourceDeclaration,
+                            store=None) -> set[str]:
     """含文档的一级分类目录。
 
     只统计"装文档的目录"——代码库的 src/、tests/ 里没有 .md，
     拿入口文档去覆盖它们没有意义，只会产生噪声。
+
+    优先用索引（快）；没有索引时退回**有深度上限**的文件系统扫描——
+    无界 rglob 在含大目录的源上会非常慢。
     """
+    if store is not None:
+        try:
+            rows = store.conn.execute(
+                "SELECT DISTINCT category FROM chunks"
+                " WHERE project=? AND source_type='document' AND category != ''",
+                (decl.name,),
+            ).fetchall()
+            if rows:
+                return {r["category"] for r in rows}
+        except Exception:
+            pass
+    return _scan_document_categories(root)
+
+
+def _scan_document_categories(root: Path) -> set[str]:
     out: set[str] = set()
     if not root.is_dir():
         return out
@@ -241,13 +265,26 @@ def _document_categories_of(root: Path, decl: SourceDeclaration) -> set[str]:
     except OSError:
         return out
     for child in children:
-        try:
-            has_doc = any(1 for _ in child.rglob("*.md"))
-        except OSError:
-            has_doc = False
-        if has_doc:
+        if _has_markdown(child, _SCAN_DEPTH):
             out.add(child.name)
     return out
+
+
+def _has_markdown(directory: Path, depth: int) -> bool:
+    if depth < 0:
+        return False
+    try:
+        for entry in os.scandir(directory):
+            if entry.is_dir(follow_symlinks=False):
+                if entry.name.startswith(".") or entry.name in ("node_modules", "vendor"):
+                    continue
+                if _has_markdown(Path(entry.path), depth - 1):
+                    return True
+            elif entry.name.endswith(".md"):
+                return True
+    except OSError:
+        return False
+    return False
 
 
 def _entry_link_targets(root: Path, decl: SourceDeclaration) -> set[str]:

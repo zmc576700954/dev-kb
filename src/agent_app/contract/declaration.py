@@ -183,14 +183,18 @@ class SourceDeclaration:
         return out
 
     def alias_to_canonical(self) -> dict[str, str]:
-        """别名表面形式 → canonical term。
+        """别名表面形式 → canonical term（只含真别名，不含 canonical 自身）。
 
         用于**查询侧扩展**：用户问"低秩适配"，扩展成"LoRA"再交给正常通道排序。
+
+        canonical 自身不映射到自己——精确词本来就由符号/FTS 通道处理，
+        再走一遍术语通道等于给同一批块重复加权。
         """
         out: dict[str, str] = {}
         for term, aliases in self.terms().items():
-            for a in [term, *aliases]:
-                out.setdefault(a, term)
+            for a in aliases:
+                if a != term:
+                    out.setdefault(a, term)
         return out
 
     # ---- 能力查询 ----

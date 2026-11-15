@@ -221,15 +221,17 @@ class MetadataStore:
         return self.conn.execute(sql, params).fetchall()
 
     def heading_search(self, query: str, project: str | None = None,
-                       limit: int = 10) -> list[sqlite3.Row]:
+                       limit: int = 10, or_fallback: bool = True) -> list[sqlite3.Row]:
         """标题链通道：只匹配文档标题里的词，与正文通道可分别调权与归因。
 
-        与 FTS 通道同口径：AND 优先，落空时逐 token 降级为 OR。
-        （长中文问题的 AND 几乎必然落空——没有降级时这个通道等于不存在。）
+        AND 优先。``or_fallback=True`` 时落空后逐 token 降级为 OR（同 FTS 通道口径）
+        —— 但宽松降级会捞进大量只命中单个 token 的弱候选，挤掉正确答案；
+        标题通道要的是精度（问"核心架构"命中"### 模块"这种父标题命中子节），
+        因此降级可关。
         """
         from .fts_tokenizer import fts_query, fts_tokenize
         rows = self._heading_run(fts_query(query), project, limit)
-        if rows:
+        if rows or not or_fallback:
             return rows
         tokens = [t for t in dict.fromkeys(fts_tokenize(query).split()) if len(t) >= 2][:8]
         if not tokens:

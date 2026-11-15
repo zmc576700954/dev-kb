@@ -33,6 +33,8 @@ _TEST_PATH = re.compile(r"(^|/)(tests?|__tests__|e2e)/|Test\.php$|\.(test|spec)\
 STRUCTURE_TRUST = float(os.environ.get("DEV_KB_STRUCTURE_TRUST", "0.7"))
 # 标题链独立通道权重：与"意图路径提示"同档
 HEADING_WEIGHT = float(os.environ.get("DEV_KB_HEADING_WEIGHT", "0.7"))
+# 标题链通道是否允许 OR 宽松降级（1=允许，0=只用 AND 精确匹配）
+HEADING_FALLBACK = os.environ.get("DEV_KB_HEADING_FALLBACK", "1") != "0"
 # 术语别名通道权重
 ALIAS_WEIGHT = float(os.environ.get("DEV_KB_ALIAS_WEIGHT", "1.0"))
 # 知识源意图映射的路径提示权重
@@ -228,7 +230,8 @@ class HybridSearch:
         # 3. 标题链独立通道：只看文档标题里的词，与正文通道分开归因
         if HEADING_WEIGHT > 0:
             try:
-                heading_rows = self.store.heading_search(query, project, limit=limit)
+                heading_rows = self.store.heading_search(query, project, limit=limit,
+                                                         or_fallback=HEADING_FALLBACK)
                 if heading_rows:
                     add(heading_rows, "heading", lambda r: r["id"], HEADING_WEIGHT)
             except Exception:
@@ -237,16 +240,25 @@ class HybridSearch:
         # 4. 术语别名通道：知识源声明的别名直接挂接对应块
         if ALIAS_WEIGHT > 0:
             for _surface, canonical in self._alias_expansions(project):
-                add(self.store.symbol_search(canonical, project, limit=limit),
-                    "alias", lambda r: r["id"], ALIAS_WEIGHT)
-                add(self.store.path_search(canonical, project, limit=limit),
-                    "alias", lambda r: r["id"], ALIAS_WEIGHT)
+                # 三路命中合并去重后只加一次：同一批块若分三次 add，
+                # RRF 分数会被重复计入，等于给术语通道三倍权重。
+                merged: dict[int, int] = {}
+                for rows in (
+                    self.store.symbol_search(canonical, project, limit=limit),
+                    self.store.path_search(canonical, project, limit=limit),
+                ):
+                    for rank, r in enumerate(rows):
+                        merged.setdefault(r["id"], rank)
                 try:
-                    hits = self.store.fts_search(canonical, project, limit=limit,
-                                                 or_fallback=False)
+                    for rank, r in enumerate(
+                        self.store.fts_search(canonical, project, limit=limit,
+                                              or_fallback=False)
+                    ):
+                        merged.setdefault(r["id"], rank)
                 except Exception:
-                    hits = []
-                add(hits, "alias", lambda r: r["id"], ALIAS_WEIGHT)
+                    pass
+                ordered = [{"id": cid} for cid in sorted(merged, key=lambda i: merged[i])]
+                add(ordered, "alias", lambda r: r["id"], ALIAS_WEIGHT)
 
         # 5. 意图路径提示（全局表，待评测后由知识源声明替代）
         for kw, hint in _PATH_HINTS.items():

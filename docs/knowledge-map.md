@@ -1,7 +1,7 @@
 ---
 状态: 稳定
-最后更新: 2026-11-14
-下次复核: 2027-11-14
+最后更新: 2026-11-15
+下次复核: 2027-11-15
 ---
 
 # 知识点地图
@@ -130,13 +130,27 @@
   - argparse 文档：https://docs.python.org/3/library/argparse.html
 
 ## 7. Git 自动化
-- **用在哪**：`impact_analysis.py` / `sync.py`（`git log --since` / `diff --name-only` / `status --porcelain` / `rev-parse --short HEAD`）。
+- **用在哪**：`sync.py`（`rev-parse --short HEAD` 取提交号）。
 - **关键概念**：porcelain 格式解析（脚本应使用 porcelain 而非面向人类的格式）；`--pretty=format:` 空格式只取文件名。
 - **参考**：
   - Git 官方文档（git-log / git-status / git-diff）：https://git-scm.com/docs
   - 《Pro Git》免费在线版：https://git-scm.com/book/zh/v2
 
+## 8. 知识源接入契约
+- **用在哪**：`contract/declaration.py`（声明模型）、`contract/rules.py`（7 条规则）、
+  `contract/checks.py`（只读检查）、`indexing/metadata_store.py`（契约字段落库）、
+  `tools/retrieval.py`（契约驱动的召回通道）。
+- **关键概念**：能力声明（capability declaration）而非类型枚举——检索器只认"这个源
+  提供哪些结构字段"，不认"这个源是哪种库"；声明式边界（`content_roots`）而非
+  黑名单排除；规则按适用条件判定，不适用不是发现；契约字段的单一事实源。
+- **参考**：
+  - JSON Schema（声明式契约的通用表达，可作为 `provides` 的校验参考）：https://json-schema.org/
+  - Kubernetes CRD 与 `status.conditions`（"声明能力 + 可观测状态"的成熟范式）：https://kubernetes.io/docs/concepts/extend-kubernetes/custom-resources/
+  - SQLite ALTER TABLE 文档（存量索引的字段迁移）：https://www.sqlite.org/lang_altertable.html
+  - FTS5 文档（`chunk_headings` 独立通道的建表与 bm25 排序）：https://sqlite.org/fts5.html
+
 ## 相关文档
 
+- [知识源接入契约](./00-知识源契约.md)
 - [架构总览](./architecture.md)
 - [技术决策记录（ADR）](./decisions.md)

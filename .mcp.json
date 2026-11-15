@@ -1,11 +1,23 @@
 {
   "mcpServers": {
-    "kb-spec": {
+    "dev-kb": {
       "type": "stdio",
       "command": ".venv/bin/python",
       "args": [
         "-m",
-        "agent_app.kb_spec.mcp_server"
+        "agent_app.mcp_server"
+      ],
+      "env": {
+        "PYTHONPATH": "src",
+        "HF_HUB_OFFLINE": "1"
+      }
+    },
+    "dev-kb-contract": {
+      "type": "stdio",
+      "command": ".venv/bin/python",
+      "args": [
+        "-m",
+        "agent_app.contract.mcp_server"
       ],
       "env": {
         "PYTHONPATH": "src"

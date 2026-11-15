@@ -1,0 +1,54 @@
+# ai-video-kb 的调优表（知识源接入契约的用户自定义层）
+#
+# 三节：
+#   aliases     canonical term → 别名列表。只有正文里真实出现过的术语才写进来
+#               （契约规则 R-06 会校验）。别名是用户可能的问法或英文写法。
+#   intent_map  中文意图 → 本库路径。检索器用它做路径提示，替代全局硬编码表。
+#   roles       路径通配 → 文档角色（index / entry / faq / reference / guide）
+aliases:
+  ComfyUI: [comfy, comfyui, Comfy UI]
+  SDXL: [sdxl, SD XL]
+  Flux: [flux]
+  ControlNet: [controlnet, control net]
+  IP-Adapter: [ipadapter, ip adapter, IP适配器]
+  LoRA: [lora, 低秩适配, 轻量微调]
+  TTS: [tts, 文字转语音, 语音合成]
+  Live2D: [live2d, live 2d]
+  FaceID: [faceid, face id, 人脸身份保持]
+  InstantID: [instantid, instant id]
+  PuLID: [pulid, pu lid]
+  漫剧: [漫剧, 短剧动画, AI短剧]
+  推理: [推理, inference, 采样]
+  采样器: [采样器, sampler]
+  工作流: [工作流, workflow]
+
+intent_map:
+  部署: ["09-部署与生态"]
+  硬件: ["09-部署与生态"]
+  生态: ["09-部署与生态"]
+  版权: ["08-合规与运营"]
+  合规: ["08-合规与运营"]
+  审核: ["06-后期与质控"]
+  平台运营: ["07-商业平台"]
+  商业化: ["07-商业平台"]
+  变现: ["07-商业平台"]
+  后期: ["06-后期与质控"]
+  画质: ["06-后期与质控"]
+  配音: ["05-音频与动效"]
+  数字人: ["05-音频与动效"]
+  音频: ["05-音频与动效"]
+  视频模型: ["04-视频模型"]
+  工作流: ["03-工作流"]
+  一致性: ["03-工作流", "02-技术详解"]
+  角色一致性: ["03-工作流", "02-技术详解"]
+  基础概念: ["01-业务概览"]
+  产业链: ["01-业务概览"]
+  学习路径: ["99-索引与排序"]
+  模型对比: ["04-视频模型", "02-技术详解"]
+  技术原理: ["02-技术详解"]
+
+roles:
+  "README.md": index
+  "99-索引与排序/*": index
+  "01-业务概览/*": guide
+  "03-工作流/*": guide

@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  contract:
+    name: 知识源接入契约门禁
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 契约校验只依赖 YAML 解析，不需要模型与向量库
+      - name: 安装依赖
+        run: python -m pip install --upgrade pip && pip install pyyaml
+
+      - name: 校验 dev-kb 自身满足契约
+        run: sh scripts/contract_check.sh --config projects.ci.yaml
+
+  tests:
+    name: 单元与集成测试
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 只装解析与切块所需的依赖：模型与向量库在 CI 里不参与
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pyyaml markdown-it-py \
+            tree-sitter tree-sitter-php tree-sitter-python \
+            tree-sitter-rust tree-sitter-typescript
+
+      - name: 跑测试
+        run: |
+          PYTHONPATH=src python -m pytest \
+            tests/test_unit.py \
+            tests/test_integration.py \
+            tests/test_mcp_server.py \
+            tests/test_eval_harness.py \
+            tests/test_contract_rules.py \
+            tests/test_contract_declaration.py \
+            tests/test_contract_service.py \
+            tests/test_contract_mcp.py \
+            -q

@@ -1,4 +1,4 @@
-# 知识源登记：本地项目目录（模板副本）
+# 知识源登记 + 接入契约声明（模板副本）
 #
 # 本文件是模板，不含真实环境信息。真实配置 projects.yaml 不入库——
 # 从本文件复制一份并填入本机实际路径：
@@ -6,16 +6,43 @@
 #     cp projects.example.yaml projects.yaml
 #
 # path 支持 `~` 与环境变量（如 $HOME/xxx），由注册表统一展开。
+#
+# ── 契约声明 ────────────────────────────────────────────────────────────────
+# 每个知识源声明自己"提供哪些结构字段"，检索器按声明消费，缺什么即降级，
+# 不拒绝接入。声明字段见 src/agent_app/contract/declaration.py。
+#
+#   provides      声明提供的可选结构字段，取值：
+#                   heading_path  文档标题链（Markdown 文档天然有）
+#                   category      分类目录（由路径首段自动推导，所有源都有）
+#                   doc_role      文档角色（须在 roles 里显式声明才有）
+#                   aliases       术语别名（须在 terms 里提供清单才有）
+#   content_roots 内容边界（相对项目根）。必须显式声明；["."] 表示全库。
+#                   未声明的路径不进索引。
+#   entry_docs    入口文档（相对项目根）。声明了 category 时必填。
+#   intent_map    中文意图 → 本库路径。检索器用它做路径提示，替代全局硬编码表。
+#   roles         路径通配 → 文档角色（index / entry / faq / reference / guide）
+#   terms         术语别名清单文件（相对项目根），格式见文件内注释
+#   extra_exclude_dirs  额外排除的目录（目录名匹配 basename；带 / 的按相对路径
+#                       匹配整棵子树）。项目特有的排除写在这里，不要写进全局表。
 projects:
   - name: my-project
     path: ~/my-project
     type: auto
-    # extra_exclude_dirs：可选，额外排除的目录。
-    # 目录名匹配 basename；带 / 的按相对路径匹配整棵子树。
+    provides: [category]
+    content_roots: ["."]
+    # entry_docs: [README.md]
+    # intent_map:
+    #   部署: ["deploy", "ops"]
+    # roles:
+    #   "README.md": index
+    # terms: [my-project.terms.yaml]
     # extra_exclude_dirs: [evals, data]
 
   # dev-kb 自身（自举索引）：
   #   - name: dev-kb
   #     path: ~/dev-kb
   #     type: auto
+  #     provides: [heading_path, category]
+  #     content_roots: ["."]
+  #     entry_docs: [README.md]
   #     extra_exclude_dirs: [data, evals/baselines, evals/results]

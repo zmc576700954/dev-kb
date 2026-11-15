@@ -1,0 +1,12 @@
+# CI 用的知识源注册表：只登记 dev-kb 自身。
+#
+# 真实的 projects.yaml 含本机路径、不入库；CI 里没有本地知识源可查，
+# 但"dev-kb 自己的文档要满足它自己定的契约"这条必须被自动检查。
+projects:
+  - name: dev-kb
+    path: .
+    type: auto
+    provides: [heading_path, category]
+    content_roots: ["."]
+    entry_docs: [README.md]
+    extra_exclude_dirs: [data, evals/baselines, evals/results]

@@ -1,12 +1,12 @@
 """本地环境配置的定位与解析。
 
-仓库只分发配置模板副本（``*.example.yaml``）；真实配置（``projects.yaml`` /
-``kb_projects.yaml``）含本机项目路径与环境信息，属于本地状态，不入库。
+仓库只分发配置模板副本（``projects.example.yaml``）；真实配置（``projects.yaml``）
+含本机项目路径与环境信息，属于本地状态，不入库。
 
 配置来源优先级：
 1. 显式传入的路径（``--config`` 或 API 参数）
-2. 环境变量 ``DEV_KB_PROJECTS`` / ``DEV_KB_KB_PROJECTS``
-3. 仓库根目录下的 ``projects.yaml`` / ``kb_projects.yaml``
+2. 环境变量 ``DEV_KB_PROJECTS``
+3. 仓库根目录下的 ``projects.yaml``
 """
 
 from __future__ import annotations
@@ -17,13 +17,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 PROJECTS_FILENAME = "projects.yaml"
-KB_PROJECTS_FILENAME = "kb_projects.yaml"
-
 PROJECTS_EXAMPLE = "projects.example.yaml"
-KB_PROJECTS_EXAMPLE = "kb_projects.example.yaml"
 
 PROJECTS_ENV = "DEV_KB_PROJECTS"
-KB_PROJECTS_ENV = "DEV_KB_KB_PROJECTS"
 
 
 def _from_env(var: str) -> Path | None:
@@ -34,13 +30,8 @@ def _from_env(var: str) -> Path | None:
 
 
 def default_projects_config() -> Path:
-    """代码项目注册表的默认位置。"""
+    """知识源注册表（含接入契约声明）的默认位置。"""
     return _from_env(PROJECTS_ENV) or ROOT / PROJECTS_FILENAME
-
-
-def default_kb_projects_config() -> Path:
-    """知识库项目注册表的默认位置。"""
-    return _from_env(KB_PROJECTS_ENV) or ROOT / KB_PROJECTS_FILENAME
 
 
 def require_config(path: str | Path, example: str, kind: str) -> Path:

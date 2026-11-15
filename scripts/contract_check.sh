@@ -5,6 +5,7 @@
 #   sh scripts/contract_check.sh                    # 用默认 projects.yaml 校验全部源
 #   sh scripts/contract_check.sh --config path.yaml # 指定注册表
 #   sh scripts/contract_check.sh --strict           # warning 也阻断
+#   DEV_KB_PYTHON=python3 sh scripts/contract_check.sh  # 指定解释器（CI 没有 .venv）
 #
 # 行为：
 #   1. 对注册表里的每个知识源跑契约校验
@@ -15,6 +16,14 @@
 # 声明级规则照常执行。
 set -e
 cd "$(dirname "$0")/.."
+
+if [ -n "$DEV_KB_PYTHON" ]; then
+  PYTHON="$DEV_KB_PYTHON"
+elif [ -x ".venv/bin/python" ]; then
+  PYTHON=".venv/bin/python"
+else
+  PYTHON="python3"
+fi
 
 STRICT=0
 CONFIG=""
@@ -30,8 +39,8 @@ done
 CONFIG_ARG=""
 [ -n "$CONFIG" ] && CONFIG_ARG="--config $CONFIG"
 
-FAILED=0
-for project in $(PYTHONPATH=src .venv/bin/python - $CONFIG_ARG <<'PYEOF' 2>&1
+# 注册表无法解析时必须失败：不能把它当成「没有项目」而放行。
+PROJECTS=$(PYTHONPATH=src "$PYTHON" - $CONFIG_ARG <<'PYEOF'
 import sys
 from agent_app.config import PROJECTS_EXAMPLE, default_projects_config, load_config
 cfg = default_projects_config()
@@ -42,9 +51,12 @@ data = load_config(cfg, PROJECTS_EXAMPLE, "知识源注册表")
 for p in data.get("projects", []):
     print(p["name"])
 PYEOF
-); do
+) || { echo "✗ 无法读取知识源注册表" >&2; exit 1; }
+
+FAILED=0
+for project in $PROJECTS; do
   echo "=== 校验 $project ==="
-  if ! PYTHONPATH=src .venv/bin/python -m agent_app.contract.cli $CONFIG_ARG validate "$project"; then
+  if ! PYTHONPATH=src "$PYTHON" -m agent_app.contract.cli $CONFIG_ARG validate "$project"; then
     FAILED=1
   fi
   echo
@@ -56,7 +68,7 @@ if [ "$FAILED" != "0" ]; then
 fi
 
 if [ "$STRICT" = "1" ]; then
-  WARNINGS=$(PYTHONPATH=src .venv/bin/python - $CONFIG_ARG <<'PYEOF' 2>&1
+  WARNINGS=$(PYTHONPATH=src "$PYTHON" - $CONFIG_ARG <<'PYEOF'
 import sys
 from agent_app.config import PROJECTS_EXAMPLE, default_projects_config, load_config
 from agent_app.contract.service import ContractService
@@ -72,7 +84,7 @@ for p in data.get("projects", []):
     total += r["summary"]["warnings"] + r["summary"]["reviews"]
 print(total)
 PYEOF
-) || { echo "$WARNINGS"; exit 1; }
+) || { echo "✗ 严格模式校验失败" >&2; exit 1; }
   if [ "$WARNINGS" != "0" ]; then
     echo "✗ 严格模式：仍有 $WARNINGS 处建议项"
     exit 1

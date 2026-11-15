@@ -27,6 +27,16 @@ data/query_expansion_cache.json
 projects.yaml
 kb_projects.yaml
 
+# 评测实验产物：可由 evals/run_eval.py 重新生成。
+# 只保留冻结基线（evals/baselines/）与独立验证集结果在版本库里。
+evals/results/
+
+# 扫描报告与待办清单：可由 scan_cli / contract cli 重新生成，
+# 且含本机绝对路径，不随仓库分发。
+reports/*.json
+reports/scan-report.md
+reports/kb-todo-*.md
+
 # 编辑器与系统文件
 .DS_Store
 .idea/

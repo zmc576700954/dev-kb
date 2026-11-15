@@ -1,0 +1,44 @@
+# repository-manage 的调优表
+#
+# 中文意图 → 本库路径片段（检索时做 path LIKE %片段%）。
+# 前半部分来自原全局硬编码表，按本库实际内容过滤（片段匹配不到任何路径的丢弃）；
+# 后半部分是本库自己的映射。两者都是「声明」，不再有全局表。
+# 片段要够短才能同时匹配到目录名与文件名（如 api 命中 ApiController.php）。
+intent_map:
+  配置:
+  - config
+  命令:
+  - Commands
+  状态管理:
+  - store/
+  - Store
+  存储:
+  - store
+  持久化:
+  - store
+  组件:
+  - components/
+  页面:
+  - views/
+  文档:
+  - docs
+  脚本:
+  - scripts
+  工具:
+  - utils
+  样式:
+  - styles
+  - css
+  前端:
+  - src
+  界面:
+  - src
+  后端:
+  - src-tauri
+  rust:
+  - src-tauri
+  共享:
+  - shared
+roles:
+  README.md: index
+  docs/*: guide

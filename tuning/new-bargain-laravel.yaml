@@ -1,0 +1,73 @@
+# new-bargain-laravel 的调优表
+#
+# 中文意图 → 本库路径片段（检索时做 path LIKE %片段%）。
+# 前半部分来自原全局硬编码表，按本库实际内容过滤（片段匹配不到任何路径的丢弃）；
+# 后半部分是本库自己的映射。两者都是「声明」，不再有全局表。
+# 片段要够短才能同时匹配到目录名与文件名（如 api 命中 ApiController.php）。
+intent_map:
+  路由:
+  - routes
+  中间件:
+  - app/Http/Middleware
+  - Middleware
+  迁移:
+  - database/migrations
+  - migrations
+  配置:
+  - config
+  命令:
+  - app/Console/Commands
+  模型:
+  - app/Models
+  状态管理:
+  - Store
+  存储:
+  - storage
+  持久化:
+  - store
+  仓库:
+  - repo
+  鉴权:
+  - app/Http/Middleware
+  权限:
+  - app/Policies
+  组件:
+  - components/
+  页面:
+  - views/
+  - pages/
+  接口:
+  - app/Http/Controllers
+  - routes/api
+  服务:
+  - app/Services
+  文档:
+  - docs
+  脚本:
+  - scripts/
+  工具:
+  - tools
+  样式:
+  - styles
+  - css
+  数据库迁移:
+  - database/migrations
+  控制器:
+  - app/Http/Controllers
+  队列:
+  - app/Jobs
+  任务:
+  - app/Jobs
+  事件:
+  - app/Events
+  监听器:
+  - app/Listeners
+  策略:
+  - app/Policies
+  测试:
+  - tests
+  模块:
+  - app/Modules
+roles:
+  README.md: index
+  docs/*: guide

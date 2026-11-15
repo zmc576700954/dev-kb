@@ -33,28 +33,15 @@ _TEST_PATH = re.compile(r"(^|/)(tests?|__tests__|e2e)/|Test\.php$|\.(test|spec)\
 STRUCTURE_TRUST = float(os.environ.get("DEV_KB_STRUCTURE_TRUST", "0.7"))
 # 标题链独立通道权重：与"意图路径提示"同档
 HEADING_WEIGHT = float(os.environ.get("DEV_KB_HEADING_WEIGHT", "0.7"))
-# 标题链通道是否允许 OR 宽松降级（1=允许，0=只用 AND 精确匹配）
-HEADING_FALLBACK = os.environ.get("DEV_KB_HEADING_FALLBACK", "1") != "0"
+# 标题链通道是否允许 OR 宽松降级。
+# 默认关闭：宽松降级会捞进大量只命中单个 token 的弱候选，实测 r@1 -0.02、
+# r@5 -0.02（破坏 q061/q080/q100）。标题通道要的是精度——问"核心架构"命中
+# "### 模块"这种父标题命中子节——AND 精确匹配即可。
+HEADING_FALLBACK = os.environ.get("DEV_KB_HEADING_FALLBACK", "0") != "0"
 # 术语别名通道权重
 ALIAS_WEIGHT = float(os.environ.get("DEV_KB_ALIAS_WEIGHT", "1.0"))
 # 知识源意图映射的路径提示权重
 INTENT_HINT_WEIGHT = float(os.environ.get("DEV_KB_INTENT_HINT_WEIGHT", "0.7"))
-
-# 意图 → 路径提示：结构类问题直接加权对应目录
-# 【待移除】全局硬编码表：只对 Laravel 类目录有效，对文档型知识库几乎无效。
-# 新机制是知识源声明的 intent_map；本表在评测确认 intent_map 不退化后删除。
-_PATH_HINTS = {
-    "路由": "routes/", "中间件": "middleware", "迁移": "migrations/",
-    "配置": "config", "命令": ["Console", "Commands"], "模型": "Models/",
-    # 以下为评测驱动扩充（baseline-v3 短板：中文问法与英文目录名无映射）
-    "状态管理": ["store/", "Store"], "存储": ["store", "storage"],
-    "持久化": ["Repository", "store"], "仓库": ["Repository", "repo"],
-    "鉴权": ["Auth", "Middleware"], "权限": ["Auth", "Middleware"],
-    "组件": "components/", "页面": ["views/", "pages/"],
-    "接口": ["Api", "api"], "服务": "Service",
-    "文档": "docs/", "脚本": "scripts/",
-    "工具": ["utils", "helpers"], "样式": ["styles", "css"],
-}
 
 # 代码定位意图：这类问题的答案在代码而非文档，给代码块加权、文档块降权
 _CODE_SEEK = re.compile(
@@ -143,6 +130,26 @@ class HybridSearch:
             return self.declarations.get(project)
         return None
 
+    def _intent_map(self, project: str | None) -> dict[str, tuple[str, ...]]:
+        """项目确定时用该源自己的意图映射；跨项目检索时聚合所有源。
+
+        跨项目题（如"数据库迁移文件在哪个目录"）不知道该用哪个源的意图表，
+        因此把所有源声明的意图合并——这也正是全局硬编码表原来的行为，
+        但现在每条映射都来自具体知识源自己的结构声明。
+        """
+        if project:
+            decl = self.declarations.get(project)
+            return decl.intent_map if decl else {}
+        merged: dict[str, tuple[str, ...]] = {}
+        for decl in self.declarations.values():
+            for intent, patterns in decl.intent_map.items():
+                bucket = list(merged.get(intent, ()))
+                for pat in patterns:
+                    if pat not in bucket:
+                        bucket.append(pat)
+                merged[intent] = tuple(bucket)
+        return merged
+
     def _heading_trusted(self, project: str | None) -> bool:
         """该源是否声明了标题链能力，且实际覆盖率达标（R-02 的判定）。"""
         if not project:
@@ -164,14 +171,18 @@ class HybridSearch:
         符号/路径/FTS 通道排序。早期实现是文档侧匹配（按路径长度取前 N），
         那是任意排序，会挤掉正确结果。
         """
-        decl = self._decl_for(project)
-        if decl is None or not decl.provides_field("aliases"):
-            return []
+        if project:
+            decls = [d for d in (self.declarations.get(project),) if d is not None]
+        else:
+            decls = list(self.declarations.values())
         out: list[tuple[str, str]] = []
-        for surface, canonical in decl.alias_to_canonical().items():
-            if len(surface) >= 2 and surface.lower() in self._query_lower:
-                if canonical not in [c for _s, c in out]:
-                    out.append((surface, canonical))
+        for decl in decls:
+            if not decl.provides_field("aliases"):
+                continue
+            for surface, canonical in decl.alias_to_canonical().items():
+                if len(surface) >= 2 and surface.lower() in self._query_lower:
+                    if canonical not in [c for _s, c in out]:
+                        out.append((surface, canonical))
         return out
 
     def search(self, query: str, project: str | None = None, limit: int = 8,
@@ -260,24 +271,16 @@ class HybridSearch:
                 ordered = [{"id": cid} for cid in sorted(merged, key=lambda i: merged[i])]
                 add(ordered, "alias", lambda r: r["id"], ALIAS_WEIGHT)
 
-        # 5. 意图路径提示（全局表，待评测后由知识源声明替代）
-        for kw, hint in _PATH_HINTS.items():
-            if kw in query:
-                hints = [hint] if isinstance(hint, str) else hint
-                for h in hints:
-                    add(self.store.path_search(h, project, limit=3), "path-hint", lambda r: r["id"], 0.7)
-
-        # 6. 知识源声明的意图映射：本库自己的"中文意图 → 路径"
-        decl = self._decl_for(project)
-        if decl is not None and INTENT_HINT_WEIGHT > 0:
-            for intent, patterns in decl.intent_map.items():
+        # 5. 意图路径提示：知识源声明的"中文意图 → 本库路径"
+        if INTENT_HINT_WEIGHT > 0:
+            for intent, patterns in self._intent_map(project).items():
                 if intent not in query:
                     continue
                 for pattern in patterns:
                     add(self.store.path_search(pattern, project, limit=3),
                         "intent-hint", lambda r: r["id"], INTENT_HINT_WEIGHT)
 
-        # 7. 向量语义
+        # 6. 向量语义
         if self.vs is not None:
             from ..indexing import embedder
             qv = embedder.embed_texts([query])[0]

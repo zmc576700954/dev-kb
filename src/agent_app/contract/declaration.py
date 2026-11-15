@@ -142,7 +142,10 @@ class SourceDeclaration:
 
         for rel in self.terms_files:
             merge_aliases(self._load_yaml(rel).get("aliases"))
-        for rel in self.tuning_files:
+        # 约定优于配置：没显式声明 tuning 文件时，自动找 tuning/<源名>.yaml。
+        # 这样调优表可以随仓库分发，而不必在每个机器的 projects.yaml 里重复引用。
+        tuning_files = self.tuning_files or (f"tuning/{self.name}.yaml",)
+        for rel in tuning_files:
             data = self._load_yaml(rel)
             merge_aliases(data.get("aliases"))
             merge_intent(data.get("intent_map"))

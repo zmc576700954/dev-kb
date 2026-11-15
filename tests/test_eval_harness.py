@@ -108,7 +108,7 @@ def test_failure_reason_distinguishes_retrieval_and_rerank():
 
 
 def test_baseline_metrics_and_metadata_present():
-    base = json.loads((ROOT / "evals/baselines/baseline-v7.json").read_text(encoding="utf-8"))
+    base = json.loads((ROOT / "evals/baselines/baseline-v8.json").read_text(encoding="utf-8"))
     assert base["metrics"]["n"] >= 100
     assert base["metrics"]["recall@5"] >= 0.96
     assert base["metrics"]["recall@1"] >= 0.78

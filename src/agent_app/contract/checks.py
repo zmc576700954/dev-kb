@@ -69,7 +69,7 @@ def check_r03(decl: SourceDeclaration, store=None) -> list[Finding]:
     root = Path(decl.root)
     for intent, patterns in decl.intent_map.items():
         for pattern in patterns:
-            if _target_exists(root, pattern):
+            if _target_exists(decl, pattern, store):
                 continue
             findings.append(Finding(
                 rule_id="R-03",
@@ -217,15 +217,51 @@ def check_r06(decl: SourceDeclaration, store=None) -> list[Finding]:
 
 # ---- 辅助 ----
 
-def _target_exists(root: Path, pattern: str) -> bool:
-    """路径模式在知识源根下是否有匹配目标。"""
-    literal = root / pattern
-    if literal.exists():
-        return True
-    try:
-        return next(root.glob(pattern), None) is not None
-    except (ValueError, OSError):
+def _target_exists(decl: SourceDeclaration, pattern: str, store=None) -> bool:
+    """意图映射的目标是否真的落在本库的内容里。
+
+    语义与检索口径一致：intent_map 的值是**路径片段**，检索时用它做
+    ``path LIKE %片段%``。因此判据是"这个片段能匹配到本库的某个路径"，
+    而不是"这个片段是一个字面路径"——否则"migrations"这类片段会被误判为
+    不存在（它实际匹配 database/migrations/…）。
+
+    有索引用索引判（快且与检索完全一致）；没有索引时退回有上限的文件系统扫描。
+    """
+    if store is not None:
+        try:
+            row = store.conn.execute(
+                "SELECT 1 FROM chunks WHERE project=? AND path LIKE ? LIMIT 1",
+                (decl.name, f"%{pattern}%"),
+            ).fetchone()
+            return row is not None
+        except Exception:
+            pass
+    return _fragment_in_tree(Path(decl.root), pattern)
+
+
+#: 文件系统回退扫描时最多访问的目录数。
+_MAX_SCAN_DIRS = 20000
+
+
+def _fragment_in_tree(root: Path, fragment: str) -> bool:
+    """路径里是否出现过该片段（有上限的遍历，避免大仓库上无界扫描）。"""
+    if not root.is_dir():
         return False
+    visited = 0
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = [d for d in dirnames
+                       if not d.startswith(".")
+                       and d not in ("node_modules", "vendor", "dist", "build")]
+        visited += 1
+        if visited > _MAX_SCAN_DIRS:
+            return False
+        for name in filenames:
+            if fragment in name:
+                return True
+        rel = os.path.relpath(dirpath, root)
+        if rel != "." and fragment in rel:
+            return True
+    return False
 
 
 #: 文件系统回退扫描的最大深度（避免在大目录上无界遍历）。

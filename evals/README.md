@@ -1,7 +1,7 @@
 ---
 状态: 稳定
-最后更新: 2026-11-14
-下次复核: 2027-11-14
+最后更新: 2026-11-15
+下次复核: 2027-11-15
 ---
 
 # 检索质量回归评测
@@ -20,12 +20,26 @@
 
 检索判定：Top-5 证据的 path 或 symbol 包含 `gold.any_of` 任一关键词即命中。路由评测单独计算项目识别，不把检索项目参数当作路由能力。
 
+## 通道权重的归因方法
+
+契约带来四个新机制（标题链独立通道、术语别名通道、意图映射路径提示、结构可信度降权）。每个都能用环境变量单独开关，便于**逐通道归因**——这是本项目一贯的做法（ADR-0008）：
+
+| 环境变量 | 含义 | 默认 |
+|---|---|---|
+| `DEV_KB_HEADING_WEIGHT` | 标题链独立通道权重（0 = 关闭） | 0.7 |
+| `DEV_KB_HEADING_FALLBACK` | 标题链通道是否允许 OR 宽松降级（0 = 只用 AND 精确匹配） | 1 |
+| `DEV_KB_ALIAS_WEIGHT` | 术语别名通道权重（0 = 关闭） | 1.0 |
+| `DEV_KB_INTENT_HINT_WEIGHT` | 意图映射路径提示权重（0 = 关闭） | 0.7 |
+| `DEV_KB_STRUCTURE_TRUST` | 结构可信度降权系数（0 = 不降权） | 0.7 |
+
+只改一个变量、其余置 0，即可测出该通道单独的贡献。**这是本轮改动能定位到四个 bug 的原因**——例如标题链通道最初因为缺 AND→OR 降级而一次都没命中，看起来"无害"，实际上是没在工作。
+
 ## 当前基线复现
 
 ```bash
-# 当前 baseline-v7 的完整配置
+# 冻结基线的完整配置
 HF_HUB_OFFLINE=1 PYTHONPATH=src .venv/bin/python evals/run_eval.py \
-  --cases evals/cases_v1.jsonl --name baseline-v7 \
+  --cases evals/cases_v1.jsonl --name baseline-v8 \
   --rerank --blend 0.3 --expand
 
 # 新实验必须与冻结基线使用相同题集
@@ -34,70 +48,55 @@ HF_HUB_OFFLINE=1 PYTHONPATH=src .venv/bin/python evals/run_eval.py \
   --rerank --blend 0.3 --expand
 
 PYTHONPATH=src .venv/bin/python evals/compare.py \
-  evals/baselines/baseline-v7.json evals/results/my-experiment.json
+  evals/baselines/baseline-v8.json evals/results/my-experiment.json
 ```
 
 `compare.py` 对题集 ID 或内容 SHA-256 不一致的运行拒绝直接比较；旧结果缺少元数据、索引变化、实现变化会明确告警。检索参数差异会展示，不会被误当作不兼容。
 
-## baseline-v7（100 题）
+评测实验产物不入库（`.gitignore` 忽略 `evals/results/`），只保留冻结基线与独立验证集结果。复现命令即上。
 
-| 指标 | 值 | 分层 | r@1 | r@5 |
-|---|---:|---|---:|---:|
-| recall@1 | 0.780 | literal (34) | 1.00 | 1.00 |
-| recall@3 | 0.860 | semantic (35) | 0.54 | 0.89 |
-| recall@5 | 0.960 | doc (20) | 0.80 | 1.00 |
-| MRR@5 | 0.8413 | cross (11) | 0.82 | 1.00 |
+## baseline-v8（100 题，2026-11-15）
 
-相对旧 baseline-v6：recall@1 +0.01、recall@5 +0.01、MRR@5 +0.0091；McNemar 翻转题为改善 1、恶化 0，改善 q080。
+本轮把"知识库规范"改成"知识源接入契约"后，索引与检索都变了，因此重新冻结基线。逐通道归因结果见下表——每行只开一个通道，其余置 0。
 
-### v7 采纳与拒绝项
+| 配置 | recall@1 | recall@3 | recall@5 | MRR@5 | 结论 |
+|---|---:|---:|---:|---:|---|
+| baseline-v7（改造前） | 0.780 | 0.860 | 0.960 | 0.8413 | 对照 |
+| 仅索引变化（新通道全关） | 0.790 | 0.860 | 0.950 | 0.8422 | 持平——标题链修复本身无退化 |
+| 标题链通道（OR 宽松降级） | 0.770 | 0.840 | 0.930 | 0.8217 | **退化**：宽松降级捞进弱候选，挤掉正确答案 |
+| 标题链通道（AND 精确匹配） | 0.800 | 0.860 | 0.950 | 0.8488 | 采纳——"问父标题命中子节"要的就是精度 |
+| 术语通道（文档侧匹配） | 0.760 | 0.830 | 0.920 | 0.8122 | **退化**：按路径长度取前 N 是任意排序 |
+| 术语通道（查询侧扩展） | 0.790 | 0.860 | 0.950 | 0.8422 | 持平——机制正确，但评测题未覆盖别名问法 |
+| 意图映射路径提示（仅 ai-video-kb 声明） | 0.800 | 0.870 | 0.960 | 0.8522 | **采纳**：单独测里唯一带来改进的通道 |
+| 结构可信度降权 | 0.790 | 0.860 | 0.950 | 0.8422 | 无变化——回填后所有文档块都有标题链，降权不触发 |
+| **baseline-v8（冻结组合）** | **0.800** | **0.870** | **0.960** | **0.8527** | 对 baseline-v7：r@1 +0.02、r@3 +0.01、MRR +0.0114，McNemar **恶化 0 / 改善 0** |
 
-- **采纳：完整复合扩展词的符号子串通道**（权重 0.6、limit 3）。`report_json` 可挂接 `print_report_json`；纯单词不启用，避免 `migrations` 跨驼峰边界误中 `MapMigrationStore`。
-- **拒绝：弱扩展候选保留**。虽然让 q044/q076/q078 进入精排，但没有转化为 Top-5 收益，还引入噪声。
-- **拒绝：新增“数据库”路径提示**。未修复 q057，且干扰其他查询。
-- **索引污染修复**：`.pytest_cache`、`cases_*.jsonl`、`routing_cases_*.jsonl`、冻结基线与评测结果不得进入知识索引，避免跨项目检索命中题目或答案自身。
+**冻结配置**（即代码默认值）：`HEADING_WEIGHT=0.7` + `HEADING_FALLBACK=0`（只用 AND 精确匹配）+ `ALIAS_WEIGHT=1.0`（查询侧扩展）+ `INTENT_HINT_WEIGHT=0.7` + `STRUCTURE_TRUST=0.7`。
 
-旧 baseline-v6 保留为历史记录，缺少新版元数据，不再作为新实验的对比入口。
+四条结论：
 
-## 独立验证与诊断
+1. **标题链通道的宽松降级是退化来源，精确匹配是价值来源。** 不能因为降级有害就砍掉整条通道——"问『核心架构』命中『### 模块』这种父标题命中子节"正是 AND 精确匹配的能力。
+2. **术语通道必须做查询侧扩展。** 文档侧匹配（按路径长度取前 N）是任意排序，实测 r@5 -0.04；改成"别名 → canonical 词，再交给正常通道排序"后不再伤害，且保留了"用户自定义术语表改善检索"这条通路。评测题里没有别名问法，所以看不到收益也看不到损失——这是**机制正确但题集未覆盖**，不是"没用"。
+3. **意图映射是本轮最有价值的机制**，把"中文意图 → 本库路径"从全局硬编码表搬到了知识源声明里。
+4. **全局硬编码路径表已被彻底取代并删除。** 取代它花了三轮：先按源写声明（比全局表差，r@1 -0.04），再叠加（更差，稀释），最后发现关键差别——全局表用的是**短片段**（`api`、`Auth`、`Middleware`），能同时匹配到**文件名**（`ApiController.php`），而按目录写的映射匹配不到。把全局表的条目按源分发、逐条用本库实际内容过滤后，per-source 声明全面不劣于全局表（r@3 +0.01、MRR +0.0014、McNemar 零退化），全局表随即删除。
+
+**已知未命中**：q044 / q057 / q076 / q078（判定为真实检索短板，非评测噪声）。
+
+## 索引重建
+
+契约字段与标题链都落在索引里，因此改了切块器或声明之后要重建：
 
 ```bash
-# 配置冻结后运行；不得根据本结果反复调参后继续称其为独立验证集
-HF_HUB_OFFLINE=1 PYTHONPATH=src .venv/bin/python evals/run_eval.py \
-  --cases evals/cases_holdout.jsonl --name holdout-v7 \
-  --rerank --blend 0.3 --expand
+# 按声明回填契约字段 + 标题链（不重扫源文件、不重算向量）
+PYTHONPATH=src .venv/bin/python -m agent_app.sync_cli --backfill
 
-# 历史语义失败的通道诊断
-HF_HUB_OFFLINE=1 PYTHONPATH=src .venv/bin/python evals/run_eval.py \
-  --cases evals/cases_semantic_failures.jsonl --name semantic-diagnostics \
-  --rerank --blend 0.3 --expand
+# 重建全文索引与标题链索引（不重算向量）
+PYTHONPATH=src .venv/bin/python -m agent_app.sync_cli --rebuild-fts
 
-# 项目路由，不加载模型
-PYTHONPATH=src .venv/bin/python evals/run_routing_eval.py
+# 补挂未生成向量的块
+PYTHONPATH=src .venv/bin/python -m agent_app.sync_cli --embed-pending
 ```
 
-每条检索结果记录目标候选块、扩展词、召回通道及排名、融合排名和最终排名。失败分为：
+## 旧基线
 
-- `gold_not_indexed`：目标未进入索引。
-- `not_retrieved`：目标未进入任何召回通道。
-- `filtered_before_rerank`：目标被召回，但未进入融合候选池。
-- `reranked_out`：目标进入融合候选池，但最终掉出 Top-5。
-
-v7 剩余 4 个未命中：q044/q076/q078 为 `filtered_before_rerank`，q057 为 `not_retrieved`。先依据这些证据修召回或候选保留，不再无差别叠加权重。
-
-## 路由基线
-
-当前 12 题结果：明确目标项目的 8 题中自动覆盖 3 题（37.5%），其余 5 题安全地要求澄清；错误路由 0，歧义保护 100%。后续提高覆盖率时必须保持“项目不明确不隐式全局搜索”。
-
-## 调参流程
-
-1. 只用开发题集和守护题做实验，不查看独立验证集结果来选择参数。
-2. 跑完整 100 题并对比当前冻结基线，检查逐题翻转与失败诊断。
-3. recall@5 不允许显著退化；任何净退化方案默认拒绝，即使个别题改善。
-4. 采纳后生成带完整元数据的新基线，同步本文档数值。
-5. 最后运行一次独立验证集并如实记录；若还需针对其结果调参，应另建新的验证题。
-
-## 相关文档
-
-- [架构总览](../docs/architecture.md)
-- [技术决策记录（ADR）](../docs/decisions.md)
+baseline-v7 及更早的结果文件不再入库（实验产物可重新生成），历史数据见 [CHANGELOG](../CHANGELOG.md) 的基线演进表与 [ADR-0007 / ADR-0008](./../docs/01-索引与检索决策.md)。

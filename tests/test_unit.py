@@ -113,9 +113,39 @@ def test_fts_query_escaped():
 
 # ---- 排除规则与扫描器 ----
 
+def test_heading_path_is_a_real_chain():
+    """标题链必须是 祖先 → 自身 的多层结构。
+
+    回归：早期实现里收集祖先的循环在第一次迭代就 break，
+    heading_path 永远只有一个元素——父标题信息全丢，"核心架构"命中不了子节。
+    """
+    from agent_app.ingestion.document_parser import chunk_markdown
+    doc = (
+        "# 核心架构\n\n## 模块\n\n架构分三层。\n\n"
+        "## 数据流\n\n数据怎么流。\n"
+    )
+    paths = {tuple(c.heading_path) for c in chunk_markdown(doc)}
+    assert ("核心架构",) in paths
+    assert ("核心架构", "模块") in paths
+    assert ("核心架构", "数据流") in paths
+
+
+def test_frontmatter_is_not_parsed_as_a_heading():
+    """frontmatter 的键值不能被 Markdown 当成 setext 标题。"""
+    from agent_app.ingestion.document_parser import chunk_markdown, first_heading
+    doc = "---\n状态: 稳定\n---\n\n# 项目背景\n\n## 目标\n\n说明。\n"
+    assert first_heading(doc) == "项目背景"
+    for c in chunk_markdown(doc):
+        assert "状态: 稳定" not in c.heading_path
+
+
 def test_exclude_critical_entries():
-    for d in ("node_modules", "vendor", ".git", ".venv", ".pytest_cache", "models", ".playwright-mcp"):
+    # 全局排除表只放跨项目通用的项；项目特有的目录写在该源自己的
+    # extra_exclude_dirs 声明里（放进全局表会让规则对所有项目生效）。
+    for d in ("node_modules", "vendor", ".git", ".venv", ".pytest_cache", ".playwright-mcp"):
         assert d in EXCLUDE_DIRS
+    for d in ("models", "notebooks", "kb_corpus"):
+        assert d not in EXCLUDE_DIRS
     for p in (".env", ".env.*", "*.key", ".phpunit.result.cache",
               "cases_*.jsonl", "routing_cases_*.jsonl"):
         assert p in EXCLUDE_FILE_PATTERNS
@@ -150,11 +180,3 @@ def test_scanner_partial_keep_superpowers_plans(tmp_path):
     assert not any("brainstorm" in p for p in paths)
 
 
-def test_scanner_spec_candidate_detection(tmp_path):
-    (tmp_path / "docs" / "superpowers" / "specs").mkdir(parents=True)
-    (tmp_path / "docs" / "superpowers" / "specs" / "a-design.md").write_text("# A\n")
-    (tmp_path / "docs" / "readme.md").write_text("# R\n")
-    report = scan_project("t", str(tmp_path))
-    spec = next(f for f in report.files if "a-design" in f.path)
-    plain = next(f for f in report.files if "readme" in f.path)
-    assert spec.is_spec_candidate and not plain.is_spec_candidate

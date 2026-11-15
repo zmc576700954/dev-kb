@@ -1,13 +1,22 @@
-"""混合检索：符号精确 ∪ FTS 关键词 ∪ 向量语义，RRF 合并排序。
+"""混合检索：符号精确 ∪ FTS 关键词 ∪ 标题链 ∪ 术语别名 ∪ 向量语义，RRF 合并排序。
 
 对照规划第四节：
 - 函数名/类名/路由/错误码 → 符号精确 + 关键词优先。
 - 描述性问题 → 向量语义补充。
 - 合并用 Reciprocal Rank Fusion，避免两路量纲不可比。
+
+契约接入（知识源接入契约）：
+- **标题链通道**：文档标题里的词本身就是可独立召回的信号。它与正文同等进 FTS，
+  同时另开一路独立通道，以便单独调权、单独归因（评测里能看到它贡献了多少）。
+- **术语通道**：知识源声明的术语别名（如「低秩适配」→ LoRA）直接挂接对应块。
+- **意图映射**：知识源声明的「中文意图 → 本库路径」替代全局硬编码路径表。
+- **结构可信度**：声明提供标题链却缺标题链的块降权——结构信息缺失时，
+  语义召回的可信度下降。
 """
 
 from __future__ import annotations
 
+import os
 import re
 
 from ..indexing.metadata_store import MetadataStore
@@ -17,9 +26,23 @@ RRF_K = 60
 _SYMBOLISH = re.compile(r"^[A-Za-z_][A-Za-z0-9_@$.#]{2,}$")
 # 测试文件降权：定位生产代码时测试不应排在前面
 _TEST_PATH = re.compile(r"(^|/)(tests?|__tests__|e2e)/|Test\.php$|\.(test|spec)\.[jt]sx?$")
+# 以下权重可用环境变量覆盖，便于逐通道做评测归因（ADR-0008 的做法）：
+#   DEV_KB_HEADING_WEIGHT / DEV_KB_ALIAS_WEIGHT / DEV_KB_INTENT_HINT_WEIGHT
+#   DEV_KB_STRUCTURE_TRUST
+# 声明了标题链能力却缺标题链的块降权（结构缺失 → 语义召回不可靠）
+STRUCTURE_TRUST = float(os.environ.get("DEV_KB_STRUCTURE_TRUST", "0.7"))
+# 标题链独立通道权重：与"意图路径提示"同档
+HEADING_WEIGHT = float(os.environ.get("DEV_KB_HEADING_WEIGHT", "0.7"))
+# 术语别名通道权重
+ALIAS_WEIGHT = float(os.environ.get("DEV_KB_ALIAS_WEIGHT", "1.0"))
+# 知识源意图映射的路径提示权重
+INTENT_HINT_WEIGHT = float(os.environ.get("DEV_KB_INTENT_HINT_WEIGHT", "0.7"))
+
 # 意图 → 路径提示：结构类问题直接加权对应目录
+# 【待移除】全局硬编码表：只对 Laravel 类目录有效，对文档型知识库几乎无效。
+# 新机制是知识源声明的 intent_map；本表在评测确认 intent_map 不退化后删除。
 _PATH_HINTS = {
-    "路由": "routes/", "中间件": "iddleware", "迁移": "migrations/",
+    "路由": "routes/", "中间件": "middleware", "迁移": "migrations/",
     "配置": "config", "命令": ["Console", "Commands"], "模型": "Models/",
     # 以下为评测驱动扩充（baseline-v3 短板：中文问法与英文目录名无映射）
     "状态管理": ["store/", "Store"], "存储": ["store", "storage"],
@@ -91,7 +114,7 @@ def _extract_cjk_terms(query: str) -> list[str]:
 class HybridSearch:
     def __init__(self, store: MetadataStore, vector_store=None, rerank: bool = False,
                  blend: float = 0.5, code_boost: float = 1.5, doc_damp: float = 0.7,
-                 expand: bool = False, expand_use_llm: bool = True):
+                 expand: bool = False, expand_use_llm: bool = True, declarations: dict | None = None):
         self.store = store
         self.vs = vector_store
         self.rerank = rerank
@@ -100,6 +123,54 @@ class HybridSearch:
         self.doc_damp = doc_damp      # 代码定位意图时文档块降权
         self.expand = expand          # LLM 查询扩展（中文→英文符号候选）
         self.expand_use_llm = expand_use_llm  # 只读 MCP 可限制为仅使用已有缓存
+        self._declarations = declarations
+        self._coverage_cache: dict[str, bool] = {}
+        self._query_lower = ""
+
+    # ---- 契约声明 ----
+
+    @property
+    def declarations(self) -> dict:
+        if self._declarations is None:
+            from ..contract.declaration import load_declarations
+            self._declarations = load_declarations()
+        return self._declarations
+
+    def _decl_for(self, project: str | None):
+        if project:
+            return self.declarations.get(project)
+        return None
+
+    def _heading_trusted(self, project: str | None) -> bool:
+        """该源是否声明了标题链能力，且实际覆盖率达标（R-02 的判定）。"""
+        if not project:
+            return False
+        if project in self._coverage_cache:
+            return self._coverage_cache[project]
+        decl = self._decl_for(project)
+        trusted = False
+        if decl is not None and decl.provides_field("heading_path"):
+            total, missing = self.store.heading_coverage(project)
+            trusted = total > 0 and (total - missing) / total >= 0.95
+        self._coverage_cache[project] = trusted
+        return trusted
+
+    def _alias_expansions(self, project: str | None) -> list[tuple[str, str]]:
+        """查询里命中的术语别名 → canonical term。
+
+        术语通道是**查询侧扩展**：用户问"低秩适配"就扩展成"LoRA"，再交给
+        符号/路径/FTS 通道排序。早期实现是文档侧匹配（按路径长度取前 N），
+        那是任意排序，会挤掉正确结果。
+        """
+        decl = self._decl_for(project)
+        if decl is None or not decl.provides_field("aliases"):
+            return []
+        out: list[tuple[str, str]] = []
+        for surface, canonical in decl.alias_to_canonical().items():
+            if len(surface) >= 2 and surface.lower() in self._query_lower:
+                if canonical not in [c for _s, c in out]:
+                    out.append((surface, canonical))
+        return out
 
     def search(self, query: str, project: str | None = None, limit: int = 8,
                diagnostics: dict | None = None) -> list[dict]:
@@ -107,6 +178,7 @@ class HybridSearch:
         ranks: dict[int, float] = {}
         sources: dict[int, set[str]] = {}
         channel_ranks: dict[str, dict[int, int]] = {}
+        self._query_lower = query.lower()
 
         def add(rows, source: str, get_id, base_weight: float = 1.0):
             for rank, row in enumerate(rows):
@@ -153,19 +225,53 @@ class HybridSearch:
         except Exception:
             pass  # 查询无法构成合法 MATCH 表达式时跳过
 
-        # 3. 意图路径提示（路由/配置/中间件等结构类问题）
+        # 3. 标题链独立通道：只看文档标题里的词，与正文通道分开归因
+        if HEADING_WEIGHT > 0:
+            try:
+                heading_rows = self.store.heading_search(query, project, limit=limit)
+                if heading_rows:
+                    add(heading_rows, "heading", lambda r: r["id"], HEADING_WEIGHT)
+            except Exception:
+                pass  # 标题索引为空或查询不合法时跳过
+
+        # 4. 术语别名通道：知识源声明的别名直接挂接对应块
+        if ALIAS_WEIGHT > 0:
+            for _surface, canonical in self._alias_expansions(project):
+                add(self.store.symbol_search(canonical, project, limit=limit),
+                    "alias", lambda r: r["id"], ALIAS_WEIGHT)
+                add(self.store.path_search(canonical, project, limit=limit),
+                    "alias", lambda r: r["id"], ALIAS_WEIGHT)
+                try:
+                    hits = self.store.fts_search(canonical, project, limit=limit,
+                                                 or_fallback=False)
+                except Exception:
+                    hits = []
+                add(hits, "alias", lambda r: r["id"], ALIAS_WEIGHT)
+
+        # 5. 意图路径提示（全局表，待评测后由知识源声明替代）
         for kw, hint in _PATH_HINTS.items():
             if kw in query:
                 hints = [hint] if isinstance(hint, str) else hint
                 for h in hints:
                     add(self.store.path_search(h, project, limit=3), "path-hint", lambda r: r["id"], 0.7)
 
-        # 4. 向量语义
+        # 6. 知识源声明的意图映射：本库自己的"中文意图 → 路径"
+        decl = self._decl_for(project)
+        if decl is not None and INTENT_HINT_WEIGHT > 0:
+            for intent, patterns in decl.intent_map.items():
+                if intent not in query:
+                    continue
+                for pattern in patterns:
+                    add(self.store.path_search(pattern, project, limit=3),
+                        "intent-hint", lambda r: r["id"], INTENT_HINT_WEIGHT)
+
+        # 7. 向量语义
         if self.vs is not None:
             from ..indexing import embedder
             qv = embedder.embed_texts([query])[0]
             add(self.vs.search(qv, project=project, limit=limit * 2), "vector", lambda p: p.id, 0.8)
 
+        trusted = self._heading_trusted(project)
         top_ids = sorted(ranks, key=lambda i: -ranks[i])[: limit * 3]
         results = []
         for cid in top_ids:
@@ -175,6 +281,10 @@ class HybridSearch:
             score = ranks[cid]
             if _TEST_PATH.search(row["path"]):
                 score *= 0.4  # 测试文件降权
+            if STRUCTURE_TRUST > 0 and trusted and row["source_type"] == "document":
+                heading = row["heading_path"]
+                if not heading or heading == "[]":
+                    score *= STRUCTURE_TRUST  # 结构缺失降权
             if code_seeking:
                 if row["source_type"] == "code":
                     score *= self.code_boost
@@ -190,6 +300,8 @@ class HybridSearch:
                 "language": row["language"],
                 "symbol": row["symbol"],
                 "heading_path": row["heading_path"],
+                "category": row["category"] or "",
+                "doc_role": row["doc_role"] or "",
                 "start_line": row["start_line"],
                 "end_line": row["end_line"],
                 "content": row["content"],
@@ -203,6 +315,7 @@ class HybridSearch:
                 "candidate_sources": {cid: sorted(items) for cid, items in sources.items()},
                 "channel_ranks": channel_ranks,
                 "fusion_ids": [r["chunk_id"] for r in results],
+                "heading_trusted": trusted,
             })
         if self.rerank and results:
             from ..indexing import reranker

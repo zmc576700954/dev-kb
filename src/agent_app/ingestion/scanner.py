@@ -60,16 +60,12 @@ LOCK_FILES = {
     "Cargo.lock", "poetry.lock",
 }
 
-SPEC_DIR_HINTS = ("specs", "spec", "tasks", "plans")
-
-
 @dataclass
 class FileEntry:
     path: str           # 相对项目根
     category: str       # code | document | config | data | binary | other
     language: str = ""
     size: int = 0
-    is_spec_candidate: bool = False
 
 
 @dataclass
@@ -115,9 +111,16 @@ def _load_ignore_dirs(root: Path) -> tuple[set[str], set[str]]:
     return dirs, paths
 
 
-def _is_spec_candidate(rel: str) -> bool:
-    parts = Path(rel).parts
-    return any(p.lower() in SPEC_DIR_HINTS for p in parts[:-1]) and rel.endswith(".md")
+def _in_content_roots(rel: str, content_roots: list[str]) -> bool:
+    """相对路径是否落在契约声明的内容边界内。"""
+    rel = rel.replace(os.sep, "/").lstrip("./")
+    for root in content_roots:
+        root = root.replace(os.sep, "/").strip("/")
+        if root in ("", "."):
+            return True
+        if rel == root or rel.startswith(root + "/"):
+            return True
+    return False
 
 
 def _classify(rel: str, size: int) -> FileEntry:
@@ -130,9 +133,9 @@ def _classify(rel: str, size: int) -> FileEntry:
     if name in CONFIG_NAMES or name in LOCK_FILES:
         return FileEntry(rel, "config", "", size)
     if ext in CODE_EXTENSIONS:
-        return FileEntry(rel, "code", CODE_EXTENSIONS[ext], size, _is_spec_candidate(rel))
+        return FileEntry(rel, "code", CODE_EXTENSIONS[ext], size)
     if ext in DOC_EXTENSIONS:
-        return FileEntry(rel, "document", "", size, _is_spec_candidate(rel))
+        return FileEntry(rel, "document", "", size)
     if ext in CONFIG_EXTENSIONS:
         return FileEntry(rel, "config", "", size)
     if ext in BINARY_EXTENSIONS:
@@ -142,7 +145,13 @@ def _classify(rel: str, size: int) -> FileEntry:
     return FileEntry(rel, "other", "", size)
 
 
-def scan_project(name: str, root: str, extra_exclude_dirs: list[str] | None = None) -> ProjectReport:
+def scan_project(name: str, root: str, extra_exclude_dirs: list[str] | None = None,
+                 content_roots: list[str] | None = None) -> ProjectReport:
+    """扫描一个知识源目录。
+
+    ``content_roots`` 是契约声明的内容边界（相对项目根；``"."`` 表示全库）。
+    边界外的文件不进索引清单——边界由声明给出，而不是靠排除名单碰巧躲开。
+    """
     root = os.path.expandvars(os.path.expanduser(root))
     root_path = Path(root)
     report = ProjectReport(name=name, root=root)
@@ -190,6 +199,12 @@ def scan_project(name: str, root: str, extra_exclude_dirs: list[str] | None = No
                 report.lock_files.append(rel)
                 continue
 
+            # 契约边界：声明之外的内容不进索引
+            if content_roots and not _in_content_roots(rel, content_roots):
+                report.excluded_dirs[f"content_roots:{rel_dir}"] = \
+                    report.excluded_dirs.get(f"content_roots:{rel_dir}", 0) + 1
+                continue
+
             matched = next(
                 (p for p in EXCLUDE_FILE_PATTERNS if fnmatch.fnmatch(fname, p)),
                 None,
@@ -234,13 +249,10 @@ def _detect_type(report: ProjectReport) -> str:
 def summarize(report: ProjectReport) -> dict:
     by_cat: dict[str, int] = {}
     by_lang: dict[str, int] = {}
-    specs: list[str] = []
     for f in report.files:
         by_cat[f.category] = by_cat.get(f.category, 0) + 1
         if f.language:
             by_lang[f.language] = by_lang.get(f.language, 0) + 1
-        if f.is_spec_candidate:
-            specs.append(f.path)
     return {
         "name": report.name,
         "root": report.root,
@@ -248,7 +260,6 @@ def summarize(report: ProjectReport) -> dict:
         "file_counts": by_cat,
         "languages": dict(sorted(by_lang.items(), key=lambda kv: -kv[1])),
         "total_indexable_files": len(report.files),
-        "spec_candidates": sorted(specs),
         "manifests": sorted(report.manifests),
         "lock_files": sorted(report.lock_files),
         "excluded_dirs": dict(sorted(report.excluded_dirs.items(), key=lambda kv: -kv[1])),

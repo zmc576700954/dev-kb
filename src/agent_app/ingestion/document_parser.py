@@ -33,27 +33,105 @@ def _heading_level(tag: str) -> int:
     return int(tag[1]) if tag.startswith("h") and len(tag) == 2 else 0
 
 
-def chunk_markdown(text: str) -> list[Chunk]:
+def _frontmatter_span(lines: list[str]) -> tuple[int, int] | None:
+    """frontmatter 块的行区间（含首尾 ---），没有则 None。"""
+    if not lines or lines[0].strip() != "---":
+        return None
+    for i in range(1, len(lines)):
+        if lines[i].strip() in ("---", "..."):
+            return (0, i + 1)
+    return None
+
+
+def _extract_headings(text: str) -> list[tuple[int, int, str]]:
+    """(行号, 层级, 标题) 列表，并修正 frontmatter 造成的伪标题。
+
+    Markdown 解析器不认识 YAML frontmatter：`状态: 稳定` 会被 setext 规则
+    当成二级标题，于是 frontmatter 的最后一个键值变成了一条假标题。
+    这里保留它的位置（切块边界依赖它），但把标题换成文档的首个真实标题。
+    """
     lines = text.splitlines()
     tokens = _md.parse(text)
-
-    # 标题边界：token.map = [start_line, end_line)
-    headings: list[tuple[int, int, str]] = []  # (line_idx, level, title)
+    headings: list[tuple[int, int, str]] = []
     for i, tok in enumerate(tokens):
         if tok.type == "heading_open" and tok.map:
             inline = tokens[i + 1] if i + 1 < len(tokens) else None
             title = inline.content.strip() if inline and inline.type == "inline" else ""
             headings.append((tok.map[0], _heading_level(tok.tag), title))
 
+    fm = _frontmatter_span(lines)
+    if fm:
+        inside = [h for h in headings if fm[0] <= h[0] < fm[1]]
+        outside = [h for h in headings if not (fm[0] <= h[0] < fm[1])]
+        if inside and outside:
+            real_title = outside[0][2]
+            headings = sorted(
+                [(line, level, real_title) for line, level, _ in inside] + outside,
+                key=lambda h: h[0],
+            )
+    return headings
+
+
+def _heading_path(headings: list[tuple[int, int, str]], idx: int) -> list[str]:
+    """标题链 = 祖先标题 + 自身标题。
+
+    从最近的祖先往回收集：只收层级严格更浅的标题，直到遇到同级或更浅的为止。
+    """
+    _, level, title = headings[idx]
+    path: list[str] = []
+    cur_level = level
+    for _line, prev_level, prev_title in reversed(headings[:idx]):
+        if prev_level < cur_level:
+            path.insert(0, prev_title)
+            cur_level = prev_level
+    path.append(title)   # 自身标题在末尾：链的顺序是 祖先 → 自身
+    return path
+
+
+def first_heading(text: str) -> str:
+    """文档的第一个标题（跳过 frontmatter 造成的伪标题；没有则返回空串）。"""
+    headings = _extract_headings(text)
+    if not headings:
+        return ""
+    lines = text.splitlines()
+    fm = _frontmatter_span(lines)
+    if fm:
+        real = [h for h in headings if not (fm[0] <= h[0] < fm[1])]
+        if real:
+            return real[0][2]
+    return headings[0][2]
+
+
+def section_paths(text: str) -> list[tuple[int, list[str]]]:
+    """章节起点行 → 标题链。用于按已有索引回填 heading_path（不重切块）。"""
+    headings = _extract_headings(text)
+    if not headings:
+        return []
+    sections: list[tuple[int, list[str]]] = []
+    if headings[0][0] > 0:
+        sections.append((1, [headings[0][2]]))
+    for idx, (line_idx, _level, _title) in enumerate(headings):
+        sections.append((line_idx + 1, _heading_path(headings, idx)))
+    return sections
+
+
+def chunk_markdown(text: str) -> list[Chunk]:
+    lines = text.splitlines()
+
+    # 标题边界：token.map = [start_line, end_line)
+    headings = _extract_headings(text)
+
     if not headings:
         return _split_plain(text, len(lines))
 
     chunks: list[Chunk] = []
-    # 前言（第一个标题之前）
+    # 前言（第一个标题之前）：frontmatter 等元数据落在这一段。
+    # 它归属文档的首个标题——否则这块没有标题信号，在检索里等于死块。
     if headings[0][0] > 0:
         pre = "\n".join(lines[: headings[0][0]]).strip()
         if pre:
-            chunks.append(Chunk(pre, "document", heading_path=[], start_line=1, end_line=headings[0][0]))
+            chunks.append(Chunk(pre, "document", heading_path=[headings[0][2]],
+                                start_line=1, end_line=headings[0][0]))
 
     for idx, (line_idx, level, title) in enumerate(headings):
         end = len(lines)
@@ -64,14 +142,8 @@ def chunk_markdown(text: str) -> list[Chunk]:
         body = "\n".join(lines[line_idx:end]).strip()
         if not body:
             continue
-        # heading_path：最近的上级标题链
-        path: list[str] = []
-        for prev_line, prev_level, prev_title in reversed(headings[: idx + 1]):
-            if prev_level < level or prev_line == line_idx:
-                path.insert(0, prev_title)
-                level = prev_level
-                if prev_line == line_idx:
-                    break
+        # heading_path：祖先标题链 + 自身标题
+        path = _heading_path(headings, idx)
         for part in _split_long(body, line_idx + 1, end):
             part.heading_path = path
             chunks.append(part)

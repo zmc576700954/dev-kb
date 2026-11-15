@@ -1,7 +1,9 @@
 """Qdrant 向量库（本地文件模式，免 Docker）。
 
 - Collection 名携带 Embedding 模型标识；换模型 = 新 Collection，不混向量。
-- point id 直接使用 SQLite chunk id；payload 存 project/path/symbol/行号，检索后回查原文。
+- point id 直接使用 SQLite chunk id；payload 只存标识与定位信息（project/path/symbol/
+  行号/source_type），检索后按 chunk id 回查 SQLite 取契约字段——契约字段的唯一
+  事实源是 SQLite，不在向量库里复制一份。
 """
 
 from __future__ import annotations

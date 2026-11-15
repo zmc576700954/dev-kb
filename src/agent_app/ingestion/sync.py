@@ -1,11 +1,14 @@
 """全量与增量同步：扫描 → 哈希比对 → 切块 → 入库 → 生成向量。
 
-规则（对照规划第六节）：
+规则：
 - 新文件：解析、切块、入库、生成向量。
 - 内容变化（content_hash 不同）：删旧块、重建新块。
 - 文件删除：同步删除块、FTS、向量与文件记录。
 - 解析失败：记录 sync_errors，不静默跳过。
 - 回答层应读取原文件，本模块只维护索引。
+
+契约字段（category / doc_role / aliases）在这里按声明填入块行，
+索引侧的契约字段因此与声明始终一致。
 """
 
 from __future__ import annotations
@@ -13,7 +16,6 @@ from __future__ import annotations
 import hashlib
 import os
 import subprocess
-from dataclasses import asdict
 from pathlib import Path
 
 from ..indexing.metadata_store import MetadataStore
@@ -53,9 +55,16 @@ class SyncEngine:
 
     # ---- 主流程 ----
 
-    def sync_project(self, name: str, root: str, extra_exclude_dirs: list[str] | None = None) -> dict:
+    def sync_project(self, name: str, root: str, extra_exclude_dirs: list[str] | None = None,
+                     decl=None) -> dict:
+        """同步一个知识源。
+
+        ``decl`` 是 :class:`~agent_app.contract.declaration.SourceDeclaration`；
+        给了就按声明限定内容边界、填契约字段。
+        """
         root = os.path.expandvars(os.path.expanduser(root))
-        report = scan_project(name, root, extra_exclude_dirs)
+        content_roots = list(decl.content_roots) if decl else None
+        report = scan_project(name, root, extra_exclude_dirs, content_roots=content_roots)
         commit = _git_commit(root)
         seen: set[str] = set()
         result = {"project": name, "new": 0, "changed": 0, "unchanged": 0,
@@ -75,11 +84,6 @@ class SyncEngine:
             existing = self.store.get_file(name, rel)
             if existing and existing["content_hash"] == digest:
                 result["unchanged"] += 1
-                # 已索引但未做 Spec 结构化解析的候选文件（如解析器后加的）需要补解析
-                if getattr(f, "is_spec_candidate", False) and not self.store.conn.execute(
-                    "SELECT 1 FROM spec_docs WHERE project=? AND path=?", (name, rel)
-                ).fetchone():
-                    self._sync_spec(name, rel, raw, f)
                 continue
 
             # 内容变化：先删旧块（含向量）
@@ -101,12 +105,11 @@ class SyncEngine:
                 continue
 
             ids = self.store.replace_chunks(
-                name, rel, [self._chunk_to_row(name, rel, c) for c in chunks])
+                name, rel, [self._chunk_to_row(name, rel, c, decl) for c in chunks])
             self.store.upsert_file(name, rel, os.path.getmtime(full), f.size, digest, commit)
-            self._sync_spec(name, rel, raw, f)
             result["chunks"] += len(ids)
             result["fallback_files"] += 1 if used_fallback else 0
-            self._queue_embedding(name, rel, ids, chunks)
+            self._queue_embedding(name, rel, ids, chunks, decl)
             self.store.commit()  # 逐文件提交：长同步被中断后可断点续跑，避免重复切块
 
         # 已删除文件
@@ -134,32 +137,23 @@ class SyncEngine:
         return [Chunk(text[:8000], "config" if category == "config" else "data",
                       start_line=1, end_line=len(lines))], False
 
-    @staticmethod
-    def _chunk_to_row(project: str, rel: str, c) -> dict:
+    def _chunk_to_row(self, project: str, rel: str, c, decl=None) -> dict:
+        """块 → 索引行，附带契约字段。"""
+        from ..contract.declaration import aliases_in_content, category_of
+        terms = decl.terms() if decl else {}
+        role = decl.role_of(rel) if decl else ""
         return {
             "source_type": c.source_type, "language": c.language, "symbol": c.symbol,
             "heading_path": c.heading_path, "start_line": c.start_line,
             "end_line": c.end_line, "content": c.content,
+            "category": category_of(rel),
+            "doc_role": role,
+            "aliases": aliases_in_content(c.content, terms),
         }
-
-    # ---- Spec 结构化解析 ----
-
-    def _sync_spec(self, project: str, rel: str, raw: bytes, f) -> None:
-        """候选 Spec/任务文件 → 解析为结构化记录。解析失败记录错误，不静默跳过。"""
-        if not getattr(f, "is_spec_candidate", False):
-            return
-        from ..specs.parser import parse_spec
-        try:
-            spec = parse_spec(raw.decode("utf-8", "replace"), rel)
-            if spec is None:
-                return
-            self.store.replace_spec(project, rel, spec)
-        except Exception as e:
-            self.store.log_error(project, rel, "spec_parse", repr(e))
 
     # ---- Embedding ----
 
-    def _queue_embedding(self, project: str, rel: str, ids: list[int], chunks: list):
+    def _queue_embedding(self, project: str, rel: str, ids: list[int], chunks: list, decl=None):
         if not self.embed:
             return
         for cid, c in zip(ids, chunks):

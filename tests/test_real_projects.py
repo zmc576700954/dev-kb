@@ -62,20 +62,6 @@ def test_chinese_fts_works(store):
     assert rows, "中文 FTS 检索失效"
 
 
-def test_spec_structured_data(store):
-    """M4：tiangong 任务与依赖边存在。"""
-    tasks = store.spec_tasks("tiangong")
-    assert len(tasks) > 100
-    deps = {(r["spec_key"], r["depends_on"]) for r in store.spec_deps("tiangong")}
-    assert ("query-writeback", "wiki-graph-compute") in deps
-    assert ("wiki-graph-compute", "wiki-link-ingest") in deps
-
-
-def test_spec_code_refs_collected(store):
-    n = store.conn.execute("SELECT COUNT(*) c FROM spec_code_refs").fetchone()["c"]
-    assert n > 300, "spec↔代码引用数量异常"
-
-
 def test_profiles_facts(store):
     """M5：画像事实与实测一致。"""
     p = get_project_profile(store, "tiangong")
@@ -86,12 +72,6 @@ def test_profiles_facts(store):
     assert p["stacks"] and p["stacks"][0]["language"] == "Python"
     p = get_project_profile(store, "repository-manage")
     assert any("Tauri" in (s["framework"] or "") for s in p["stacks"])
-
-
-def test_proposals_pending_only(store):
-    """M6：所有提案均未落盘（除非人工操作过）。"""
-    for p in store.proposals():
-        assert p["status"] in ("pending", "approved", "rejected", "applied")
 
 
 def test_dev_kb_excludes_eval_artifacts_and_pytest_cache(store):

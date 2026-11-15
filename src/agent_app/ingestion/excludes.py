@@ -1,6 +1,10 @@
 """默认排除清单：目录、文件名模式、二进制扩展名。
 
-来源：规划文档默认项 + 2026-11-12 对五个目录实测扩充项。
+这里只放**跨项目通用**的排除项（版本控制、依赖、构建产物、运行时产物）。
+某个项目特有的目录（例如某个仓库的语料副本与模型权重）写在该项目自己的
+``extra_exclude_dirs`` 声明里——放进全局表会让这条规则对所有项目生效，
+那正是知识源契约要消除的跨项目耦合。
+
 支持项目根目录 .agentignore 追加规则，并尊重 .gitignore 中的目录级规则。
 """
 
@@ -18,8 +22,6 @@ EXCLUDE_DIRS = {
     "dist", "dist-electron", "build", "target", "out",
     # 运行时产物
     "storage", "cache", "logs", "tmp", "temp",
-    # 大体积数据（kaiwu 实测）
-    "models", "notebooks", "kb_corpus", "kb_corpus_draft", "kb_corpus_real",
 }
 
 # 部分保留的目录：只保留指定子目录，其余排除

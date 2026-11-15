@@ -54,6 +54,7 @@ class SyncEngine:
     # ---- 主流程 ----
 
     def sync_project(self, name: str, root: str, extra_exclude_dirs: list[str] | None = None) -> dict:
+        root = os.path.expandvars(os.path.expanduser(root))
         report = scan_project(name, root, extra_exclude_dirs)
         commit = _git_commit(root)
         seen: set[str] = set()

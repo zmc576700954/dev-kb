@@ -2,14 +2,16 @@
 
 配置方式（按优先级）：
 1. 环境变量 LLM_BASE_URL + LLM_API_KEY + LLM_MODEL（任何 OpenAI 兼容服务）
-2. 本地 MLX：LLM_MLX_PATH 或默认 kaiwu/models/Qwen3-4B-Instruct-2507-mlx-4bit
+2. 本地 MLX：LLM_MLX_PATH，或缺省路径 ~/kaiwu/models/Qwen3-4B-Instruct-2507-mlx-4bit
 """
 
 from __future__ import annotations
 
 import os
 
-DEFAULT_MLX_PATH = "/Users/zhumingchen/kaiwu/models/Qwen3-4B-Instruct-2507-mlx-4bit"
+DEFAULT_MLX_PATH = os.path.expanduser(
+    "~/kaiwu/models/Qwen3-4B-Instruct-2507-mlx-4bit"
+)
 
 _mlx_cache: tuple | None = None
 

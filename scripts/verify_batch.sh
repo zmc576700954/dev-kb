@@ -1,7 +1,7 @@
 #!/bin/sh
 # 批量操作 + dry-run stale 预检的完整验证
 set -e
-cd /Users/zhumingchen/dev-kb
+cd "$(dirname "$0")/.."
 
 echo "=== 1. 批量操作测试 ==="
 PYTHONPATH=src .venv/bin/python -m pytest tests/test_kb_cli_batch.py -q

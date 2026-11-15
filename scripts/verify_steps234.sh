@@ -1,6 +1,6 @@
 #!/bin/sh
 # 第 2–4 步验证：待办清单 + CI 门禁 + MCP client
-cd /Users/zhumingchen/dev-kb
+cd "$(dirname "$0")/.."
 
 echo "=== 1. 待办清单（ai-video-kb，前 25 行） ==="
 PYTHONPATH=src .venv/bin/python scripts/todo_report.py ai-video-kb | head -25

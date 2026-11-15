@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import yaml
@@ -17,7 +18,9 @@ def load_kb_registry(config: str | Path | None = None) -> dict[str, dict]:
 
 def kb_project_root(name: str, config: str | Path | None = None) -> str | None:
     p = load_kb_registry(config).get(name)
-    return p["path"] if p else None
+    if not p:
+        return None
+    return os.path.expandvars(os.path.expanduser(p["path"]))
 
 
 def kb_paths(name: str, config: str | Path | None = None) -> list[str]:

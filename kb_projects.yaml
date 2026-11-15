@@ -5,12 +5,14 @@
 #   未配置 → 项目内所有 .md 都纳入校验。
 #   配置后 → 只有这些目录下的文档参与规范校验；项目根 README 始终参与。
 #   用途：代码仓库兼作知识库时，把 vendor 副本、报告产物等排除在规范范围外。
+#
+# path 支持 `~` 与环境变量（如 $HOME/xxx），由注册表统一展开。
 projects:
   - name: ai-video-kb
-    path: /Users/zhumingchen/ai-video-kb
+    path: ~/ai-video-kb
 
   - name: dev-kb
-    path: /Users/zhumingchen/dev-kb
+    path: ~/dev-kb
     kb_paths:
       - docs
       - evals

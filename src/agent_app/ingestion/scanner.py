@@ -143,6 +143,7 @@ def _classify(rel: str, size: int) -> FileEntry:
 
 
 def scan_project(name: str, root: str, extra_exclude_dirs: list[str] | None = None) -> ProjectReport:
+    root = os.path.expandvars(os.path.expanduser(root))
     root_path = Path(root)
     report = ProjectReport(name=name, root=root)
     if not root_path.is_dir():

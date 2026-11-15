@@ -1,6 +1,6 @@
 #!/bin/sh
 # 恢复 dev-kb 被破坏的围栏结构 + 定位剩余 error
-cd /Users/zhumingchen/dev-kb
+cd "$(dirname "$0")/.."
 
 echo "=== 1. 恢复预览（不改动文件） ==="
 PYTHONPATH=src .venv/bin/python scripts/recover_dev_kb.py

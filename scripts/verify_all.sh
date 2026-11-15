@@ -1,6 +1,6 @@
 #!/bin/sh
 # dev-kb 拆分收尾 + 四步总验证
-cd /Users/zhumingchen/dev-kb
+cd "$(dirname "$0")/.."
 
 echo "=== 1. 应用拆分 ==="
 PYTHONPATH=src .venv/bin/python scripts/split_decisions.py --apply

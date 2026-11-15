@@ -1,7 +1,7 @@
 #!/bin/sh
 # README op 校验修复后的完整验证流程
 set -e
-cd /Users/zhumingchen/dev-kb
+cd "$(dirname "$0")/.."
 
 echo "=== 1. 新增测试 ==="
 PYTHONPATH=src .venv/bin/python -m pytest tests/test_kb_readme_ops.py -q

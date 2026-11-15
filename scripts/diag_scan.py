@@ -10,7 +10,7 @@ import yaml
 
 from agent_app.ingestion.scanner import scan_project
 
-ROOT = Path("/Users/zhumingchen/dev-kb")
+ROOT = Path(__file__).resolve().parent.parent
 projects = yaml.safe_load(open(ROOT / "projects.yaml", encoding="utf-8"))["projects"]
 dev = next(p for p in projects if p["name"] == "dev-kb")
 extra = dev.get("extra_exclude_dirs")

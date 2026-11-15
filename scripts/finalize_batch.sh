@@ -1,6 +1,6 @@
 #!/bin/sh
 # 批量操作收尾：撤回过时的已批准提案 + 最终校验
-cd /Users/zhumingchen/dev-kb
+cd "$(dirname "$0")/.."
 
 echo "=== 1. 撤回过时的已批准提案（修复内容已被后续变更取代） ==="
 PYTHONPATH=src .venv/bin/python -m agent_app.kb_spec.cli proposals reject 24 25 66 || true

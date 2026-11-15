@@ -104,11 +104,12 @@ def kb_check(root: str, doc_path: str, draft: str) -> str:
     """
     try:
         from pathlib import Path
-        from ..kb_spec.registry import load_kb_registry
+        from ..kb_spec.registry import kb_project_root, load_kb_registry
         registry = load_kb_registry()
         root_r = Path(root).resolve()
-        project = next((n for n, p in registry.items()
-                        if Path(p["path"]).resolve() == root_r), None)
+        project = next((n for n in registry
+                        if kb_project_root(n)
+                        and Path(kb_project_root(n)).resolve() == root_r), None)
         if not project:
             return ""
         from ..tools.kb_client import KbSpecClient

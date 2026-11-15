@@ -1,6 +1,6 @@
 #!/bin/sh
 # 接入 dev-kb 自身：范围限定修正后的完整验证
-cd /Users/zhumingchen/dev-kb
+cd "$(dirname "$0")/.."
 
 echo "=== 1. kb_paths 范围测试 ==="
 PYTHONPATH=src .venv/bin/python -m pytest tests/test_kb_scope.py -q

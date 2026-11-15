@@ -1,5 +1,5 @@
 {
-  "source": "/Users/zhumingchen/web-boke/docs/kb-agent-spec.md",
+  "source": "web-boke/docs/kb-agent-spec.md",
   "sha256": "8490d00e767a331f6687e6cddc0b66a486fd9202789279b6192c940a13d10f02",
   "vendored_at": "2026-11-13",
   "change_note": "§5.2 空章节定义；§8 列表规则；§4.2 文件名专有名词例外；§13 标题核心词与开篇段落（纯结构化文档不适用）"

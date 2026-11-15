@@ -82,6 +82,24 @@ PYTHONPATH=src .venv/bin/python evals/compare.py \
 
 **已知未命中**：q044 / q057 / q076 / q078（判定为真实检索短板，非评测噪声）。
 
+## holdout 验收（12 题独立验证集）
+
+`cases_holdout.jsonl` 的 12 题从未参与 v1–v8 的参数选择与拒绝实验，只在冻结配置后验收：
+
+```bash
+HF_HUB_OFFLINE=1 PYTHONPATH=src .venv/bin/python evals/run_eval.py \
+  --cases evals/cases_holdout.jsonl --name holdout-v8 --rerank --blend 0.3 --expand
+```
+
+| 指标 | holdout-v7 | holdout-v8 |
+|---|---:|---:|
+| recall@1 | 0.6667 | 0.6667 |
+| recall@3 | 0.7500 | 0.7500 |
+| recall@5 | 0.7500 | 0.7500 |
+| MRR@5 | 0.7083 | 0.7083 |
+
+McNemar：恶化 0 / 改善 0（p=1.0）。**冻结配置在未参与调参的题集上与旧基线完全一致**——本轮改动没有把 100 题集上的收益建立在过拟合上。未命中 3 题：h002 / h004 / h010。
+
 ## 索引重建
 
 契约字段与标题链都落在索引里，因此改了切块器或声明之后要重建：

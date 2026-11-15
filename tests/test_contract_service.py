@@ -100,3 +100,26 @@ def test_service_suggest_hints_lists_directories(tmp_path, registry):
     info = svc.suggest_hints("doc-kb")
     assert "03-运维" in info["directories"]
     svc.close()
+
+
+def test_readonly_queries_do_not_create_index(tmp_path, registry):
+    """CI 没有 meta.db：sources/rules/suggest-hints 不应顺手建库。"""
+    db = tmp_path / "no-index.db"
+    svc = ContractService(db_path=db, config=registry)
+    assert svc.sources()
+    assert len(svc.rules()) == 7
+    assert svc.suggest_hints("doc-kb")["directories"]
+    assert not db.exists()
+    svc.close()
+    assert not db.exists()
+
+
+def test_indexed_source_checks_are_inapplicable_without_index(tmp_path, registry, doc_source):
+    """无索引时 R-02/R-05 不适用；声明级 R-01/R-03/R-04/R-07 仍可校验。"""
+    db = tmp_path / "no-index.db"
+    svc = ContractService(db_path=db, config=registry)
+    result = svc.validate(doc_source.name)
+    assert result["verdict"] in ("pass", "warn")
+    assert all(f["rule_id"] not in ("R-02", "R-05", "R-06") for f in result["findings"])
+    assert not db.exists()
+    svc.close()

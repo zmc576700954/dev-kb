@@ -21,8 +21,18 @@ class ContractService:
     def __init__(self, store: MetadataStore | None = None, db_path: str | Path | None = None,
                  config: str | Path | None = None):
         self._owns_store = store is None
-        self.store = store if store is not None else MetadataStore(db_path or ROOT / "data/meta.db")
+        self.store = store
+        self.db_path = db_path or ROOT / "data/meta.db"
         self.config = config
+
+    def _ensure_store(self) -> MetadataStore | None:
+        """只有索引级校验需要 meta.db；sources/rules/suggest-hints 不应建库。
+
+        CI 没有本地索引，声明级校验仍必须可运行。
+        """
+        if self.store is None and Path(self.db_path).is_file():
+            self.store = MetadataStore(self.db_path)
+        return self.store
 
     # ---- 声明 ----
 
@@ -57,7 +67,7 @@ class ContractService:
                 "findings": [],
                 "message": f"未登记的知识源：{name}",
             }
-        findings = run_checks(decl, self.store)
+        findings = run_checks(decl, self._ensure_store())
         errors = sum(1 for f in findings if f.severity == "error")
         warnings = sum(1 for f in findings if f.severity == "warning")
         verdict = "fail" if errors else ("warn" if warnings else "pass")
@@ -107,8 +117,9 @@ class ContractService:
         }
 
     def close(self):
-        if self._owns_store:
+        if self._owns_store and self.store is not None:
             self.store.close()
+            self.store = None
 
     def __enter__(self):
         return self

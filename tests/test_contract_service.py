@@ -2,7 +2,12 @@
 
 from __future__ import annotations
 
+import json
+import sqlite3
+from pathlib import Path
+
 import pytest
+import yaml
 
 from agent_app.contract.checks import check_r02, check_r05, check_r06
 from agent_app.contract.service import ContractService
@@ -47,10 +52,28 @@ def test_contract_columns_are_populated(synced, doc_source):
 
 def test_aliases_column_records_terms_found_in_body(synced, doc_source):
     row = synced.conn.execute(
-        "SELECT aliases FROM chunks WHERE project=? AND content LIKE '%ComfyUI%'",
+        "SELECT aliases FROM chunks WHERE project=? AND path='01-概览/02-术语.md'",
         (doc_source.name,)).fetchone()
     assert row is not None
-    assert "ComfyUI" in row["aliases"] and "comfy" in row["aliases"]
+    assert json.loads(row["aliases"]) == ["ComfyUI"]
+
+
+def test_aliases_column_records_only_surfaces_in_body(store, doc_source):
+    source_root = Path(doc_source.root)
+    (source_root / "doc-kb.terms.yaml").write_text(yaml.safe_dump({
+        "aliases": {"LoRA": ["lora", "低秩适配"]},
+    }, allow_unicode=True), encoding="utf-8")
+    (source_root / "01-概览" / "02-术语.md").write_text(
+        "# 术语表\n\n## 定义\n\n低秩适配是一种轻量微调方法。\n", encoding="utf-8"
+    )
+    SyncEngine(store, None, embed=False).sync_project(
+        doc_source.name, doc_source.root, decl=doc_source
+    )
+    row = store.conn.execute(
+        "SELECT aliases, content FROM chunks WHERE project=? AND path='01-概览/02-术语.md'",
+        (doc_source.name,),
+    ).fetchone()
+    assert json.loads(row["aliases"]) == ["低秩适配"]
 
 
 def test_r02_passes_when_headings_are_dense(synced, doc_source):
@@ -112,6 +135,69 @@ def test_readonly_queries_do_not_create_index(tmp_path, registry):
     assert not db.exists()
     svc.close()
     assert not db.exists()
+
+
+@pytest.mark.parametrize("with_index", [False, True])
+def test_r03_rejects_targets_outside_indexable_content(tmp_path, with_index):
+    root = tmp_path / "kb"
+    (root / "docs").mkdir(parents=True)
+    (root / "outside").mkdir()
+    (root / "excluded").mkdir()
+    (root / "docs" / "keep.md").write_text("# 有效目标\n")
+    (root / "outside" / "hidden.md").write_text("# 边界外\n")
+    (root / "excluded" / "hidden.md").write_text("# 已排除\n")
+    config = tmp_path / "projects.yaml"
+    config.write_text(yaml.safe_dump({"projects": [{
+        "name": "kb", "path": str(root), "provides": ["category"],
+        "content_roots": ["docs"], "entry_docs": ["docs/keep.md"],
+        "extra_exclude_dirs": ["excluded"],
+        "intent_map": {"有效": ["keep"], "大小写": ["KEEP"], "越界": ["outside"], "排除": ["excluded"]},
+    }]}, allow_unicode=True), encoding="utf-8")
+    db = tmp_path / "meta.db"
+    if with_index:
+        store = MetadataStore(db)
+        for rel in ("docs/keep.md", "outside/hidden.md", "excluded/hidden.md"):
+            store.replace_chunks("kb", rel, [{
+                "source_type": "document", "heading_path": ["目标"], "content": rel,
+            }])
+        store.close()
+
+    svc = ContractService(db_path=db, config=config)
+    result = svc.validate("kb")
+    svc.close()
+    r03 = [f for f in result["findings"] if f["rule_id"] == "R-03"]
+    assert {f["evidence"]["pattern"] for f in r03} == {"outside", "excluded"}
+
+
+def test_r04_does_not_require_category_links(tmp_path, registry, doc_source):
+    (tmp_path / "doc-kb" / "README.md").write_text("# 只有入口，没有分类链接\n")
+    svc = ContractService(db_path=tmp_path / "meta.db", config=registry)
+    result = svc.validate(doc_source.name)
+    svc.close()
+    assert result["findings"] == []
+
+
+def test_validate_does_not_migrate_existing_index(tmp_path, registry, doc_source):
+    db = tmp_path / "legacy.db"
+    conn = sqlite3.connect(db)
+    conn.execute(
+        "CREATE TABLE chunks ("
+        "id INTEGER PRIMARY KEY, project TEXT, path TEXT, source_type TEXT, "
+        "heading_path TEXT, content TEXT)"
+    )
+    conn.commit()
+    conn.close()
+
+    svc = ContractService(db_path=db, config=registry)
+    svc.validate(doc_source.name)
+    svc.close()
+
+    conn = sqlite3.connect(db)
+    tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    columns = {r[1] for r in conn.execute("PRAGMA table_info(chunks)")}
+    conn.close()
+    assert "files" not in tables
+    assert "category" not in columns
 
 
 def test_indexed_source_checks_are_inapplicable_without_index(tmp_path, registry, doc_source):

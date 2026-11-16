@@ -2,6 +2,8 @@
 
 import os
 
+import pytest
+
 from agent_app.ingestion.document_parser import chunk_markdown
 from agent_app.ingestion.code_parser import chunk_code
 from agent_app.ingestion.excludes import EXCLUDE_DIRS, EXCLUDE_FILE_PATTERNS
@@ -151,6 +153,13 @@ def test_exclude_critical_entries():
         assert p in EXCLUDE_FILE_PATTERNS
 
 
+@pytest.mark.parametrize("content_roots", [None, []])
+def test_scanner_without_content_roots_indexes_nothing(tmp_path, content_roots):
+    (tmp_path / "README.md").write_text("# 不应被隐式全库索引\n")
+    report = scan_project("t", str(tmp_path), content_roots=content_roots)
+    assert report.files == []
+
+
 def test_scanner_respects_excludes(tmp_path):
     (tmp_path / "node_modules").mkdir()
     (tmp_path / "node_modules" / "junk.js").write_text("x")
@@ -160,7 +169,7 @@ def test_scanner_respects_excludes(tmp_path):
     (tmp_path / "cases_v1.jsonl").write_text('{"id":"q001","gold":{"any_of":["secret"]}}')
     (tmp_path / "app.py").write_text("def f(): pass\n")
     (tmp_path / "README.md").write_text("# 项目\n\n说明。\n")
-    report = scan_project("t", str(tmp_path))
+    report = scan_project("t", str(tmp_path), content_roots=["."])
     paths = [f.path for f in report.files]
     assert "app.py" in paths and "README.md" in paths
     assert not any("node_modules" in p or ".env" in p for p in paths)
@@ -174,7 +183,7 @@ def test_scanner_partial_keep_superpowers_plans(tmp_path):
     (sp / "brainstorm").mkdir()
     (sp / "plans" / "2026-01-01-x.md").write_text("# X 计划\n\n> 状态：待评审\n")
     (sp / "brainstorm" / "noise.md").write_text("# 噪声\n")
-    report = scan_project("t", str(tmp_path))
+    report = scan_project("t", str(tmp_path), content_roots=["."])
     paths = [f.path for f in report.files]
     assert any(".superpowers/plans" in p for p in paths)
     assert not any("brainstorm" in p for p in paths)

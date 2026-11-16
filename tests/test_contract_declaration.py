@@ -82,7 +82,8 @@ def test_optional_fields_are_the_contract_field_set():
 def test_aliases_in_content_only_for_present_terms():
     terms = {"LoRA": ["lora", "低秩适配"], "SDXL": ["sdxl"]}
     got = aliases_in_content("本文介绍 LoRA 的用法", terms)
-    assert "LoRA" in got and "低秩适配" in got
+    assert got == ["LoRA"]
+    assert aliases_in_content("本文介绍低秩适配", terms) == ["低秩适配"]
     assert "SDXL" not in got
 
 

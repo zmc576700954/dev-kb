@@ -35,7 +35,7 @@ def resolve_root(path: str) -> str:
 def list_projects(config: str | Path | None = None) -> list[dict]:
     """工具：列出已登记项目。"""
     return [
-        {"name": p["name"], "path": resolve_root(p["path"]), "type": p.get("type", "auto")}
+        {"name": p["name"], "path": resolve_root(p["path"])}
         for p in load_registry(config).values()
     ]
 

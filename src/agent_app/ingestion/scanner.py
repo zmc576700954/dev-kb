@@ -14,6 +14,7 @@ import os
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 
+from ..contract.declaration import path_in_content_roots
 from .excludes import (
     BINARY_EXTENSIONS,
     EXCLUDE_DIRS,
@@ -111,18 +112,6 @@ def _load_ignore_dirs(root: Path) -> tuple[set[str], set[str]]:
     return dirs, paths
 
 
-def _in_content_roots(rel: str, content_roots: list[str]) -> bool:
-    """相对路径是否落在契约声明的内容边界内。"""
-    rel = rel.replace(os.sep, "/").lstrip("./")
-    for root in content_roots:
-        root = root.replace(os.sep, "/").strip("/")
-        if root in ("", "."):
-            return True
-        if rel == root or rel.startswith(root + "/"):
-            return True
-    return False
-
-
 def _classify(rel: str, size: int) -> FileEntry:
     name = os.path.basename(rel)
     lower = rel.lower()
@@ -157,6 +146,9 @@ def scan_project(name: str, root: str, extra_exclude_dirs: list[str] | None = No
     report = ProjectReport(name=name, root=root)
     if not root_path.is_dir():
         report.errors.append(f"目录不存在: {root}")
+        return report
+    if not content_roots:
+        # R-01 fail closed：未声明内容边界不等于隐式声明全库。
         return report
 
     ignore_dirs, ignore_paths = _load_ignore_dirs(root_path)
@@ -200,7 +192,7 @@ def scan_project(name: str, root: str, extra_exclude_dirs: list[str] | None = No
                 continue
 
             # 契约边界：声明之外的内容不进索引
-            if content_roots and not _in_content_roots(rel, content_roots):
+            if not path_in_content_roots(rel, content_roots):
                 report.excluded_dirs[f"content_roots:{rel_dir}"] = \
                     report.excluded_dirs.get(f"content_roots:{rel_dir}", 0) + 1
                 continue

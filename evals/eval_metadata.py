@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE_FILES = (
     "evals/run_eval.py",
     "src/agent_app/tools/retrieval.py",
+    "src/agent_app/contract/declaration.py",
     "src/agent_app/indexing/metadata_store.py",
     "src/agent_app/indexing/embedder.py",
     "src/agent_app/indexing/reranker.py",
@@ -44,15 +45,40 @@ def cases_metadata(path: str | Path, cases: list[dict]) -> dict:
     }
 
 
-def implementation_metadata() -> dict:
-    """对检索实现做确定性指纹；indexed_at、mtime 与 Git 状态均不参与。"""
+def implementation_metadata(declarations=None) -> dict:
+    """对检索实现与生效声明做确定性指纹；mtime 与 Git 状态不参与。"""
+    if declarations is None:
+        from agent_app.contract.declaration import load_declarations
+        declarations = load_declarations()
+    declaration_payload = {
+        name: {
+            "provides": list(decl.provides),
+            "content_roots": list(decl.content_roots),
+            "entry_docs": list(decl.entry_docs),
+            "extra_exclude_dirs": list(decl.extra_exclude_dirs),
+            "intent_map": decl.intent_map,
+            "roles": decl.roles,
+            "aliases": decl.terms(),
+        }
+        for name, decl in sorted(declarations.items())
+    }
+    declaration_bytes = json.dumps(
+        declaration_payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+
     digest = hashlib.sha256()
     for relative in SOURCE_FILES:
         digest.update(relative.encode("utf-8"))
         digest.update(b"\0")
         digest.update((ROOT / relative).read_bytes())
         digest.update(b"\0")
-    return {"algorithm": "sha256", "sources_sha256": digest.hexdigest()}
+    digest.update(b"declarations\0")
+    digest.update(declaration_bytes)
+    return {
+        "algorithm": "sha256",
+        "sources_sha256": digest.hexdigest(),
+        "declarations_sha256": hashlib.sha256(declaration_bytes).hexdigest(),
+    }
 
 
 def index_metadata(store) -> dict:
@@ -80,7 +106,14 @@ def retrieval_metadata(args, engine) -> tuple[dict, dict]:
     from agent_app.indexing import embedder, reranker
     from agent_app.llm import backend
     from agent_app.llm.query_expansion import CACHE_PATH
-    from agent_app.tools.retrieval import RRF_K
+    from agent_app.tools.retrieval import (
+        ALIAS_WEIGHT,
+        HEADING_FALLBACK,
+        HEADING_WEIGHT,
+        INTENT_HINT_WEIGHT,
+        RRF_K,
+        STRUCTURE_TRUST,
+    )
 
     expand = bool(args.expand)
     rerank = bool(args.rerank)
@@ -92,6 +125,11 @@ def retrieval_metadata(args, engine) -> tuple[dict, dict]:
         "code_boost": float(engine.code_boost),
         "doc_damp": float(engine.doc_damp),
         "rrf_k": RRF_K,
+        "heading_weight": HEADING_WEIGHT,
+        "heading_fallback": HEADING_FALLBACK,
+        "alias_weight": ALIAS_WEIGHT,
+        "intent_hint_weight": INTENT_HINT_WEIGHT,
+        "structure_trust": STRUCTURE_TRUST,
         "result_limit": 5,
         "query_expansion_cache_sha256": (
             file_sha256(CACHE_PATH) if expand and CACHE_PATH.exists() else None

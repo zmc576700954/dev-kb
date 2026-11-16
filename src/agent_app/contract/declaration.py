@@ -44,13 +44,24 @@ OPTIONAL_FIELDS = ("heading_path", "category", "doc_role", "aliases")
 DOC_ROLES = ("index", "entry", "faq", "reference", "guide")
 
 
+def path_in_content_roots(rel: str, content_roots: list[str] | tuple[str, ...] | None) -> bool:
+    """相对路径是否落在显式内容边界内；空边界始终 fail closed。"""
+    rel = rel.replace(os.sep, "/")
+    for root in content_roots or ():
+        root = root.replace(os.sep, "/").strip("/")
+        if root in ("", "."):
+            return True
+        if rel == root or rel.startswith(root + "/"):
+            return True
+    return False
+
+
 @dataclass
 class SourceDeclaration:
     """单个知识源的契约声明。"""
 
     name: str
     root: str
-    type: str = "auto"
     provides: tuple[str, ...] = ()
     content_roots: tuple[str, ...] = ()
     entry_docs: tuple[str, ...] = ()
@@ -78,7 +89,6 @@ class SourceDeclaration:
         return cls(
             name=name,
             root=resolve_root(entry["path"]),
-            type=entry.get("type", "auto"),
             provides=tuple(str(p) for p in (entry.get("provides") or ())),
             content_roots=tuple(str(r) for r in (entry.get("content_roots") or ())),
             entry_docs=tuple(str(d) for d in (entry.get("entry_docs") or ())),
@@ -152,15 +162,11 @@ class SourceDeclaration:
             for pattern, role in (data.get("roles") or {}).items():
                 roles[str(pattern)] = str(role)
 
-        merge_aliases(self._inline_aliases())
         merge_intent(self._inline_intent, replace=True)
         roles.update(self._inline_roles)
 
         self._cache = {"aliases": aliases, "intent_map": intent, "roles": roles}
         return self._cache
-
-    def _inline_aliases(self) -> dict:
-        return {}
 
     # ---- 派生视图 ----
 
@@ -214,16 +220,7 @@ class SourceDeclaration:
 
     def in_content(self, rel: str) -> bool:
         """相对路径是否落在声明的内容边界内。"""
-        if not self.content_roots:
-            return False
-        rel = rel.replace(os.sep, "/")
-        for root in self.content_roots:
-            root = root.replace(os.sep, "/").strip("/")
-            if root in ("", "."):
-                return True
-            if rel == root or rel.startswith(root + "/"):
-                return True
-        return False
+        return path_in_content_roots(rel, self.content_roots)
 
     # ---- 文档角色 ----
 
@@ -268,20 +265,18 @@ def category_of(rel: str) -> str:
     文档知识库得到 01-业务概览 这类一级目录。取原样不做前缀剥离，
     这样它与 path 子串匹配用的是同一份字面量。
     """
-    rel = rel.replace(os.sep, "/").lstrip("./")
+    rel = rel.replace(os.sep, "/")
     head, sep, _ = rel.partition("/")
     return head if sep else ""
 
 
 def aliases_in_content(content: str, terms: dict[str, list[str]]) -> list[str]:
-    """该块正文里出现的术语及其别名（canonical + 全部别名表面形式）。"""
+    """该块正文里实际出现的 canonical 与别名表面形式。"""
     if not terms:
         return []
     out: list[str] = []
     for term, aliases in terms.items():
-        if term not in content:
-            continue
         for surface in [term, *aliases]:
-            if surface not in out:
+            if surface in content and surface not in out:
                 out.append(surface)
     return out

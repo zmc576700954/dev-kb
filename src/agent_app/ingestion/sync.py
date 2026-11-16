@@ -109,7 +109,7 @@ class SyncEngine:
             self.store.upsert_file(name, rel, os.path.getmtime(full), f.size, digest, commit)
             result["chunks"] += len(ids)
             result["fallback_files"] += 1 if used_fallback else 0
-            self._queue_embedding(name, rel, ids, chunks, decl)
+            self._queue_embedding(name, rel, ids, chunks)
             self.store.commit()  # 逐文件提交：长同步被中断后可断点续跑，避免重复切块
 
         # 已删除文件
@@ -153,7 +153,7 @@ class SyncEngine:
 
     # ---- Embedding ----
 
-    def _queue_embedding(self, project: str, rel: str, ids: list[int], chunks: list, decl=None):
+    def _queue_embedding(self, project: str, rel: str, ids: list[int], chunks: list):
         if not self.embed:
             return
         for cid, c in zip(ids, chunks):

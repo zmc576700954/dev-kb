@@ -31,7 +31,7 @@ class ContractService:
         CI 没有本地索引，声明级校验仍必须可运行。
         """
         if self.store is None and Path(self.db_path).is_file():
-            self.store = MetadataStore(self.db_path)
+            self.store = MetadataStore.open_read_only(self.db_path)
         return self.store
 
     # ---- 声明 ----

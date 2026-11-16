@@ -38,7 +38,7 @@ def make_service(tmp_path):
     (root / "secret.txt").write_text("outside knowledge", encoding="utf-8")
     config = tmp_path / "projects.yaml"
     config.write_text(yaml.safe_dump({
-        "projects": [{"name": "demo", "path": str(root), "type": "auto"}]
+        "projects": [{"name": "demo", "path": str(root)}]
     }), encoding="utf-8")
     db_path = tmp_path / "test.db"
     store = MetadataStore(db_path)

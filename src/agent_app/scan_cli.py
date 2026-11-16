@@ -92,7 +92,10 @@ def main() -> int:
 
     summaries = []
     for p in projects:
-        report = scan_project(p["name"], p["path"], p.get("extra_exclude_dirs"))
+        report = scan_project(
+            p["name"], p["path"], p.get("extra_exclude_dirs"),
+            content_roots=p.get("content_roots"),
+        )
         s = summarize(report)
         summaries.append(s)
         (out_dir / f"{p['name']}.json").write_text(report_to_json(report), encoding="utf-8")

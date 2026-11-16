@@ -84,16 +84,13 @@ def test_r04_flags_missing_entry_file(doc_source):
     assert findings and "不存在" in findings[0].message
 
 
-def test_r04_coverage_only_for_document_sources(code_source):
-    """代码库没有"文档分类"，覆盖性检查不适用——否则全是噪声。"""
+def test_r04_accepts_existing_code_entry_doc(code_source):
+    """代码库同样只校验入口文档是否存在，不检查分类链接。"""
     assert check_r04(code_source) == []
 
 
-def test_r04_warns_on_uncovered_category(doc_source):
-    doc_source.entry_docs = ("README.md",)
-    findings = check_r04(doc_source)
-    # README 覆盖了全部三个分类 → 无覆盖性警告
-    assert [f for f in findings if "未被任何入口文档覆盖" in f.message] == []
+def test_r04_accepts_existing_document_entry(doc_source):
+    assert check_r04(doc_source) == []
 
 
 # ---- R-07 声明字段集 ----

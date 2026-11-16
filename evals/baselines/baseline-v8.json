@@ -16,6 +16,11 @@
     "code_boost": 1.5,
     "doc_damp": 0.7,
     "rrf_k": 60,
+    "heading_weight": 0.7,
+    "heading_fallback": false,
+    "alias_weight": 1.0,
+    "intent_hint_weight": 0.7,
+    "structure_trust": 0.7,
     "result_limit": 5,
     "query_expansion_cache_sha256": "f979494289c2a793e2c83c2bbff6f2a5fd81a213aee20a6fc8fb93ccef69e370"
   },

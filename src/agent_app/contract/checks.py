@@ -9,8 +9,6 @@
 
 from __future__ import annotations
 
-import os
-import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -19,11 +17,6 @@ from .rules import RULES
 
 #: R-02 的标题链覆盖率阈值。
 HEADING_COVERAGE_MIN = 0.95
-
-#: R-04 覆盖性检查里，每个入口最多检查多少个链接目标。
-MAX_ENTRY_LINKS = 200
-
-_LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 
 
 @dataclass
@@ -64,12 +57,18 @@ def check_r01(decl: SourceDeclaration, store=None) -> list[Finding]:
 
 
 def check_r03(decl: SourceDeclaration, store=None) -> list[Finding]:
-    """R-03：意图映射的目标必须存在。"""
+    """R-03：意图映射的目标必须位于声明的可索引内容内。"""
+    from ..ingestion.scanner import scan_project
+
     findings: list[Finding] = []
-    root = Path(decl.root)
+    report = scan_project(
+        decl.name, decl.root, list(decl.extra_exclude_dirs),
+        content_roots=list(decl.content_roots),
+    )
+    paths = [entry.path.casefold() for entry in report.files]
     for intent, patterns in decl.intent_map.items():
         for pattern in patterns:
-            if _target_exists(decl, pattern, store):
+            if any(pattern.casefold() in path for path in paths):
                 continue
             findings.append(Finding(
                 rule_id="R-03",
@@ -82,7 +81,7 @@ def check_r03(decl: SourceDeclaration, store=None) -> list[Finding]:
 
 
 def check_r04(decl: SourceDeclaration, store=None) -> list[Finding]:
-    """R-04：入口文档必须存在；并报告未被入口覆盖的分类。"""
+    """R-04：声明分类结构时，入口文档必须已声明且真实存在。"""
     findings: list[Finding] = []
     root = Path(decl.root)
     if not decl.entry_docs:
@@ -104,27 +103,6 @@ def check_r04(decl: SourceDeclaration, store=None) -> list[Finding]:
                 location=f"{decl.name}",
                 evidence={"entry_doc": doc},
             ))
-
-    # 覆盖性只对文档型知识源有意义：代码库的 src/、tests/ 不是"分类"，
-    # 用入口文档去覆盖它们没有意义，会变成噪声。
-    if not decl.provides_field("heading_path"):
-        return findings
-    categories = _document_categories_of(root, decl, store)
-    if not categories:
-        return findings
-    linked = _entry_link_targets(root, decl)
-    for category in sorted(categories):
-        if any(c == category or c.startswith(category + "/") for c in linked):
-            continue
-        if any(category in c for c in linked):
-            continue
-        findings.append(Finding(
-            rule_id="R-04",
-            severity="warning",
-            message=f"分类「{category}」未被任何入口文档覆盖",
-            location=f"{decl.name}",
-            evidence={"category": category},
-        ))
     return findings
 
 
@@ -216,137 +194,6 @@ def check_r06(decl: SourceDeclaration, store=None) -> list[Finding]:
 
 
 # ---- 辅助 ----
-
-def _target_exists(decl: SourceDeclaration, pattern: str, store=None) -> bool:
-    """意图映射的目标是否真的落在本库的内容里。
-
-    语义与检索口径一致：intent_map 的值是**路径片段**，检索时用它做
-    ``path LIKE %片段%``。因此判据是"这个片段能匹配到本库的某个路径"，
-    而不是"这个片段是一个字面路径"——否则"migrations"这类片段会被误判为
-    不存在（它实际匹配 database/migrations/…）。
-
-    有索引用索引判（快且与检索完全一致）；没有索引时退回有上限的文件系统扫描。
-    """
-    if store is not None:
-        try:
-            row = store.conn.execute(
-                "SELECT 1 FROM chunks WHERE project=? AND path LIKE ? LIMIT 1",
-                (decl.name, f"%{pattern}%"),
-            ).fetchone()
-            return row is not None
-        except Exception:
-            pass
-    return _fragment_in_tree(Path(decl.root), pattern)
-
-
-#: 文件系统回退扫描时最多访问的目录数。
-_MAX_SCAN_DIRS = 20000
-
-
-def _fragment_in_tree(root: Path, fragment: str) -> bool:
-    """路径里是否出现过该片段（有上限的遍历，避免大仓库上无界扫描）。"""
-    if not root.is_dir():
-        return False
-    visited = 0
-    for dirpath, dirnames, filenames in os.walk(root):
-        dirnames[:] = [d for d in dirnames
-                       if not d.startswith(".")
-                       and d not in ("node_modules", "vendor", "dist", "build")]
-        visited += 1
-        if visited > _MAX_SCAN_DIRS:
-            return False
-        for name in filenames:
-            if fragment in name:
-                return True
-        rel = os.path.relpath(dirpath, root)
-        if rel != "." and fragment in rel:
-            return True
-    return False
-
-
-#: 文件系统回退扫描的最大深度（避免在大目录上无界遍历）。
-_SCAN_DEPTH = 3
-
-
-def _document_categories_of(root: Path, decl: SourceDeclaration,
-                            store=None) -> set[str]:
-    """含文档的一级分类目录。
-
-    只统计"装文档的目录"——代码库的 src/、tests/ 里没有 .md，
-    拿入口文档去覆盖它们没有意义，只会产生噪声。
-
-    优先用索引（快）；没有索引时退回**有深度上限**的文件系统扫描——
-    无界 rglob 在含大目录的源上会非常慢。
-    """
-    if store is not None:
-        try:
-            rows = store.conn.execute(
-                "SELECT DISTINCT category FROM chunks"
-                " WHERE project=? AND source_type='document' AND category != ''",
-                (decl.name,),
-            ).fetchall()
-            if rows:
-                return {r["category"] for r in rows}
-        except Exception:
-            pass
-    return _scan_document_categories(root)
-
-
-def _scan_document_categories(root: Path) -> set[str]:
-    out: set[str] = set()
-    if not root.is_dir():
-        return out
-    try:
-        children = [c for c in root.iterdir() if c.is_dir() and not c.name.startswith(".")]
-    except OSError:
-        return out
-    for child in children:
-        if _has_markdown(child, _SCAN_DEPTH):
-            out.add(child.name)
-    return out
-
-
-def _has_markdown(directory: Path, depth: int) -> bool:
-    if depth < 0:
-        return False
-    try:
-        for entry in os.scandir(directory):
-            if entry.is_dir(follow_symlinks=False):
-                if entry.name.startswith(".") or entry.name in ("node_modules", "vendor"):
-                    continue
-                if _has_markdown(Path(entry.path), depth - 1):
-                    return True
-            elif entry.name.endswith(".md"):
-                return True
-    except OSError:
-        return False
-    return False
-
-
-def _entry_link_targets(root: Path, decl: SourceDeclaration) -> set[str]:
-    """入口文档链接到的相对路径集合（用于分类覆盖性判断）。"""
-    out: set[str] = set()
-    for doc in decl.entry_docs:
-        path = root / doc
-        if not path.is_file():
-            continue
-        try:
-            text = path.read_text(encoding="utf-8", errors="replace")
-        except OSError:
-            continue
-        base = path.parent
-        for raw in _LINK_RE.findall(text)[:MAX_ENTRY_LINKS]:
-            target = raw.split("#", 1)[0].strip()
-            if not target or target.startswith(("http://", "https://", "mailto:")):
-                continue
-            try:
-                resolved = (base / target).resolve()
-                rel = resolved.relative_to(root.resolve())
-            except (OSError, ValueError):
-                continue
-            out.add(str(rel).replace("\\", "/"))
-    return out
-
 
 def _heading_stats(store, project: str) -> tuple[int, int] | None:
     """(document 块总数, 缺标题链的块数)；表尚未迁移时返回 None。"""

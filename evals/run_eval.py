@@ -157,7 +157,7 @@ def main() -> int:
         "cases": cases_metadata(cases_path, cases),
         "config": config,
         "models": models,
-        "implementation": implementation_metadata(),
+        "implementation": implementation_metadata(engine.declarations),
         "index": index_metadata(store),
         # 保留旧字段，兼容已有结果查看脚本。
         "rerank": args.rerank,

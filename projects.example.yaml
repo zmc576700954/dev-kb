@@ -27,10 +27,9 @@
 projects:
   - name: my-project
     path: ~/my-project
-    type: auto
     provides: [category]
     content_roots: ["."]
-    # entry_docs: [README.md]
+    entry_docs: [README.md]
     # intent_map:
     #   部署: ["deploy", "ops"]
     # roles:
@@ -41,7 +40,6 @@ projects:
   # dev-kb 自身（自举索引）：
   #   - name: dev-kb
   #     path: ~/dev-kb
-  #     type: auto
   #     provides: [heading_path, category]
   #     content_roots: ["."]
   #     entry_docs: [README.md]

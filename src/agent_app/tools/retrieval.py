@@ -130,25 +130,15 @@ class HybridSearch:
             return self.declarations.get(project)
         return None
 
-    def _intent_map(self, project: str | None) -> dict[str, tuple[str, ...]]:
-        """项目确定时用该源自己的意图映射；跨项目检索时聚合所有源。
-
-        跨项目题（如"数据库迁移文件在哪个目录"）不知道该用哪个源的意图表，
-        因此把所有源声明的意图合并——这也正是全局硬编码表原来的行为，
-        但现在每条映射都来自具体知识源自己的结构声明。
-        """
+    def _intent_map(self, project: str | None) -> dict[str, dict[str, tuple[str, ...]]]:
+        """按源返回意图映射；跨项目检索也不能把一个源的路径提示用在另一个源。"""
         if project:
             decl = self.declarations.get(project)
-            return decl.intent_map if decl else {}
-        merged: dict[str, tuple[str, ...]] = {}
-        for decl in self.declarations.values():
-            for intent, patterns in decl.intent_map.items():
-                bucket = list(merged.get(intent, ()))
-                for pat in patterns:
-                    if pat not in bucket:
-                        bucket.append(pat)
-                merged[intent] = tuple(bucket)
-        return merged
+            return {project: decl.intent_map} if decl else {}
+        return {
+            name: decl.intent_map
+            for name, decl in self.declarations.items()
+        }
 
     def _heading_trusted(self, project: str | None) -> bool:
         """该源是否声明了标题链能力，且实际覆盖率达标（R-02 的判定）。"""
@@ -163,6 +153,22 @@ class HybridSearch:
             trusted = total > 0 and (total - missing) / total >= 0.95
         self._coverage_cache[project] = trusted
         return trusted
+
+    def _heading_rows(self, query: str, project: str | None, limit: int):
+        """仅从声明且覆盖率达标的源召回标题；跨项目时按源分别门禁。"""
+        projects = [project] if project else list(self.declarations)
+        rows = []
+        for name in projects:
+            if not self._heading_trusted(name):
+                continue
+            try:
+                rows.extend(self.store.heading_search(
+                    query, name, limit=limit, or_fallback=HEADING_FALLBACK
+                ))
+            except Exception:
+                pass  # 标题索引为空或查询不合法时跳过
+        rows.sort(key=lambda row: row["rank"] if "rank" in row.keys() else float("inf"))
+        return rows[:limit]
 
     def _alias_expansions(self, project: str | None) -> list[tuple[str, str]]:
         """查询里命中的术语别名 → canonical term。
@@ -240,13 +246,9 @@ class HybridSearch:
 
         # 3. 标题链独立通道：只看文档标题里的词，与正文通道分开归因
         if HEADING_WEIGHT > 0:
-            try:
-                heading_rows = self.store.heading_search(query, project, limit=limit,
-                                                         or_fallback=HEADING_FALLBACK)
-                if heading_rows:
-                    add(heading_rows, "heading", lambda r: r["id"], HEADING_WEIGHT)
-            except Exception:
-                pass  # 标题索引为空或查询不合法时跳过
+            heading_rows = self._heading_rows(query, project, limit)
+            if heading_rows:
+                add(heading_rows, "heading", lambda r: r["id"], HEADING_WEIGHT)
 
         # 4. 术语别名通道：知识源声明的别名直接挂接对应块
         if ALIAS_WEIGHT > 0:
@@ -271,14 +273,15 @@ class HybridSearch:
                 ordered = [{"id": cid} for cid in sorted(merged, key=lambda i: merged[i])]
                 add(ordered, "alias", lambda r: r["id"], ALIAS_WEIGHT)
 
-        # 5. 意图路径提示：知识源声明的"中文意图 → 本库路径"
+        # 5. 意图路径提示：每个知识源的声明只作用于本源
         if INTENT_HINT_WEIGHT > 0:
-            for intent, patterns in self._intent_map(project).items():
-                if intent not in query:
-                    continue
-                for pattern in patterns:
-                    add(self.store.path_search(pattern, project, limit=3),
-                        "intent-hint", lambda r: r["id"], INTENT_HINT_WEIGHT)
+            for source, intent_map in self._intent_map(project).items():
+                for intent, patterns in intent_map.items():
+                    if intent not in query:
+                        continue
+                    for pattern in patterns:
+                        add(self.store.path_search(pattern, source, limit=3),
+                            "intent-hint", lambda r: r["id"], INTENT_HINT_WEIGHT)
 
         # 6. 向量语义
         if self.vs is not None:

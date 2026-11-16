@@ -27,7 +27,7 @@
 | 环境变量 | 含义 | 默认 |
 |---|---|---|
 | `DEV_KB_HEADING_WEIGHT` | 标题链独立通道权重（0 = 关闭） | 0.7 |
-| `DEV_KB_HEADING_FALLBACK` | 标题链通道是否允许 OR 宽松降级（0 = 只用 AND 精确匹配） | 1 |
+| `DEV_KB_HEADING_FALLBACK` | 标题链通道是否允许 OR 宽松降级（0 = 只用 AND 精确匹配） | 0 |
 | `DEV_KB_ALIAS_WEIGHT` | 术语别名通道权重（0 = 关闭） | 1.0 |
 | `DEV_KB_INTENT_HINT_WEIGHT` | 意图映射路径提示权重（0 = 关闭） | 0.7 |
 | `DEV_KB_STRUCTURE_TRUST` | 结构可信度降权系数（0 = 不降权） | 0.7 |
@@ -105,7 +105,7 @@ McNemar：恶化 0 / 改善 0（p=1.0）。**冻结配置在未参与调参的�
 契约字段与标题链都落在索引里，因此改了切块器或声明之后要重建：
 
 ```bash
-# 按声明回填契约字段 + 标题链（不重扫源文件、不重算向量）
+# 根据已有 chunks 回填 category / doc_role / aliases（不重扫源文件、不重算向量）
 PYTHONPATH=src .venv/bin/python -m agent_app.sync_cli --backfill
 
 # 重建全文索引与标题链索引（不重算向量）

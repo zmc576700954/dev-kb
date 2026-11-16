@@ -72,6 +72,17 @@ class MetadataStore:
         self.conn.executescript(SCHEMA)
         self._migrate()
         self.conn.commit()
+        self._read_only = False
+
+    @classmethod
+    def open_read_only(cls, db_path: str | Path) -> "MetadataStore":
+        """打开既有索引供只读查询使用，不建目录、不建表、不迁移。"""
+        self = cls.__new__(cls)
+        uri = Path(db_path).resolve().as_uri() + "?mode=ro"
+        self.conn = sqlite3.connect(uri, uri=True)
+        self.conn.row_factory = sqlite3.Row
+        self._read_only = True
+        return self
 
     def _migrate(self) -> None:
         """为既有索引补上契约字段列（不重建索引、不重算向量）。
@@ -189,24 +200,30 @@ class MetadataStore:
 
     # ---- 检索 ----
 
-    def fts_search(self, query: str, project: str | None = None, limit: int = 10,
-                   or_fallback: bool = True) -> list[sqlite3.Row]:
+    def _with_or_fallback(self, query: str, limit: int, or_fallback: bool, run):
+        """AND 优先；需要时按命中 token 数与 bm25 总分降级排序。"""
         from .fts_tokenizer import fts_query, fts_tokenize
-        rows = self._fts_run(fts_query(query), project, limit)
+        rows = run(fts_query(query), limit)
         if rows or not or_fallback:
             return rows
-        # AND 落空 → 覆盖率降级：逐 token 检索，按"命中 token 数 → bm25 总分"排序
         tokens = [t for t in dict.fromkeys(fts_tokenize(query).split()) if len(t) >= 2][:8]
         if not tokens:
             return []
         scores: dict[int, float] = {}
         counts: dict[int, int] = {}
-        for t in tokens:
-            for r in self._fts_run(f'"{t}"', project, 200):
-                scores[r["id"]] = scores.get(r["id"], 0.0) + r["rank"]
-                counts[r["id"]] = counts.get(r["id"], 0) + 1
+        for token in tokens:
+            for row in run(f'"{token}"', 200):
+                scores[row["id"]] = scores.get(row["id"], 0.0) + row["rank"]
+                counts[row["id"]] = counts.get(row["id"], 0) + 1
         top = sorted(counts, key=lambda i: (counts[i], -scores.get(i, 0)), reverse=True)[:limit]
         return [self.get_chunk(i) for i in top]
+
+    def fts_search(self, query: str, project: str | None = None, limit: int = 10,
+                   or_fallback: bool = True) -> list[sqlite3.Row]:
+        return self._with_or_fallback(
+            query, limit, or_fallback,
+            lambda match, n: self._fts_run(match, project, n),
+        )
 
     def _fts_run(self, match: str, project: str | None, limit: int) -> list[sqlite3.Row]:
         sql = """SELECT c.*, bm25(chunk_fts) AS rank FROM chunk_fts
@@ -229,21 +246,10 @@ class MetadataStore:
         标题通道要的是精度（问"核心架构"命中"### 模块"这种父标题命中子节），
         因此降级可关。
         """
-        from .fts_tokenizer import fts_query, fts_tokenize
-        rows = self._heading_run(fts_query(query), project, limit)
-        if rows or not or_fallback:
-            return rows
-        tokens = [t for t in dict.fromkeys(fts_tokenize(query).split()) if len(t) >= 2][:8]
-        if not tokens:
-            return []
-        scores: dict[int, float] = {}
-        counts: dict[int, int] = {}
-        for t in tokens:
-            for r in self._heading_run(f'"{t}"', project, 200):
-                scores[r["id"]] = scores.get(r["id"], 0.0) + r["rank"]
-                counts[r["id"]] = counts.get(r["id"], 0) + 1
-        top = sorted(counts, key=lambda i: (counts[i], -scores.get(i, 0)), reverse=True)[:limit]
-        return [self.get_chunk(i) for i in top]
+        return self._with_or_fallback(
+            query, limit, or_fallback,
+            lambda match, n: self._heading_run(match, project, n),
+        )
 
     def _heading_run(self, match: str, project: str | None, limit: int) -> list[sqlite3.Row]:
         sql = """SELECT c.*, bm25(chunk_headings) AS rank FROM chunk_headings
@@ -283,17 +289,6 @@ class MetadataStore:
         """路径子串搜索：查询中的符号 token 直接匹配文件路径。"""
         sql = "SELECT * FROM chunks WHERE path LIKE ?"
         params: list = [f"%{term}%"]
-        if project:
-            sql += " AND project = ?"
-            params.append(project)
-        sql += " ORDER BY LENGTH(path) LIMIT ?"
-        params.append(limit)
-        return self.conn.execute(sql, params).fetchall()
-
-    def alias_search(self, term: str, project: str | None = None, limit: int = 10) -> list[sqlite3.Row]:
-        """术语通道：查询词命中该块声明的术语别名（如「低秩适配」→ LoRA）。"""
-        sql = "SELECT * FROM chunks WHERE aliases LIKE ?"
-        params: list = [f'%"{term}"%']
         if project:
             sql += " AND project = ?"
             params.append(project)
@@ -373,67 +368,6 @@ class MetadataStore:
         ).fetchone()
         return int(row["total"] or 0), int(row["missing"] or 0)
 
-    def apply_sections(self, project: str, path: str,
-                       sections: list[tuple[int, list[str]]]) -> int:
-        """按章节起点回填该文件所有块的 heading_path。
-
-        不动块边界、不动正文、不重算向量——只改 heading_path 一列。
-        块归属的规则与切块器一致：取"章节起点 ≤ 块起始行"的最后一节。
-        """
-        if not sections:
-            return 0
-        rows = self.conn.execute(
-            "SELECT id, start_line FROM chunks WHERE project=? AND path=?",
-            (project, path)).fetchall()
-        updated = 0
-        for r in rows:
-            start = r["start_line"]
-            chosen: list[str] | None = None
-            for sec_start, sec_path in sections:
-                if sec_start <= start:
-                    chosen = sec_path
-                else:
-                    break
-            if chosen is None:
-                continue
-            self.conn.execute(
-                "UPDATE chunks SET heading_path=? WHERE id=?",
-                (json.dumps(chosen, ensure_ascii=False), r["id"]))
-            updated += 1
-        return updated
-
-    def document_files(self, project: str) -> list[str]:
-        """该源已入库的文档文件路径。"""
-        rows = self.conn.execute(
-            "SELECT DISTINCT path FROM chunks WHERE project=? AND source_type='document'"
-            " ORDER BY path", (project,)).fetchall()
-        return [r["path"] for r in rows]
-
-    def set_preamble_heading(self, project: str, path: str, heading: str) -> int:
-        """给文件里"无标题"的前导块补上文档首个标题。
-
-        切块器把 frontmatter 切成独立块时，那块原本没有任何标题信号。
-        补标题只改 heading_path 一列——不动块边界、不动正文、不重算向量。
-        """
-        if not heading:
-            return 0
-        cur = self.conn.execute(
-            "UPDATE chunks SET heading_path=?"
-            " WHERE project=? AND path=? AND start_line=1"
-            " AND (heading_path IS NULL OR heading_path='' OR heading_path='[]')",
-            (json.dumps([heading], ensure_ascii=False), project, path),
-        )
-        return cur.rowcount
-
-    def files_with_preamble_chunk(self, project: str) -> list[str]:
-        """列出"存在无标题前导块"的文档路径。"""
-        rows = self.conn.execute(
-            "SELECT DISTINCT path FROM chunks WHERE project=? AND source_type='document'"
-            " AND start_line=1 AND (heading_path IS NULL OR heading_path='' OR heading_path='[]')",
-            (project,),
-        ).fetchall()
-        return [r["path"] for r in rows]
-
     def backfill_structure(self, project: str, category_of, role_of, alias_of) -> int:
         """按声明回填契约字段（category / doc_role / aliases）。
 
@@ -474,5 +408,6 @@ class MetadataStore:
         self.conn.commit()
 
     def close(self):
-        self.conn.commit()
+        if not self._read_only:
+            self.conn.commit()
         self.conn.close()

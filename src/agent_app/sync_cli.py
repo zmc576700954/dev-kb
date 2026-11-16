@@ -69,10 +69,6 @@ def main() -> int:
                 lambda rel, content: aliases_in_content(content, terms),
             )
             print(f"[{name}] 已回填契约字段：{n} 块")
-            fixed = _backfill_heading_paths(store, name, decl.root)
-            if fixed:
-                print(f"[{name}] 已回填标题链：{fixed} 块")
-        print("提示：回填后运行 --rebuild-fts 让标题链进入全文索引")
         return 0
 
     engine = SyncEngine(store, vs, embed=not args.no_embed)
@@ -103,27 +99,6 @@ def main() -> int:
     if vs:
         print(f"向量库总量：{vs.count()}")
     return 0
-
-
-def _backfill_heading_paths(store, project: str, root: str) -> int:
-    """按源文件重新回填标题链：只改 heading_path 一列，不动块边界、不重算向量。"""
-    from agent_app.ingestion.document_parser import section_paths
-    fixed = 0
-    for rel in store.document_files(project):
-        path = Path(root) / rel
-        if not path.is_file():
-            continue
-        try:
-            text = path.read_text(encoding="utf-8", errors="replace")
-        except OSError:
-            continue
-        sections = section_paths(text)
-        if not sections:
-            continue
-        fixed += store.apply_sections(project, rel, sections)
-    store.commit()
-    return fixed
-
 
 
 if __name__ == "__main__":

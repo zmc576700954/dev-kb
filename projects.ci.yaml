@@ -5,7 +5,6 @@
 projects:
   - name: dev-kb
     path: .
-    type: auto
     provides: [heading_path, category]
     content_roots: ["."]
     entry_docs: [README.md]

@@ -329,6 +329,15 @@ def _heading_positions(body: str) -> list[tuple[int, int, str]]:
     return out
 
 
+def _is_mechanism(rel: str) -> bool:
+    """`_` 前缀路径段 = 机制目录（批次 3：MCP 语义写提案落 `_proposals/`）。
+
+    与 rm validator 同口径：机制目录仍被索引展示，但豁免全部规范检查
+    （S/M/H/L 组）——提案文件有自己的元数据形态，不应被规则打回。
+    点前缀隐藏目录本来就不进收集面，无需处理。"""
+    return any(seg.startswith('_') for seg in rel.split('/'))
+
+
 def load_project(kb_root: Path, project: str) -> Project:
     root = kb_root / project
     docs: dict[str, Doc] = {}
@@ -338,8 +347,11 @@ def load_project(kb_root: Path, project: str) -> Project:
     if root.is_dir():
         # S-2/S-3/S-4 要覆盖非 .md 文件与目录，因此单独收集全部条目；
         # 只有 .md 会进入 docs 并参与 M/H/L 组检查。
+        # `_` 前缀机制目录（`_proposals/` 等）双侧统一豁免。
         for entry in sorted(root.rglob('*')):
             rel = entry.relative_to(root).as_posix()
+            if _is_mechanism(rel):
+                continue
             if entry.is_dir():
                 dirs.append(rel)
             elif entry.is_file():
@@ -347,6 +359,8 @@ def load_project(kb_root: Path, project: str) -> Project:
         paths = [p for p in root.rglob('*.md') if p.is_file()]
         for path in sorted(paths, key=lambda p: p.relative_to(root).as_posix()):
             rel = path.relative_to(root).as_posix()
+            if _is_mechanism(rel):
+                continue
             try:
                 text = path.read_text(encoding='utf-8')
             except UnicodeDecodeError as exc:

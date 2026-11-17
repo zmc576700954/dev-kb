@@ -1,5 +1,5 @@
 {
- "_reason": "修正快照项目定位后重新冻结（check_project 的 kb_root/项目名 两级结构）",
+ "_reason": "批次 3：下划线前缀机制目录（_proposals/ 等）双侧豁免规范校验（仍索引展示）。同步 kaiwu check_kb 批次 3 变更（load_project 增加 _is_mechanism 过滤）进冻结副本，新增 proj-mechanism fixture：提案文件故意不合规，两侧均 0 findings、等价静默。",
  "_updated": "2026-11-17",
  "check_kb": {
   "proj-basic": [
@@ -319,6 +319,23 @@
    {
     "level": "warning",
     "path": "01-分类/b.md",
+    "rule_id": "T4"
+   }
+  ],
+  "proj-mechanism": [
+   {
+    "level": "error",
+    "path": "01-分类/ok-doc.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/ok-doc.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/ok-doc.md",
     "rule_id": "T4"
    }
   ],
@@ -724,6 +741,26 @@
    },
    {
     "entry_id": "01-分类-b",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   }
+  ],
+  "proj-mechanism": [
+   {
+    "entry_id": "01-分类-ok-doc",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-ok-doc",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-ok-doc",
     "message": "Entry has no outgoing links (orphan candidate)",
     "rule_id": "W5",
     "severity": "warning"

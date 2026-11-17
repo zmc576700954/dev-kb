@@ -52,3 +52,34 @@ jobs:
             tests/test_contract_service.py \
             tests/test_contract_mcp.py \
             -q
+
+  kb-spec-consistency:
+    name: kb-spec 双实现一致性（fixture 比对）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Python 实现 = fixtures/kb-spec/frozen_check_kb.py（kaiwu 仓库无远端，
+      # 冻结副本与 kaiwu-snapshot 同进退）；Rust 实现 = rm 的 synapse CLI。
+      - name: Checkout repository-manage
+        uses: actions/checkout@v4
+        with:
+          repository: zmc576700954/repository-manage
+          ref: main
+          path: repository-manage
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 安装 Rust 工具链
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: 构建 synapse CLI
+        working-directory: repository-manage/src-tauri
+        run: cargo build --bin synapse
+
+      - name: fixture 比对（判据等价 + 黄金基线）
+        run: |
+          python3 fixtures/kb-spec/compare.py \
+            --rm-repo repository-manage

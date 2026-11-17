@@ -1,0 +1,795 @@
+{
+ "_reason": "修正快照项目定位后重新冻结（check_project 的 kb_root/项目名 两级结构）",
+ "_updated": "2026-11-17",
+ "check_kb": {
+  "proj-basic": [
+   {
+    "level": "error",
+    "path": "01-分类/a-overdue.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/a-overdue.md",
+    "rule_id": "M4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/a-overdue.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/a-overdue.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/b-future.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/b-future.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/b-future.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/c-ondemand.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/c-ondemand.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/c-ondemand.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/d-status-ok.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/d-status-ok.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/d-status-ok.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/e-status-bad.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/e-status-bad.md",
+    "rule_id": "M3a"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/e-status-bad.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/e-status-bad.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/f-code-ok.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/f-code-ok.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/f-code-ok.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/g-code-bad.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/g-code-bad.md",
+    "rule_id": "M5"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/g-code-bad.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/g-code-bad.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/h-code-absent.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/h-code-absent.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/h-code-absent.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/i-status-absent.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/i-status-absent.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/i-status-absent.md",
+    "rule_id": "T4"
+   }
+  ],
+  "proj-legacy": [
+   {
+    "level": "error",
+    "path": "01-分类/legacy-comments.md",
+    "rule_id": "M1"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/legacy-comments.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/legacy-comments.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/orphan.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/orphan.md",
+    "rule_id": "M4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/orphan.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/orphan.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/type-tag-missing.md",
+    "rule_id": "M1"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/type-tag-missing.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/type-tag-missing.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/wiki-links.md",
+    "rule_id": "L1a"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/wiki-links.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/wiki-links.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/wiki-links.md",
+    "rule_id": "T4"
+   }
+  ],
+  "proj-matrix-absent": [
+   {
+    "level": "error",
+    "path": "01-分类/a.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/a.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/a.md",
+    "rule_id": "T4"
+   }
+  ],
+  "proj-matrix-bad": [
+   {
+    "level": "warning",
+    "path": "01-分类/a.md",
+    "rule_id": "L8"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/a.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/a.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/a.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/b.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/b.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/b.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "warning",
+    "path": "README.md",
+    "rule_id": "L9"
+   },
+   {
+    "level": "warning",
+    "path": "README.md",
+    "rule_id": "L9"
+   }
+  ],
+  "proj-matrix-ok": [
+   {
+    "level": "error",
+    "path": "01-分类/a.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/a.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/a.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "error",
+    "path": "01-分类/b.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/b.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-分类/b.md",
+    "rule_id": "T4"
+   }
+  ],
+  "proj-stem": [
+   {
+    "level": "error",
+    "path": "01-甲/x.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "01-甲/x.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "01-甲/x.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "error",
+    "path": "02-乙/uni.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "02-乙/uni.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "02-乙/uni.md",
+    "rule_id": "T4"
+   },
+   {
+    "level": "warning",
+    "path": "02-乙/x.md",
+    "rule_id": "L7"
+   },
+   {
+    "level": "error",
+    "path": "02-乙/x.md",
+    "rule_id": "M2"
+   },
+   {
+    "level": "warning",
+    "path": "02-乙/x.md",
+    "rule_id": "S4"
+   },
+   {
+    "level": "warning",
+    "path": "02-乙/x.md",
+    "rule_id": "T4"
+   }
+  ]
+ },
+ "equivalence_violations": [],
+ "synapse": {
+  "proj-basic": [
+   {
+    "entry_id": "01-分类-a-overdue",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-a-overdue",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-a-overdue",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "01-分类-a-overdue",
+    "message": "下次 review 已过复审期：2020-01-01",
+    "rule_id": "W6",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "01-分类-b-future",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-b-future",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-b-future",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "01-分类-c-ondemand",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-c-ondemand",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-c-ondemand",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "01-分类-d-status-ok",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-d-status-ok",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-d-status-ok",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "01-分类-e-status-bad",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-e-status-bad",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-e-status-bad",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "01-分类-e-status-bad",
+    "message": "状态基准值非法：写作中（应为 草案、模板、稳定、需持续监控、过期、已归档）",
+    "rule_id": "W7",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "01-分类-f-code-ok",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-f-code-ok",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-f-code-ok",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "01-分类-g-code-bad",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-g-code-bad",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-g-code-bad",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "01-分类-g-code-bad",
+    "message": "文档代号取值非法：\"硬件-01\"（应为 NN-MM 数字形态，如 02-01）",
+    "rule_id": "W8",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "01-分类-h-code-absent",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-h-code-absent",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-h-code-absent",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "01-分类-i-status-absent",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-i-status-absent",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-i-status-absent",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   }
+  ],
+  "proj-legacy": [
+   {
+    "entry_id": "01-分类-orphan",
+    "message": "@synapse-tags must have at least one type: prefix",
+    "rule_id": "E4",
+    "severity": "error"
+   },
+   {
+    "entry_id": "01-分类-orphan",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-orphan",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-orphan",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "01-分类-orphan",
+    "message": "下次 review 已过复审期：2020-06-01",
+    "rule_id": "W6",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "01-分类-type-tag-missing",
+    "message": "@synapse-tags must have at least one type: prefix",
+    "rule_id": "E4",
+    "severity": "error"
+   },
+   {
+    "entry_id": "01-分类-type-tag-missing",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-type-tag-missing",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-type-tag-missing",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "01-分类-wiki-links",
+    "message": "@synapse-tags must have at least one type: prefix",
+    "rule_id": "E4",
+    "severity": "error"
+   },
+   {
+    "entry_id": "01-分类-wiki-links",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "legacy-comments",
+    "message": "@synapse-id \"legacy-comments\" does not match path-derived \"01-分类-legacy-comments\"",
+    "rule_id": "E2",
+    "severity": "error"
+   },
+   {
+    "entry_id": "legacy-comments",
+    "message": "@synapse-tags must have at least one type: prefix",
+    "rule_id": "E4",
+    "severity": "error"
+   },
+   {
+    "entry_id": "legacy-comments",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "legacy-comments",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   }
+  ],
+  "proj-matrix-absent": [
+   {
+    "entry_id": "01-分类-a",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-a",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-a",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   }
+  ],
+  "proj-matrix-bad": [
+   {
+    "entry_id": "01-分类-a",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-a",
+    "message": "依赖矩阵声明依赖 01-99，但相关文档小节未链接它（依赖 ⊆ 相关文档）",
+    "rule_id": "W10",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "01-分类-b",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-b",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "README",
+    "message": "依赖矩阵不互惠：01-01 依赖 01-99，但 01-99 的被依赖列没有 01-01",
+    "rule_id": "W11",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "README",
+    "message": "依赖矩阵不互惠：01-01 被依赖含 01-02，但 01-02 的依赖列没有 01-01",
+    "rule_id": "W11",
+    "severity": "warning"
+   }
+  ],
+  "proj-matrix-ok": [
+   {
+    "entry_id": "01-分类-a",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-b",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-分类-b",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   }
+  ],
+  "proj-stem": [
+   {
+    "entry_id": "01-甲-x",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-甲-x",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "01-甲-x",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "02-乙-uni",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "02-乙-uni",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "02-乙-uni",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "02-乙-x",
+    "message": "Modified 0 days ago",
+    "rule_id": "I1",
+    "severity": "info"
+   },
+   {
+    "entry_id": "02-乙-x",
+    "message": "Orphan entry (no links)",
+    "rule_id": "I2",
+    "severity": "info"
+   },
+   {
+    "entry_id": "02-乙-x",
+    "message": "Entry has no outgoing links (orphan candidate)",
+    "rule_id": "W5",
+    "severity": "warning"
+   },
+   {
+    "entry_id": "02-乙-x",
+    "message": "文件 stem 重复：x（与 01-甲-x 同名，链接解析兜底会二义）",
+    "rule_id": "W9",
+    "severity": "warning"
+   }
+  ]
+ }
+}

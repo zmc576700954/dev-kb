@@ -1,0 +1,12 @@
+{
+  "pinned_date": "2026-11-17",
+  "shared_rules": [
+    ["M3a", "W7"],
+    ["M4", "W6"],
+    ["M5", "W8"],
+    ["L7", "W9"],
+    ["L8", "W10"],
+    ["L9", "W11"]
+  ],
+  "note": "判据等价对（kaiwu rule ↔ rm rule），见 rm 仓库 docs/kb-spec.md 附录 A。级别差异（M3a/M5 在 kaiwu 是错误级、rm 警告级）不参与比对，理由见附录 B。"
+}

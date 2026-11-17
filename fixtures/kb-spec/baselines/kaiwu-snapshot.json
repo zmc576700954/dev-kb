@@ -1,0 +1,11 @@
+{
+ "_reason": "修正快照项目定位后重新冻结（check_project 的 kb_root/项目名 两级结构）",
+ "_updated": "2026-11-17",
+ "check_kb": {
+  "kaiwu-snapshot": []
+ },
+ "equivalence_violations": [],
+ "synapse": {
+  "kaiwu-snapshot": []
+ }
+}

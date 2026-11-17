@@ -77,7 +77,9 @@ jobs:
 
       - name: 构建 synapse CLI
         working-directory: repository-manage/src-tauri
-        run: cargo build --bin synapse
+        # CLI 只依赖 validator（tauri-free）：--no-default-features 跳过
+        # tauri/glib 等桌面依赖，ubuntu runner 无需装 webkit/glib 系统包。
+        run: cargo build --no-default-features --bin synapse
 
       - name: fixture 比对（判据等价 + 黄金基线）
         run: |
